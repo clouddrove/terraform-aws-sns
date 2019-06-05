@@ -8,4 +8,5 @@ resource "aws_sns_platform_application" "sns" {
   platform            = var.platform
   platform_credential = var.key
   platform_principal  = var.certificate
+  success_feedback_sample_rate = 100
 }
