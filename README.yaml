@@ -1,0 +1,50 @@
+---
+#
+# This is the canonical configuration for the `README.md`
+# Run `make readme` to rebuild the `README.md`
+#
+
+
+# Name of this project
+name : terraform-aws-sns-platform-application
+
+# License of this project
+license: "MIT"
+
+# Canonical GitHub repo
+github_repo: clouddrove/terraform-aws-sns-platform-application
+
+# Badges to display
+badges:
+  - name: "Build Status"
+    image: "https://img.shields.io/badge/build-passing-green.svg"
+    url: "https://travis-ci.org/cloudposse/terraform-aws-vpc"
+
+#  description of this project
+description: |-
+  This terraform module is used to create SNS on AWS.
+
+# extra content
+# please not remove these two If you need add more
+include:
+  - "terraform.md"
+  - "targets.md"
+  
+# How to use this project
+usage : |-
+  ### Simple Example
+  Include this repository as a module in your existing terraform code:
+  ```hcl
+  module "example" {
+      source      = "git@github.com:clouddrove/terraform-aws-sns.git"
+      name        = "clouddrove"
+      platform    = "APNS"
+      key         = "file("/home/clouddrove/private.key")"
+      certificate = "file("/home/clouddrove/certificate.crt")"
+    }
+  ```
+# Contributors to this project
+contributors:
+  - name: "Nikita Dugar"
+    github: "nikitadugar"
+
