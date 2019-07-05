@@ -6,8 +6,6 @@ module "sns" {
   source = "../../"
   name        = "clouddrove"
   platform    = "APNS"
-  key         = "file("/home/clouddrove/private.key")"
-  certificate = "file("/home/clouddrove/certificate.crt")"
+  key         = file("./../../../certificates/private_key.pem")
+  certificate = file("./../../../certificates/cert.pem")
 }
-
-
