@@ -12,7 +12,7 @@ This terraform module is used to create SNS on AWS.
 
 ---
 
-This project is part of our comprehensive ["Clouddrove"](https://clouddrove.com) approach towards DevOps. 
+This project is part of our comprehensive ["Clouddrove"](https://clouddrove.com) approach towards DevOps.
 [<img align="right" title="Share on Facebook" src="https://docs.cloudposse.com/images/ionicons/social-facebook-outline-2.0.1-16x16-999999.svg" />][share_facebook]
 [<img align="right" title="Share on LinkedIn" src="https://docs.cloudposse.com/images/ionicons/social-linkedin-outline-2.0.1-16x16-999999.svg" />][share_linkedin]
 [<img align="right" title="Share on Twitter" src="https://docs.cloudposse.com/images/ionicons/social-twitter-outline-2.0.1-16x16-999999.svg" />][share_twitter]
@@ -27,7 +27,7 @@ It's 100% Open Source and licensed under the [MIT](LICENSE).
 
 
 
-We literally have [*hundreds of terraform modules*][terraform_modules] that are Open Source and well-maintained. Check them out! 
+We literally have [*hundreds of terraform modules*][terraform_modules] that are Open Source and well-maintained. Check them out!
 
 
 
@@ -169,9 +169,9 @@ Include this repository as a module in your existing terraform code:
 
 
 
-## Share the Love 
+## Share the Love
 
-Like this project? Please give it a ★ on [our GitHub](https://github.com/clouddrove/terraform-aws-sns-platform-application)! (it helps us **a lot**) 
+Like this project? Please give it a ★ on [our GitHub](https://github.com/clouddrove/terraform-aws-sns-platform-application)! (it helps us **a lot**)
 
 ## Related Projects
 
@@ -201,7 +201,7 @@ Copyright © [CloudDrove](https://clouddrove.com). All Right Reserved.
 
 
 
-## License 
+## License
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 

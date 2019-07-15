@@ -196,7 +196,7 @@ variable "endpoint_auto_confirms" {
 
 variable "confirmation_timeout_in_minutes" {
   type        = number
-  default = 60
+  default     = 60
   description = " Integer indicating number of minutes to wait in retying mode for fetching subscription arn before marking it as failure. Only applicable for http and https protocols."
 }
 
@@ -231,7 +231,7 @@ variable "monthly_spend_limit" {
 }
 
 variable "delivery_status_iam_role_arn" {
-  type = string
+  type        = string
   default     = ""
   description = "The ARN of the IAM role that allows Amazon SNS to write logs about SMS deliveries in CloudWatch Logs."
 }
@@ -242,19 +242,19 @@ variable "delivery_status_success_sampling_rate" {
 }
 
 variable "default_sender_id" {
-  type = string
+  type        = string
   default     = ""
   description = "A string, such as your business brand, that is displayed as the sender on the receiving device."
 }
 
 variable "default_sms_type" {
-  type = string
+  type        = string
   default     = "Transactional"
   description = "The type of SMS message that you will send by default. Possible values are: Promotional, Transactional."
 }
 
 variable "usage_report_s3_bucket" {
-  type = string
+  type        = string
   default     = ""
   description = "The name of the Amazon S3 bucket to receive daily SMS usage reports from Amazon SNS."
 }

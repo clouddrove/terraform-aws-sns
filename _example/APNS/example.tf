@@ -1,20 +1,20 @@
 provider "aws" {
-  region  = "eu-west-1"
+  region = "eu-west-1"
 }
 
 module "sns" {
-  source = "git::https://github.com/clouddrove/terraform-aws-sns.git"
-  name        = "clouddrove"
-  platform    = "APNS"
-  key         = file("./../../../certificates/private_key.pem")
-  certificate = file("./../../../certificates/cert.pem")
-  topic_name  = "sns_topic"
-  delivery_policy = file("./../_json/delivery_policy.json")
-  policy      = data.aws_iam_policy_document.sns-topic-policy.json
-  endpoint = "arn:aws:sqs:eu-west-1:866067750630:dev-sqs-clouddrove"
+  source            = "git::https://github.com/clouddrove/terraform-aws-sns.git"
+  name              = "clouddrove"
+  platform          = "APNS"
+  key               = file("./../../../certificates/private_key.pem")
+  certificate       = file("./../../../certificates/cert.pem")
+  topic_name        = "sns_topic"
+  delivery_policy   = file("./../_json/delivery_policy.json")
+  policy            = data.aws_iam_policy_document.sns-topic-policy.json
+  endpoint          = "arn:aws:sqs:eu-west-1:866067750630:dev-sqs-clouddrove"
   update_preference = true
-  create_topic = true
-  protocol = "sqs"
+  create_topic      = true
+  protocol          = "sqs"
 }
 
 data "aws_iam_policy_document" "sns-topic-policy" {
