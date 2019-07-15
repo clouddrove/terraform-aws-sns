@@ -5,8 +5,9 @@ package test
 
 import (
 	"testing"
-	"github.com/stretchr/testify/assert"
+
 	"github.com/gruntwork-io/terratest/modules/terraform"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestSns(t *testing.T) {
@@ -15,7 +16,7 @@ func TestSns(t *testing.T) {
 	terraformOptions := &terraform.Options{
 		// Source path of Terraform directory.
 		TerraformDir: "../../_example/APNS",
-		Upgrade: true,
+		Upgrade:      true,
 	}
 
 	// This will run 'terraform init' and 'terraform application' and will fail the test if any errors occur
