@@ -1,8 +1,6 @@
-# Compiled files
-**/*.tfstate
+# ignored files
+*.tfstate
 *.tfstate.backup
-
-# Module directory
-**/.terraform/
+.terraform
 .idea
 *.iml

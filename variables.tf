@@ -1,4 +1,3 @@
-
 variable "name" {
   description = "The friendly name for the SNS platform application"
   type        = string
@@ -207,15 +206,13 @@ variable "raw_message_delivery" {
 }
 
 variable "filter_policy" {
-  type = "string"
   default     = ""
   description = "JSON String with the filter policy that will be used in the subscription to filter messages seen by the target resource."
 }
 
 variable "subscription_delivery_policy" {
-  type = "string"
   default     = ""
-  description = "Boolean indicating whether or not to enable raw message delivery."
+  description = "JSON String with the delivery policy (retries, backoff, etc.) that will be used in the subscription - this only applies to HTTP/S subscriptions."
 }
 
 variable "update_preference" {
@@ -223,8 +220,13 @@ variable "update_preference" {
   description = "Boolean indicating whether or not to update SNS SMS Preference."
 }
 
+variable "create_topic" {
+  default     = false
+  description = "Boolean indicating whether or not to create topic."
+}
+
 variable "monthly_spend_limit" {
-  default     = "100"
+  default     = 1
   description = "The maximum amount in USD that you are willing to spend each month to send SMS messages."
 }
 

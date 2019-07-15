@@ -17,6 +17,7 @@ resource "aws_sns_platform_application" "sns" {
 }
 
 resource "aws_sns_topic" "topics" {
+  count = var.create_topic ? 1 : 0
   name = var.topic_name
   display_name = var.display_name
   policy = var.policy
@@ -37,7 +38,8 @@ resource "aws_sns_topic" "topics" {
 }
 
 resource "aws_sns_topic_subscription" "sns-topic" {
-  topic_arn = aws_sns_topic.topics.arn
+  count = var.create_topic ? 1 : 0
+  topic_arn = aws_sns_topic.topics[count.index].arn
   protocol  = var.protocol
   endpoint  = var.endpoint
   endpoint_auto_confirms  = var.endpoint_auto_confirms
@@ -49,6 +51,7 @@ resource "aws_sns_topic_subscription" "sns-topic" {
 
 resource "aws_sns_sms_preferences" "update_sms_prefs" {
   count = var.update_preference ? 1 : 0
+  monthly_spend_limit = var.monthly_spend_limit
   delivery_status_iam_role_arn = var.delivery_status_iam_role_arn
   delivery_status_success_sampling_rate = var.delivery_status_success_sampling_rate
   default_sender_id = var.default_sender_id

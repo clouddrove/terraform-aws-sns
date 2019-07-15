@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "sns" {
-  source = "../../"
+  source = "git::https://github.com/clouddrove/terraform-aws-sns.git"
   name        = "clouddrove"
   platform    = "APNS"
   key         = file("./../../../certificates/private_key.pem")
@@ -13,6 +13,7 @@ module "sns" {
   policy      = data.aws_iam_policy_document.sns-topic-policy.json
   endpoint = "arn:aws:sqs:eu-west-1:866067750630:dev-sqs-clouddrove"
   update_preference = true
+  create_topic = true
   protocol = "sqs"
 }
 
