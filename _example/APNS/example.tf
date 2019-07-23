@@ -4,6 +4,7 @@ provider "aws" {
 
 module "sns" {
   source            = "git::https://github.com/clouddrove/terraform-aws-sns.git"
+  
   name              = "clouddrove"
   platform          = "APNS"
   key               = file("./../../../certificates/private_key.pem")

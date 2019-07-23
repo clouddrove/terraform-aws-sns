@@ -1,12 +1,12 @@
 variable "name" {
-  description = "The friendly name for the SNS platform application"
   type        = string
+  description = "The friendly name for the SNS platform application"
 }
 
 variable "platform" {
   type        = string
-  description = "The platform that the app is registered with. See Platform for supported platforms like 'APNS' 'GCM'"
   default     = ""
+  description = "The platform that the app is registered with. See Platform for supported platforms like 'APNS' 'GCM'"
 }
 
 variable "key" {

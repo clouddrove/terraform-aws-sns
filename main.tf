@@ -1,7 +1,9 @@
 ## Managed By : CloudDrove
 ## Copyright @ CloudDrove. All Right Reserved.
 
-resource "aws_sns_platform_application" "sns" {
+#Module      : SNS
+#Description : Terraform module which creates SNS resources on AWS
+resource "aws_sns_platform_application" "default" {
   count                            = 1
   name                             = var.name
   platform                         = var.platform
@@ -16,7 +18,9 @@ resource "aws_sns_platform_application" "sns" {
   success_feedback_sample_rate     = var.success_feedback_sample_rate
 }
 
-resource "aws_sns_topic" "topics" {
+#Module      : SNS TOPIC
+#Description : Terraform module which creates SNS Topic resources on AWS
+resource "aws_sns_topic" "default" {
   count                                    = var.create_topic ? 1 : 0
   name                                     = var.topic_name
   display_name                             = var.display_name
@@ -37,7 +41,9 @@ resource "aws_sns_topic" "topics" {
   sqs_failure_feedback_role_arn            = var.sqs_failure_feedback_role_arn
 }
 
-resource "aws_sns_topic_subscription" "sns-topic" {
+#Module      : SNS TOPIC SUBSCRIPTION
+#Description : Terraform module which creates SNS Topic Subscription resources on AWS
+resource "aws_sns_topic_subscription" "default" {
   count                           = var.create_topic ? 1 : 0
   topic_arn                       = aws_sns_topic.topics[count.index].arn
   protocol                        = var.protocol
@@ -49,7 +55,9 @@ resource "aws_sns_topic_subscription" "sns-topic" {
   delivery_policy                 = var.subscription_delivery_policy
 }
 
-resource "aws_sns_sms_preferences" "update_sms_prefs" {
+#Module      : SNS SMS Preferences
+#Description : Terraform module which creates SNS SMS Preferences on AWS
+resource "aws_sns_sms_preferences" "default" {
   count                                 = var.update_preference ? 1 : 0
   monthly_spend_limit                   = var.monthly_spend_limit
   delivery_status_iam_role_arn          = var.delivery_status_iam_role_arn
