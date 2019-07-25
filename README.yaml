@@ -1,0 +1,107 @@
+---
+#
+# This is the canonical configuration for the `README.md`
+# Run `make readme` to rebuild the `README.md`
+#
+
+# Name of this project
+name : terraform-aws-sns-platform-application
+
+# License of this project
+license: "MIT"
+
+# Canonical GitHub repo
+github_repo: clouddrove/terraform-aws-sns-platform-application
+
+# Badges to display
+badges:
+  - name: "Build Status"
+    image: "https://img.shields.io/badge/build-passing-green.svg"
+    url: "https://travis-ci.org/cloudposse/terraform-aws-vpc"
+
+#  Related Projects of this project
+related:
+  - name: "terraform-aws-sqs"
+    description: "Terraform module provisioning for create SQS on AWS."
+    url: "https://github.com/clouddrove/terraform-aws-sqs"
+
+#  description of this project
+description: |-
+  This terraform module is used to create SNS on AWS.
+
+# extra content
+# please not remove these two If you need add more
+include:
+  - "terraform.md"
+
+# How to use this project
+usage : |-
+  Include this repository as a module in your existing terraform code:
+  ### Example1
+  ```hcl
+    module "sns" {
+      source = "git::https://github.com/clouddrove/terraform-aws-sns.git"
+      name        = "clouddrove"
+      platform    = "APNS"
+      key         = file("./../../../certificates/private_key.pem")
+      certificate = file("./../../../certificates/cert.pem")
+      topic_name  = "sns_topic"
+      delivery_policy = file("./../_json/delivery_policy.json")
+      policy      = data.aws_iam_policy_document.sns-topic-policy.json
+      endpoint = "arn:aws:sqs:eu-west-1:866067750630:dev-sqs-clouddrove"
+      update_preference = true
+      create_topic = true
+      protocol = "sqs"
+    }
+
+    data "aws_iam_policy_document" "sns-topic-policy" {
+      policy_id = "__default_policy_ID"
+      statement {
+        actions = [
+          "SNS:Subscribe",
+          "SNS:SetTopicAttributes",
+          "SNS:RemovePermission",
+          "SNS:Receive",
+          "SNS:Publish",
+          "SNS:ListSubscriptionsByTopic",
+          "SNS:GetTopicAttributes",
+          "SNS:DeleteTopic",
+          "SNS:AddPermission",
+        ]
+        condition {
+          test     = "StringEquals"
+          variable = "AWS:SourceOwner"
+
+          values = [
+            866067750630,
+          ]
+        }
+        effect = "Allow"
+        principals {
+          type        = "AWS"
+          identifiers = ["*"]
+        }
+        resources = [
+          "arn:aws:sns:eu-west-1:866067750630:sns_topic",
+        ]
+        sid = "__default_statement_ID"
+      }
+    }
+  ```
+  ### Example2
+  ```hcl
+    module "sns" {
+      source = "git::https://github.com/clouddrove/terraform-aws-sns.git"
+      name        = "clouddrove"
+      platform    = "GCM"
+      key         = "AAAAKHQaqe1w:APA91bEgwftAYq6N2YV8TeU2k4bRj0k1q2I7Q47ZvFPLQm-ESbD2Fhjj3U9wNNuZ2aC-QZVdgDrN5C6E3Ec08AWhMgbs4b72gNvqcXh1JBoR6yLwretghyjutTR4yRmT0vWdhz4_PW1AwDC0aVoH"
+    }
+  ```
+# Contributors to this project
+contributors:
+  - name: "Kamlesh Bhargav"
+    github: "kamleshbhargav"
+  - name: "Nikita Dugar"
+    github: "nikitadugar"
+  - name: "Sohan Yadav"
+    github: "sohanyadav"
