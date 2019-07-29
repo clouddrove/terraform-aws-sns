@@ -9,7 +9,7 @@ import (
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
-func TestSns(t *testing.T) {
+func Test(t *testing.T) {
 	t.Parallel()
 
 	terraformOptions := &terraform.Options{

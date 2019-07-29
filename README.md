@@ -12,7 +12,7 @@ This terraform module is used to create SNS on AWS.
 
 ---
 
-This project is part of our comprehensive ["Clouddrove"](https://clouddrove.com) approach towards DevOps.
+This project is part of our comprehensive ["Clouddrove"](https://clouddrove.com) approach towards DevOps. 
 [<img align="right" title="Share on Facebook" src="https://docs.cloudposse.com/images/ionicons/social-facebook-outline-2.0.1-16x16-999999.svg" />][share_facebook]
 [<img align="right" title="Share on LinkedIn" src="https://docs.cloudposse.com/images/ionicons/social-linkedin-outline-2.0.1-16x16-999999.svg" />][share_linkedin]
 [<img align="right" title="Share on Twitter" src="https://docs.cloudposse.com/images/ionicons/social-twitter-outline-2.0.1-16x16-999999.svg" />][share_twitter]
@@ -27,7 +27,7 @@ It's 100% Open Source and licensed under the [MIT](LICENSE).
 
 
 
-We literally have [*hundreds of terraform modules*][terraform_modules] that are Open Source and well-maintained. Check them out!
+We literally have [*hundreds of terraform modules*][terraform_modules] that are Open Source and well-maintained. Check them out! 
 
 
 
@@ -46,18 +46,18 @@ Include this repository as a module in your existing terraform code:
 ### Example1
 ```hcl
   module "sns" {
-    source = "git::https://github.com/clouddrove/terraform-aws-sns.git"
-    name        = "clouddrove"
-    platform    = "APNS"
-    key         = file("./../../../certificates/private_key.pem")
-    certificate = file("./../../../certificates/cert.pem")
-    topic_name  = "sns_topic"
-    delivery_policy = file("./../_json/delivery_policy.json")
-    policy      = data.aws_iam_policy_document.sns-topic-policy.json
-    endpoint = "arn:aws:sqs:eu-west-1:866067750630:dev-sqs-clouddrove"
+    source            = "git::https://github.com/clouddrove/terraform-aws-sns.git"
+    name              = "clouddrove"
+    platform          = "APNS"
+    key               = file("./../../../certificates/private_key.pem")
+    certificate       = file("./../../../certificates/cert.pem")
+    topic_name        = "sns_topic"
+    delivery_policy   = file("./../_json/delivery_policy.json")
+    policy            = data.aws_iam_policy_document.sns-topic-policy.json
+    endpoint          = "arn:aws:sqs:eu-west-1:866067750630:dev-sqs-clouddrove"
     update_preference = true
-    create_topic = true
-    protocol = "sqs"
+    create_topic      = true
+    protocol          = "sqs"
   }
 
   data "aws_iam_policy_document" "sns-topic-policy" {
@@ -97,7 +97,7 @@ Include this repository as a module in your existing terraform code:
 ### Example2
 ```hcl
   module "sns" {
-    source = "git::https://github.com/clouddrove/terraform-aws-sns.git"
+    source      = "git::https://github.com/clouddrove/terraform-aws-sns.git"
     name        = "clouddrove"
     platform    = "GCM"
     key         = "AAAAKHQaqe1w:APA91bEgwftAYq6N2YV8TeU2k4bRj0k1q2I7Q47ZvFPLQm-ESbD2Fhjj3U9wNNuZ2aC-QZVdgDrN5C6E3Ec08AWhMgbs4b72gNvqcXh1JBoR6yLwretghyjutTR4yRmT0vWdhz4_PW1AwDC0aVoH"
@@ -169,9 +169,9 @@ Include this repository as a module in your existing terraform code:
 
 
 
-## Share the Love
+## Share the Love 
 
-Like this project? Please give it a ★ on [our GitHub](https://github.com/clouddrove/terraform-aws-sns-platform-application)! (it helps us **a lot**)
+Like this project? Please give it a ★ on [our GitHub](https://github.com/clouddrove/terraform-aws-sns-platform-application)! (it helps us **a lot**) 
 
 ## Related Projects
 
@@ -201,7 +201,7 @@ Copyright © [CloudDrove](https://clouddrove.com). All Right Reserved.
 
 
 
-## License
+## License 
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 

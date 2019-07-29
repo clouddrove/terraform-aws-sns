@@ -40,18 +40,18 @@ usage : |-
   ### Example1
   ```hcl
     module "sns" {
-      source = "git::https://github.com/clouddrove/terraform-aws-sns.git"
-      name        = "clouddrove"
-      platform    = "APNS"
-      key         = file("./../../../certificates/private_key.pem")
-      certificate = file("./../../../certificates/cert.pem")
-      topic_name  = "sns_topic"
-      delivery_policy = file("./../_json/delivery_policy.json")
-      policy      = data.aws_iam_policy_document.sns-topic-policy.json
-      endpoint = "arn:aws:sqs:eu-west-1:866067750630:dev-sqs-clouddrove"
+      source            = "git::https://github.com/clouddrove/terraform-aws-sns.git"
+      name              = "clouddrove"
+      platform          = "APNS"
+      key               = file("./../../../certificates/private_key.pem")
+      certificate       = file("./../../../certificates/cert.pem")
+      topic_name        = "sns_topic"
+      delivery_policy   = file("./../_json/delivery_policy.json")
+      policy            = data.aws_iam_policy_document.sns-topic-policy.json
+      endpoint          = "arn:aws:sqs:eu-west-1:866067750630:dev-sqs-clouddrove"
       update_preference = true
-      create_topic = true
-      protocol = "sqs"
+      create_topic      = true
+      protocol          = "sqs"
     }
 
     data "aws_iam_policy_document" "sns-topic-policy" {
@@ -91,7 +91,7 @@ usage : |-
   ### Example2
   ```hcl
     module "sns" {
-      source = "git::https://github.com/clouddrove/terraform-aws-sns.git"
+      source      = "git::https://github.com/clouddrove/terraform-aws-sns.git"
       name        = "clouddrove"
       platform    = "GCM"
       key         = "AAAAKHQaqe1w:APA91bEgwftAYq6N2YV8TeU2k4bRj0k1q2I7Q47ZvFPLQm-ESbD2Fhjj3U9wNNuZ2aC-QZVdgDrN5C6E3Ec08AWhMgbs4b72gNvqcXh1JBoR6yLwretghyjutTR4yRmT0vWdhz4_PW1AwDC0aVoH"
