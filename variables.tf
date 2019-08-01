@@ -1,8 +1,49 @@
+#Module      : LABEL
+#Description : Terraform label module variables
 variable "name" {
   type        = string
-  description = "The friendly name for the SNS platform application"
+  default     = ""
+  description = "Name  (e.g. `app` or `cluster`)."
 }
 
+variable "application" {
+  type        = string
+  default     = ""
+  description = "Application (e.g. `cd` or `clouddrove`)."
+}
+
+variable "environment" {
+  type        = string
+  default     = ""
+  description = "Environment (e.g. `prod`, `dev`, `staging`)."
+}
+
+variable "label_order" {
+  type        = list
+  default     = []
+  description = "label order, e.g. `name`,`application`."
+}
+
+variable "attributes" {
+  type        = list
+  default     = []
+  description = "Additional attributes (e.g. `1`)."
+}
+
+variable "delimiter" {
+  type        = string
+  default     = "-"
+  description = "Delimiter to be used between `organization`, `environment`, `name` and `attributes`"
+}
+
+variable "tags" {
+  type        = map
+  default     = {}
+  description = "Additional tags (e.g. map(`BusinessUnit`,`XYZ`)."
+}
+
+# Module      : SNS Module
+# Description : Terraform SNS module variables
 variable "platform" {
   type        = string
   default     = ""
@@ -14,11 +55,16 @@ variable "key" {
   default     = ""
   description = "Application Platform credential. See Credential for type of credential required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources"
 }
+variable "gcm_key" {
+  type        = string
+  default     = ""
+  description = "Application Platform credential. See Credential for type of credential required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources"
+}
 
 variable "certificate" {
   type        = string
   default     = ""
-  description = "application Platform principal. See Principal for type of principal required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources"
+  description = "application Platform principal. See Principal for type of principal required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources."
 }
 
 variable "event_delivery_failure_topic_arn" {
@@ -180,7 +226,7 @@ variable "sqs_failure_feedback_role_arn" {
 variable "protocol" {
   type        = string
   default     = ""
-  description = "The protocol to use. The possible values for this are: sqs, sms, lambda, application"
+  description = "The protocol to use. The possible values for this are: sqs, sms, lambda, application."
 }
 
 variable "endpoint" {
@@ -190,6 +236,7 @@ variable "endpoint" {
 }
 
 variable "endpoint_auto_confirms" {
+  type        = bool
   default     = false
   description = "Boolean indicating whether the end point is capable of auto confirming subscription."
 }
@@ -201,31 +248,43 @@ variable "confirmation_timeout_in_minutes" {
 }
 
 variable "raw_message_delivery" {
+  type        = bool
   default     = false
   description = "Boolean indicating whether or not to enable raw message delivery."
 }
 
 variable "filter_policy" {
+  type =   string
   default     = ""
   description = "JSON String with the filter policy that will be used in the subscription to filter messages seen by the target resource."
 }
 
 variable "subscription_delivery_policy" {
+  type =   string
   default     = ""
   description = "JSON String with the delivery policy (retries, backoff, etc.) that will be used in the subscription - this only applies to HTTP/S subscriptions."
 }
 
-variable "update_preference" {
+variable "enable_sms_preference" {
+  type        = bool
   default     = false
   description = "Boolean indicating whether or not to update SNS SMS Preference."
 }
 
-variable "create_topic" {
+variable "enable_topic" {
+  type        = bool
   default     = false
   description = "Boolean indicating whether or not to create topic."
 }
 
+variable "enable_sns" {
+  type        = bool
+  default     = true
+  description = "Boolean indicating whether or not to create sns."
+}
+
 variable "monthly_spend_limit" {
+  type        = number
   default     = 1
   description = "The maximum amount in USD that you are willing to spend each month to send SMS messages."
 }
