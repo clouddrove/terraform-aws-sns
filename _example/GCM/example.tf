@@ -5,7 +5,11 @@ provider "aws" {
 module "sns" {
   source = "git::https://github.com/clouddrove/terraform-aws-sns.git"
 
-  name     = "clouddrove"
+  name        = "sqs"
+  application = "clouddrove"
+  environment = "test"
+  label_order = ["environment", "name", "application"]
+
   platform = "GCM"
-  key      = "AAAAKHQaqe1w:APA91bEgwftAYq6N2YV8TeU2k4bRj0k1q2I7Q47ZvFPLQm-ESbD2Fhjj3U9wNNuZ2aC-QZVdgDrN5C6E3Ec08AWhMgbs4b72gNvqcXh1JBoR6yLwretghyjutTR4yRmT0vWdhz4_PW1AwDC0aVoH"
+  gcm_key      = "AAAA8TADDDPA91bGe_q6xfkWyd6x4ie2UGqj4icP_6Kyz3OT2Ms1cbJZDOq3AkCAt5tNpNE0g3oUQBdind1g7891cdrVAxbOmzL3XRd0ktgkFne2OwI7pC5an877XcBNQiHPMHT7dN7TykI2o6O2K"
 }
