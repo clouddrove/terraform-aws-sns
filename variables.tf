@@ -254,13 +254,13 @@ variable "raw_message_delivery" {
 }
 
 variable "filter_policy" {
-  type =   string
+  type        = string
   default     = ""
   description = "JSON String with the filter policy that will be used in the subscription to filter messages seen by the target resource."
 }
 
 variable "subscription_delivery_policy" {
-  type =   string
+  type        = string
   default     = ""
   description = "JSON String with the delivery policy (retries, backoff, etc.) that will be used in the subscription - this only applies to HTTP/S subscriptions."
 }
