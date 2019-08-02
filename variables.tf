@@ -21,7 +21,7 @@ variable "environment" {
 variable "label_order" {
   type        = list
   default     = []
-  description = "label order, e.g. `name`,`application`."
+  description = "Label order, e.g. `name`,`application`."
 }
 
 variable "attributes" {
@@ -33,7 +33,7 @@ variable "attributes" {
 variable "delimiter" {
   type        = string
   default     = "-"
-  description = "Delimiter to be used between `organization`, `environment`, `name` and `attributes`"
+  description = "Delimiter to be used between `organization`, `environment`, `name` and `attributes`."
 }
 
 variable "tags" {
@@ -47,18 +47,18 @@ variable "tags" {
 variable "platform" {
   type        = string
   default     = ""
-  description = "The platform that the app is registered with. See Platform for supported platforms like 'APNS' 'GCM'"
+  description = "The platform that the app is registered with. See Platform for supported platforms like 'APNS' 'GCM'."
 }
 
 variable "key" {
   type        = string
   default     = ""
-  description = "Application Platform credential. See Credential for type of credential required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources"
+  description = "Application Platform credential. See Credential for type of credential required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources."
 }
 variable "gcm_key" {
   type        = string
   default     = ""
-  description = "Application Platform credential. See Credential for type of credential required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources"
+  description = "Application Platform credential. See Credential for type of credential required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources."
 }
 
 variable "certificate" {
@@ -88,7 +88,7 @@ variable "event_endpoint_deleted_topic_arn" {
 variable "event_endpoint_updated_topic_arn" {
   type        = string
   default     = ""
-  description = " SNS Topic triggered when an existing platform endpoint is changed from your platform application."
+  description = "SNS Topic triggered when an existing platform endpoint is changed from your platform application."
 }
 
 variable "failure_feedback_role_arn" {
@@ -112,7 +112,7 @@ variable "success_feedback_role_arn" {
 variable "success_feedback_sample_rate" {
   type        = number
   default     = 100
-  description = "The percentage of success to sample (0-100)"
+  description = "The percentage of success to sample (0-100)."
 }
 
 variable "topic_name" {
@@ -254,13 +254,13 @@ variable "raw_message_delivery" {
 }
 
 variable "filter_policy" {
-  type =   string
+  type        = string
   default     = ""
   description = "JSON String with the filter policy that will be used in the subscription to filter messages seen by the target resource."
 }
 
 variable "subscription_delivery_policy" {
-  type =   string
+  type        = string
   default     = ""
   description = "JSON String with the delivery policy (retries, backoff, etc.) that will be used in the subscription - this only applies to HTTP/S subscriptions."
 }

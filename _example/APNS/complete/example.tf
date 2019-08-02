@@ -32,23 +32,23 @@ data "aws_iam_policy_document" "document" {
 }
 
 module "sns" {
-  source            = "git::https://github.com/clouddrove/terraform-aws-sns.git"
+  source = "git::https://github.com/clouddrove/terraform-aws-sns.git"
 
   name        = "sns"
   application = "clouddrove"
   environment = "test"
   label_order = ["environment", "name", "application"]
 
-  platform          = "APNS"
+  platform              = "APNS"
   enable_sms_preference = true
-  enable_topic      = true
-  endpoint          = module.sqs.arn
-  protocol          = "sqs"
+  enable_topic          = true
+  endpoint              = module.sqs.arn
+  protocol              = "sqs"
 
-  key               = "../../certificates/private_key.pem"
-  certificate       = "../../certificates/cert.pem"
-  delivery_policy   = "../../_json/delivery_policy.json"
-  policy            = data.aws_iam_policy_document.sns-topic-policy.json
+  key             = "../../certificates/private_key.pem"
+  certificate     = "../../certificates/cert.pem"
+  delivery_policy = "../../_json/delivery_policy.json"
+  policy          = data.aws_iam_policy_document.sns-topic-policy.json
 }
 
 data "aws_iam_policy_document" "sns-topic-policy" {
@@ -70,7 +70,7 @@ data "aws_iam_policy_document" "sns-topic-policy" {
       variable = "AWS:SourceOwner"
 
       values = [
-        866067750630,
+        xxxxxxxxxxxx,
       ]
     }
     effect = "Allow"
