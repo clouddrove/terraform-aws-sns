@@ -5,29 +5,26 @@
 #
 
 # Name of this project
-name : terraform-aws-sns-platform-application
+name : Terraform AWS SNS
 
 # License of this project
 license: "MIT"
 
 # Canonical GitHub repo
-github_repo: clouddrove/terraform-aws-sns-platform-application
+github_repo: clouddrove/terraform-aws-sns
 
 # Badges to display
 badges:
-  - name: "Build Status"
-    image: "https://img.shields.io/badge/build-passing-green.svg"
-    url: "https://travis-ci.org/cloudposse/terraform-aws-vpc"
-
-#  Related Projects of this project
-related:
-  - name: "terraform-aws-sqs"
-    description: "Terraform module provisioning for create SQS on AWS."
-    url: "https://github.com/clouddrove/terraform-aws-sqs"
+  - name: "Terraform"
+    image: "https://img.shields.io/badge/Terraform-v0.12-green"
+    url: "https://www.terraform.io"
+  - name: "Licence"
+    image: "https://img.shields.io/badge/License-MIT-blue.svg"
+    url: "LICENSE.md"
 
 #  description of this project
 description: |-
-  This terraform module is used to create SNS on AWS.
+  Terraform module is used to setup SNS service to manage notifications on application.
 
 # extra content
 # please not remove these two If you need add more
@@ -36,19 +33,38 @@ include:
 
 # How to use this project
 usage : |-
-  Include this repository as a module in your existing terraform code:
-  ### Example1
+  Here are some examples of how you can use this module in your inventory structure:
+  ### APNS
+  #### Basic
+  ```hcl
+    module "sns" {
+      source      = "git::https://github.com/clouddrove/terraform-aws-sns.git"
+
+      name        = "basic-sns"
+      application = "clouddrove"
+      environment = "test"
+      label_order = ["environment", "name", "application"]
+
+      platform          = "APNS"
+      key               = "../../certificates/private_key.pem"
+      certificate       = "../../certificates/cert.pem"
+    }
+  ```
+  #### Complete
   ```hcl
     module "sns" {
       source            = "git::https://github.com/clouddrove/terraform-aws-sns.git"
-      name              = "clouddrove"
+      name        = "sns"
+      application = "clouddrove"
+      environment = "test"
+      label_order = ["environment", "name", "application"]
       platform          = "APNS"
-      key               = file("./../../../certificates/private_key.pem")
-      certificate       = file("./../../../certificates/cert.pem")
+      key               = file("../../certificates/private_key.pem")
+      certificate       = file("../../certificates/cert.pem")
       topic_name        = "sns_topic"
       delivery_policy   = file("./../_json/delivery_policy.json")
       policy            = data.aws_iam_policy_document.sns-topic-policy.json
-      endpoint          = "arn:aws:sqs:eu-west-1:866067750630:dev-sqs-clouddrove"
+      endpoint          = "arn:aws:sqs:eu-west-1:xxxxxxxxxxx:dev-sqs-clouddrove"
       update_preference = true
       create_topic      = true
       protocol          = "sqs"
@@ -88,20 +104,15 @@ usage : |-
       }
     }
   ```
-  ### Example2
+  ### GCM
   ```hcl
     module "sns" {
       source      = "git::https://github.com/clouddrove/terraform-aws-sns.git"
-      name        = "clouddrove"
+      name        = "sqs"
+      application = "clouddrove"
+      environment = "test"
+      label_order = ["environment", "name", "application"]
       platform    = "GCM"
       key         = "AAAAKHQaqe1w:APA91bEgwftAYq6N2YV8TeU2k4bRj0k1q2I7Q47ZvFPLQm-ESbD2Fhjj3U9wNNuZ2aC-QZVdgDrN5C6E3Ec08AWhMgbs4b72gNvqcXh1JBoR6yLwretghyjutTR4yRmT0vWdhz4_PW1AwDC0aVoH"
     }
   ```
-# Contributors to this project
-contributors:
-  - name: "Kamlesh Bhargav"
-    github: "kamleshbhargav"
-  - name: "Nikita Dugar"
-    github: "nikitadugar"
-  - name: "Sohan Yadav"
-    github: "sohanyadav"

@@ -70,7 +70,7 @@ data "aws_iam_policy_document" "sns-topic-policy" {
       variable = "AWS:SourceOwner"
 
       values = [
-        866067750630,
+        xxxxxxxxxxxx,
       ]
     }
     effect = "Allow"

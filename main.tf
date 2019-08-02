@@ -14,7 +14,8 @@ module "labels" {
 }
 
 #Module      : SNS
-#Description : Terraform module which creates SNS resources on AWS
+#Description : Terraform module is used to setup SNS service to manage notifications on 
+#              application.
 resource "aws_sns_platform_application" "default" {
   count                            = var.enable_sns ? 1 : 0
 
