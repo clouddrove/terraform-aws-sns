@@ -65,13 +65,11 @@ Here are some examples of how you can use this module in your inventory structur
 #### Basic
 ```hcl
   module "sns" {
-    source      = "git::https://github.com/clouddrove/terraform-aws-sns.git"
-
-    name        = "basic-sns"
-    application = "clouddrove"
-    environment = "test"
-    label_order = ["environment", "name", "application"]
-
+    source            = "git::https://github.com/clouddrove/terraform-aws-sns.git"
+    name              = "basic-sns"
+    application       = "clouddrove"
+    environment       = "test"
+    label_order       = ["environment", "name", "application"]
     platform          = "APNS"
     key               = "../../certificates/private_key.pem"
     certificate       = "../../certificates/cert.pem"
@@ -81,10 +79,10 @@ Here are some examples of how you can use this module in your inventory structur
 ```hcl
   module "sns" {
     source            = "git::https://github.com/clouddrove/terraform-aws-sns.git"
-    name        = "sns"
-    application = "clouddrove"
-    environment = "test"
-    label_order = ["environment", "name", "application"]
+    name              = "sns"
+    application       = "clouddrove"
+    environment       = "test"
+    label_order       = ["environment", "name", "application"]
     platform          = "APNS"
     key               = file("../../certificates/private_key.pem")
     certificate       = file("../../certificates/cert.pem")
