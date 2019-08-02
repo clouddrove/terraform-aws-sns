@@ -116,7 +116,7 @@ Here are some examples of how you can use this module in your inventory structur
         variable = "AWS:SourceOwner"
 
         values = [
-          866067750630,
+          xxxxxxxxxxx,
         ]
       }
       effect = "Allow"
@@ -125,7 +125,7 @@ Here are some examples of how you can use this module in your inventory structur
         identifiers = ["*"]
       }
       resources = [
-        "arn:aws:sns:eu-west-1:866067750630:sns_topic",
+        "arn:aws:sns:eu-west-1:xxxxxxxxxxx:sns_topic",
       ]
       sid = "__default_statement_ID"
     }
