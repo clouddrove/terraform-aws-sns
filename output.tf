@@ -1,5 +1,5 @@
 #Module      : SNS
-#Description : Terraform module which creates SNS resources on AWS
+#Description : Terraform module is used to setup SNS service to manage notifications on application.
 output "id" {
   value = concat(
     aws_sns_platform_application.default.*.id

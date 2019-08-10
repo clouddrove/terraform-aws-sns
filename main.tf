@@ -14,14 +14,15 @@ module "labels" {
 }
 
 #Module      : SNS
-#Description : Terraform module which creates SNS resources on AWS
+#Description : Terraform module is used to setup SNS service to manage notifications on
+#              application.
 resource "aws_sns_platform_application" "default" {
-  count                            = var.enable_sns ? 1 : 0
+  count = var.enable_sns ? 1 : 0
 
   name                             = module.labels.id
   platform                         = var.platform
-  platform_credential              =  length(var.gcm_key) > 0 ? var.gcm_key : file(var.key)
-  platform_principal               =  length(var.gcm_key) > 0 ? var.gcm_key : file(var.certificate)
+  platform_credential              = length(var.gcm_key) > 0 ? var.gcm_key : file(var.key)
+  platform_principal               = length(var.gcm_key) > 0 ? var.gcm_key : file(var.certificate)
   event_delivery_failure_topic_arn = var.event_delivery_failure_topic_arn
   event_endpoint_created_topic_arn = var.event_endpoint_created_topic_arn
   event_endpoint_deleted_topic_arn = var.event_endpoint_deleted_topic_arn
@@ -34,7 +35,7 @@ resource "aws_sns_platform_application" "default" {
 #Module      : SNS TOPIC
 #Description : Terraform module which creates SNS Topic resources on AWS
 resource "aws_sns_topic" "default" {
-  count                                    = var.enable_topic ? 1 : 0
+  count = var.enable_topic ? 1 : 0
 
   name                                     = module.labels.id
   display_name                             = var.display_name
@@ -53,13 +54,13 @@ resource "aws_sns_topic" "default" {
   sqs_success_feedback_role_arn            = var.sqs_success_feedback_role_arn
   sqs_success_feedback_sample_rate         = var.sqs_success_feedback_sample_rate
   sqs_failure_feedback_role_arn            = var.sqs_failure_feedback_role_arn
-  tags = module.labels.tags
+  tags                                     = module.labels.tags
 }
 
 #Module      : SNS TOPIC SUBSCRIPTION
 #Description : Terraform module which creates SNS Topic Subscription resources on AWS
 resource "aws_sns_topic_subscription" "default" {
-  count                           = var.enable_topic ? 1 : 0
+  count = var.enable_topic ? 1 : 0
 
   topic_arn                       = aws_sns_topic.default[count.index].arn
   protocol                        = var.protocol
@@ -74,7 +75,7 @@ resource "aws_sns_topic_subscription" "default" {
 #Module      : SNS SMS Preferences
 #Description : Terraform module which creates SNS SMS Preferences on AWS
 resource "aws_sns_sms_preferences" "default" {
-  count                                 = var.enable_sms_preference ? 1 : 0
+  count = var.enable_sms_preference ? 1 : 0
 
   monthly_spend_limit                   = var.monthly_spend_limit
   delivery_status_iam_role_arn          = var.delivery_status_iam_role_arn

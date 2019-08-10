@@ -4,32 +4,33 @@
 
 
 <h1 align="center">
-    terraform-aws-sns-platform-application
-
-
+    Terraform AWS SNS
 </h1>
 
 <p align="center" style="font-size: 1.2rem;">
-    This terraform module is used to create SNS on AWS.
+    Terraform module is used to setup SNS service to manage notifications on application.
      </p>
 
 <p align="center">
 
-<a href="https://travis-ci.org/cloudposse/terraform-aws-vpc">
-  <img src="https://img.shields.io/badge/build-passing-green.svg" alt="Build Status">
+<a href="https://www.terraform.io">
+  <img src="https://img.shields.io/badge/Terraform-v0.12-green" alt="Terraform">
+</a>
+<a href="LICENSE.md">
+  <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="Licence">
 </a>
 
 
 </p>
 <p align="center">
 
-<a href='https://facebook.com/sharer/sharer.php?u=https://github.com/clouddrove/terraform-aws-sns-platform-application'>
+<a href='https://facebook.com/sharer/sharer.php?u=https://github.com/clouddrove/terraform-aws-sns'>
   <img title="Share on Facebook" src="https://user-images.githubusercontent.com/50652676/62817743-4f64cb80-bb59-11e9-90c7-b057252ded50.png" />
 </a>
-<a href='https://www.linkedin.com/shareArticle?mini=true&title=terraform-aws-sns-platform-application&url=https://github.com/clouddrove/terraform-aws-sns-platform-application'>
+<a href='https://www.linkedin.com/shareArticle?mini=true&title=Terraform+AWS+SNS&url=https://github.com/clouddrove/terraform-aws-sns'>
   <img title="Share on LinkedIn" src="https://user-images.githubusercontent.com/50652676/62817742-4e339e80-bb59-11e9-87b9-a1f68cae1049.png" />
 </a>
-<a href='https://twitter.com/intent/tweet/?text=terraform-aws-sns-platform-application&url=https://github.com/clouddrove/terraform-aws-sns-platform-application'>
+<a href='https://twitter.com/intent/tweet/?text=Terraform+AWS+SNS&url=https://github.com/clouddrove/terraform-aws-sns'>
   <img title="Share on Twitter" src="https://user-images.githubusercontent.com/50652676/62817740-4c69db00-bb59-11e9-8a79-3580fbbf6d5c.png" />
 </a>
 
@@ -62,22 +63,39 @@ This module has a few dependencies:
 
 ## Examples
 
-**IMPORTANT:** Since the `master` branch used in `source` varies based on new modifications, we suggest that you use the release versions [here](https://github.com/clouddrove/terraform-aws-sns-platform-application/releases).
+**IMPORTANT:** Since the `master` branch used in `source` varies based on new modifications, we suggest that you use the release versions [here](https://github.com/clouddrove/terraform-aws-sns/releases).
 
 
-Include this repository as a module in your existing terraform code:
-### Example1
+Here are some examples of how you can use this module in your inventory structure:
+### APNS
+#### Basic
 ```hcl
   module "sns" {
     source            = "git::https://github.com/clouddrove/terraform-aws-sns.git"
-    name              = "clouddrove"
+    name              = "basic-sns"
+    application       = "clouddrove"
+    environment       = "test"
+    label_order       = ["environment", "name", "application"]
     platform          = "APNS"
-    key               = file("./../../../certificates/private_key.pem")
-    certificate       = file("./../../../certificates/cert.pem")
+    key               = "../../certificates/private_key.pem"
+    certificate       = "../../certificates/cert.pem"
+  }
+```
+#### Complete
+```hcl
+  module "sns" {
+    source            = "git::https://github.com/clouddrove/terraform-aws-sns.git"
+    name              = "sns"
+    application       = "clouddrove"
+    environment       = "test"
+    label_order       = ["environment", "name", "application"]
+    platform          = "APNS"
+    key               = file("../../certificates/private_key.pem")
+    certificate       = file("../../certificates/cert.pem")
     topic_name        = "sns_topic"
     delivery_policy   = file("./../_json/delivery_policy.json")
     policy            = data.aws_iam_policy_document.sns-topic-policy.json
-    endpoint          = "arn:aws:sqs:eu-west-1:866067750630:dev-sqs-clouddrove"
+    endpoint          = "arn:aws:sqs:eu-west-1:xxxxxxxxxxx:dev-sqs-clouddrove"
     update_preference = true
     create_topic      = true
     protocol          = "sqs"
@@ -102,7 +120,7 @@ Include this repository as a module in your existing terraform code:
         variable = "AWS:SourceOwner"
 
         values = [
-          866067750630,
+          xxxxxxxxxxx,
         ]
       }
       effect = "Allow"
@@ -111,17 +129,20 @@ Include this repository as a module in your existing terraform code:
         identifiers = ["*"]
       }
       resources = [
-        "arn:aws:sns:eu-west-1:866067750630:sns_topic",
+        "arn:aws:sns:eu-west-1:xxxxxxxxxxx:sns_topic",
       ]
       sid = "__default_statement_ID"
     }
   }
 ```
-### Example2
+### GCM
 ```hcl
   module "sns" {
     source      = "git::https://github.com/clouddrove/terraform-aws-sns.git"
-    name        = "clouddrove"
+    name        = "sqs"
+    application = "clouddrove"
+    environment = "test"
+    label_order = ["environment", "name", "application"]
     platform    = "GCM"
     key         = "AAAAKHQaqe1w:APA91bEgwftAYq6N2YV8TeU2k4bRj0k1q2I7Q47ZvFPLQm-ESbD2Fhjj3U9wNNuZ2aC-QZVdgDrN5C6E3Ec08AWhMgbs4b72gNvqcXh1JBoR6yLwretghyjutTR4yRmT0vWdhz4_PW1AwDC0aVoH"
   }
@@ -142,7 +163,7 @@ Include this repository as a module in your existing terraform code:
 | confirmation_timeout_in_minutes | Integer indicating number of minutes to wait in retying mode for fetching subscription arn before marking it as failure. Only applicable for http and https protocols. | number | `60` | no |
 | default_sender_id | A string, such as your business brand, that is displayed as the sender on the receiving device. | string | `` | no |
 | default_sms_type | The type of SMS message that you will send by default. Possible values are: Promotional, Transactional. | string | `Transactional` | no |
-| delimiter | Delimiter to be used between `organization`, `environment`, `name` and `attributes` | string | `-` | no |
+| delimiter | Delimiter to be used between `organization`, `environment`, `name` and `attributes`. | string | `-` | no |
 | delivery_policy | The SNS delivery policy. | string | `` | no |
 | delivery_status_iam_role_arn | The ARN of the IAM role that allows Amazon SNS to write logs about SMS deliveries in CloudWatch Logs. | string | `` | no |
 | delivery_status_success_sampling_rate | The percentage of successful SMS deliveries for which Amazon SNS will write logs in CloudWatch Logs. The value must be between 0 and 100. | string | `50` | no |
@@ -159,20 +180,20 @@ Include this repository as a module in your existing terraform code:
 | event_endpoint_updated_topic_arn | SNS Topic triggered when an existing platform endpoint is changed from your platform application. | string | `` | no |
 | failure_feedback_role_arn | The IAM role permitted to receive failure feedback for this application. | string | `` | no |
 | filter_policy | JSON String with the filter policy that will be used in the subscription to filter messages seen by the target resource. | string | `` | no |
-| gcm_key | Application Platform credential. See Credential for type of credential required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources | string | `` | no |
+| gcm_key | Application Platform credential. See Credential for type of credential required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources. | string | `` | no |
 | http_failure_feedback_role_arn | IAM role for failure feedback. | string | `` | no |
 | http_success_feedback_role_arn | The IAM role permitted to receive success feedback for this topic. | string | `` | no |
 | http_success_feedback_sample_rate | Percentage of success to sample. | number | `100` | no |
-| key | Application Platform credential. See Credential for type of credential required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources | string | `` | no |
+| key | Application Platform credential. See Credential for type of credential required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources. | string | `` | no |
 | kms_master_key_id | The ID of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK. For more information. | string | `` | no |
-| label_order | label order, e.g. `name`,`application`. | list | `<list>` | no |
+| label_order | Label order, e.g. `name`,`application`. | list | `<list>` | no |
 | lambda_failure_feedback_role_arn | IAM role for failure feedback. | string | `` | no |
 | lambda_success_feedback_role_arn | The IAM role permitted to receive success feedback for this topic. | string | `` | no |
 | lambda_success_feedback_sample_rate | Percentage of success to sample. | number | `100` | no |
 | monthly_spend_limit | The maximum amount in USD that you are willing to spend each month to send SMS messages. | number | `1` | no |
 | name | Name  (e.g. `app` or `cluster`). | string | `` | no |
 | name_prefix | The friendly name for the SNS topic. Conflicts with name. | string | `` | no |
-| platform | The platform that the app is registered with. See Platform for supported platforms like 'APNS' 'GCM' | string | `` | no |
+| platform | The platform that the app is registered with. See Platform for supported platforms like 'APNS' 'GCM'. | string | `` | no |
 | platform_principal | Application Platform principal. See Principal for type of principal required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources. | string | `` | no |
 | policy | The fully-formed AWS policy as JSON. For more information about building AWS IAM policy documents with Terraform. | string | `` | no |
 | protocol | The protocol to use. The possible values for this are: sqs, sms, lambda, application. | string | `` | no |
@@ -182,7 +203,7 @@ Include this repository as a module in your existing terraform code:
 | sqs_success_feedback_sample_rate | Percentage of success to sample. | number | `100` | no |
 | subscription_delivery_policy | JSON String with the delivery policy (retries, backoff, etc.) that will be used in the subscription - this only applies to HTTP/S subscriptions. | string | `` | no |
 | success_feedback_role_arn | The IAM role permitted to receive success feedback for this application. | string | `` | no |
-| success_feedback_sample_rate | The percentage of success to sample (0-100) | number | `100` | no |
+| success_feedback_sample_rate | The percentage of success to sample (0-100). | number | `100` | no |
 | tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | map | `<map>` | no |
 | topic_name | The friendly name for the SNS topic. By default generated by Terraform. | string | `` | no |
 | usage_report_s3_bucket | The name of the Amazon S3 bucket to receive daily SMS usage reports from Amazon SNS. | string | `` | no |
@@ -208,9 +229,9 @@ You need to run the following command in the testing folder:
 
 
 ## Feedback
-If you come accross a bug or have any feedback, please log it in our [issue tracker](https://github.com/clouddrove/terraform-aws-sns-platform-application/issues), or feel free to drop us an email at [hello@clouddrove.com](mailto:hello@clouddrove.com).
+If you come accross a bug or have any feedback, please log it in our [issue tracker](https://github.com/clouddrove/terraform-aws-sns/issues), or feel free to drop us an email at [hello@clouddrove.com](mailto:hello@clouddrove.com).
 
-If you have found it worth your time, go ahead and give us a * on [our GitHub](https://github.com/clouddrove/terraform-aws-sns-platform-application)!
+If you have found it worth your time, go ahead and give us a * on [our GitHub](https://github.com/clouddrove/terraform-aws-sns)!
 
 ## About us
 
