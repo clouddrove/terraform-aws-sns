@@ -180,7 +180,7 @@ Here are some examples of how you can use this module in your inventory structur
 | event_endpoint_updated_topic_arn | SNS Topic triggered when an existing platform endpoint is changed from your platform application. | string | `` | no |
 | failure_feedback_role_arn | The IAM role permitted to receive failure feedback for this application. | string | `` | no |
 | filter_policy | JSON String with the filter policy that will be used in the subscription to filter messages seen by the target resource. | string | `` | no |
-| gcm_key | Application Platform credential. See Credential for type of credential required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources. | string | - | yes |
+| gcm_key | Application Platform credential. See Credential for type of credential required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources. | string | `` | no |
 | http_failure_feedback_role_arn | IAM role for failure feedback. | string | `` | no |
 | http_success_feedback_role_arn | The IAM role permitted to receive success feedback for this topic. | string | `` | no |
 | http_success_feedback_sample_rate | Percentage of success to sample. | number | `100` | no |

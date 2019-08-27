@@ -27,7 +27,7 @@ data "aws_iam_policy_document" "document" {
       identifiers = ["*"]
     }
     actions   = ["sqs:SendMessage"]
-    resources = ["arn:aws:sqs:eu-west-1:xxxxxxxxxxxx:test-sqs-clouddrove"]
+    resources = ["arn:aws:sqs:eu-west-1:866067750630:test-sqs-clouddrove"]
   }
 }
 
@@ -70,7 +70,7 @@ data "aws_iam_policy_document" "sns-topic-policy" {
       variable = "AWS:SourceOwner"
 
       values = [
-        xxxxxxxxxxxx,
+        866067750630,
       ]
     }
     effect = "Allow"
@@ -79,7 +79,7 @@ data "aws_iam_policy_document" "sns-topic-policy" {
       identifiers = ["*"]
     }
     resources = [
-      "arn:aws:sns:eu-west-1:xxxxxxxxxxxx:app/APNS/test-sns-clouddrove",
+      "arn:aws:sns:eu-west-1:866067750630:app/APNS/test-sns-clouddrove",
     ]
     sid = "__default_statement_ID"
   }
