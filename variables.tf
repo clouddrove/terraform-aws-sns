@@ -46,7 +46,6 @@ variable "tags" {
 # Description : Terraform SNS module variables
 variable "platform" {
   type        = string
-  default     = ""
   description = "The platform that the app is registered with. See Platform for supported platforms like 'APNS' 'GCM'."
 }
 
@@ -57,7 +56,6 @@ variable "key" {
 }
 variable "gcm_key" {
   type        = string
-  default     = ""
   description = "Application Platform credential. See Credential for type of credential required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources."
 }
 
