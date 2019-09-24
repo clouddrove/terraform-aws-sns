@@ -71,7 +71,7 @@ Here are some examples of how you can use this module in your inventory structur
 #### Basic
 ```hcl
   module "sns" {
-    source            = "git::https://github.com/clouddrove/terraform-aws-sns.git"
+    source            = "git::https://github.com/clouddrove/terraform-aws-sns.git?ref=tags/0.12.0"
     name              = "basic-sns"
     application       = "clouddrove"
     environment       = "test"
@@ -84,7 +84,7 @@ Here are some examples of how you can use this module in your inventory structur
 #### Complete
 ```hcl
   module "sns" {
-    source            = "git::https://github.com/clouddrove/terraform-aws-sns.git"
+    source            = "git::https://github.com/clouddrove/terraform-aws-sns.git?ref=tags/0.12.0"
     name              = "sns"
     application       = "clouddrove"
     environment       = "test"
@@ -138,7 +138,7 @@ Here are some examples of how you can use this module in your inventory structur
 ### GCM
 ```hcl
   module "sns" {
-    source      = "git::https://github.com/clouddrove/terraform-aws-sns.git"
+    source      = "git::https://github.com/clouddrove/terraform-aws-sns.git?ref=tags/0.12.0"
     name        = "sqs"
     application = "clouddrove"
     environment = "test"

@@ -38,7 +38,7 @@ usage : |-
   #### Basic
   ```hcl
     module "sns" {
-      source            = "git::https://github.com/clouddrove/terraform-aws-sns.git"
+      source            = "git::https://github.com/clouddrove/terraform-aws-sns.git?ref=tags/0.12.0"
       name              = "basic-sns"
       application       = "clouddrove"
       environment       = "test"
@@ -51,7 +51,7 @@ usage : |-
   #### Complete
   ```hcl
     module "sns" {
-      source            = "git::https://github.com/clouddrove/terraform-aws-sns.git"
+      source            = "git::https://github.com/clouddrove/terraform-aws-sns.git?ref=tags/0.12.0"
       name              = "sns"
       application       = "clouddrove"
       environment       = "test"
