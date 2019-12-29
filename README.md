@@ -71,11 +71,11 @@ Here are some examples of how you can use this module in your inventory structur
 #### Basic
 ```hcl
   module "sns" {
-    source            = "git::https://github.com/clouddrove/terraform-aws-sns.git?ref=tags/0.12.0"
+    source            = "git::https://github.com/clouddrove/terraform-aws-sns.git?ref=tags/0.12.1"
     name              = "basic-sns"
     application       = "clouddrove"
     environment       = "test"
-    label_order       = ["environment", "name", "application"]
+    label_order       = ["environment", "application", "name"]
     platform          = "APNS"
     key               = "../../certificates/private_key.pem"
     certificate       = "../../certificates/cert.pem"
@@ -84,11 +84,11 @@ Here are some examples of how you can use this module in your inventory structur
 #### Complete
 ```hcl
   module "sns" {
-    source            = "git::https://github.com/clouddrove/terraform-aws-sns.git?ref=tags/0.12.0"
+    source            = "git::https://github.com/clouddrove/terraform-aws-sns.git?ref=tags/0.12.1"
     name              = "sns"
     application       = "clouddrove"
     environment       = "test"
-    label_order       = ["environment", "name", "application"]
+    label_order       = ["environment", "application", "name"]
     platform          = "APNS"
     key               = file("../../certificates/private_key.pem")
     certificate       = file("../../certificates/cert.pem")
@@ -138,11 +138,11 @@ Here are some examples of how you can use this module in your inventory structur
 ### GCM
 ```hcl
   module "sns" {
-    source      = "git::https://github.com/clouddrove/terraform-aws-sns.git?ref=tags/0.12.0"
+    source      = "git::https://github.com/clouddrove/terraform-aws-sns.git?ref=tags/0.12.1"
     name        = "sqs"
     application = "clouddrove"
     environment = "test"
-    label_order = ["environment", "name", "application"]
+    label_order = ["environment", "application", "name"]
     platform    = "GCM"
     key         = "AAAAKHQaqe1w:APA91bEgwftAYq6N2YV8TeU2k4bRj0k1q2I7Q47ZvFPLQm-ESbD2Fhjj3U9wNNuZ2aC-QZVdgDrN5C6E3Ec08AWhMgbs4b72gNvqcXh1JBoR6yLwretghyjutTR4yRmT0vWdhz4_PW1AwDC0aVoH"
   }
