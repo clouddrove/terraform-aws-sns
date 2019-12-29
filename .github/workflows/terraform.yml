@@ -82,14 +82,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 'Terratest For GCM'
-        uses: clouddrove/github-actions@v2.0
-        with:
-          actions_subcommand: 'terratest'
-          tf_actions_working_dir: ./_test/GCM
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: 'Slack Notification'
         uses: clouddrove/action-slack@v2
         with:
