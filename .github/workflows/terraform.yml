@@ -20,7 +20,7 @@ jobs:
         uses: clouddrove/github-actions@v2.0
         with:
           actions_subcommand: 'init'
-          tf_actions_working_dir: ./_example/APNS/basic/complete
+          tf_actions_working_dir: ./_example/APNS/complete
 
       - name: 'Terraform Init APNS basic'
         uses: clouddrove/github-actions@v2.0
