@@ -3,12 +3,12 @@ provider "aws" {
 }
 
 module "sns" {
-  source = "git::https://github.com/clouddrove/terraform-aws-sns.git?ref=tags/0.12.0"
+  source = "./../../../"
 
   name        = "basic-sns"
   application = "clouddrove"
   environment = "test"
-  label_order = ["environment", "name", "application"]
+  label_order = ["environment", "application", "name"]
 
   platform    = "APNS"
   key         = "../../certificates/private_key.pem"

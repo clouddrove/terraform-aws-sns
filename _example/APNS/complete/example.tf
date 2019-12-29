@@ -2,13 +2,16 @@ provider "aws" {
   region = "eu-west-1"
 }
 
+data "aws_caller_identity" "current" {}
+
+
 module "sqs" {
-  source = "git::https://github.com/clouddrove/terraform-aws-sqs.git?ref=tags/0.12.0"
+  source = "git::https://github.com/clouddrove/terraform-aws-sqs.git?ref=tags/0.12.2"
 
   name        = "sqs"
   application = "clouddrove"
   environment = "test"
-  label_order = ["environment", "name", "application"]
+  label_order = ["environment", "application", "name"]
 
   delay_seconds             = 90
   max_message_size          = 2048
@@ -26,18 +29,20 @@ data "aws_iam_policy_document" "document" {
       type        = "AWS"
       identifiers = ["*"]
     }
-    actions   = ["sqs:SendMessage"]
-    resources = ["arn:aws:sqs:eu-west-1:866067750630:test-sqs-clouddrove"]
+    actions = ["sqs:SendMessage"]
+    resources = [
+      format("arn:aws:sqs:eu-west-1:%s:test-clouddrove-sqs", data.aws_caller_identity.current.account_id)
+    ]
   }
 }
 
 module "sns" {
-  source = "git::https://github.com/clouddrove/terraform-aws-sns.git"
+  source = "./../../../"
 
   name        = "sns"
   application = "clouddrove"
   environment = "test"
-  label_order = ["environment", "name", "application"]
+  label_order = ["environment", "application", "name"]
 
   platform              = "APNS"
   enable_sms_preference = true
@@ -70,7 +75,7 @@ data "aws_iam_policy_document" "sns-topic-policy" {
       variable = "AWS:SourceOwner"
 
       values = [
-        866067750630,
+        data.aws_caller_identity.current.account_id,
       ]
     }
     effect = "Allow"
@@ -79,7 +84,7 @@ data "aws_iam_policy_document" "sns-topic-policy" {
       identifiers = ["*"]
     }
     resources = [
-      "arn:aws:sns:eu-west-1:866067750630:app/APNS/test-sns-clouddrove",
+      format("arn:aws:sns:eu-west-1:%s:app/APNS/test-clouddrove-sns", data.aws_caller_identity.current.account_id)
     ]
     sid = "__default_statement_ID"
   }
