@@ -322,3 +322,9 @@ variable "usage_report_s3_bucket" {
   default     = ""
   description = "The name of the Amazon S3 bucket to receive daily SMS usage reports from Amazon SNS."
 }
+
+variable "enabled" {
+  type        = bool
+  default     = true
+  description = "Boolean indicating whether or not to create sns module."
+}

@@ -176,6 +176,7 @@ Here are some examples of how you can use this module in your inventory structur
 | enable\_sms\_preference | Boolean indicating whether or not to update SNS SMS Preference. | bool | `"false"` | no |
 | enable\_sns | Boolean indicating whether or not to create sns. | bool | `"true"` | no |
 | enable\_topic | Boolean indicating whether or not to create topic. | bool | `"false"` | no |
+| enabled | Boolean indicating whether or not to create sns module. | bool | `"true"` | no |
 | endpoint | The endpoint to send data to, the contents will vary with the protocol. | string | `""` | no |
 | endpoint\_auto\_confirms | Boolean indicating whether the end point is capable of auto confirming subscription. | bool | `"false"` | no |
 | environment | Environment \(e.g. `prod`, `dev`, `staging`\). | string | `""` | no |
