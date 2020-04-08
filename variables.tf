@@ -42,6 +42,12 @@ variable "tags" {
   description = "Additional tags (e.g. map(`BusinessUnit`,`XYZ`)."
 }
 
+variable "managedby" {
+  type        = string
+  default     = "anmol@clouddrove.com"
+  description = "ManagedBy, eg 'CloudDrove' or 'AnmolNagpal'."
+}
+
 # Module      : SNS Module
 # Description : Terraform SNS module variables
 variable "platform" {
@@ -278,7 +284,7 @@ variable "enable_topic" {
 
 variable "enable_sns" {
   type        = bool
-  default     = true
+  default     = false
   description = "Boolean indicating whether or not to create sns."
 }
 
@@ -315,4 +321,10 @@ variable "usage_report_s3_bucket" {
   type        = string
   default     = ""
   description = "The name of the Amazon S3 bucket to receive daily SMS usage reports from Amazon SNS."
+}
+
+variable "enabled" {
+  type        = bool
+  default     = true
+  description = "Boolean indicating whether or not to create sns module."
 }

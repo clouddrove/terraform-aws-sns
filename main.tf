@@ -7,9 +7,11 @@
 module "labels" {
   source = "git::https://github.com/clouddrove/terraform-labels.git?ref=tags/0.12.0"
 
+  enabled     = var.enabled
   name        = var.name
   application = var.application
   environment = var.environment
+  managedby   = var.managedby
   label_order = var.label_order
 }
 
@@ -17,7 +19,7 @@ module "labels" {
 #Description : Terraform module is used to setup SNS service to manage notifications on
 #              application.
 resource "aws_sns_platform_application" "default" {
-  count = var.enable_sns ? 1 : 0
+  count = var.enabled && var.enable_sns ? 1 : 0
 
   name                             = module.labels.id
   platform                         = var.platform
@@ -35,7 +37,7 @@ resource "aws_sns_platform_application" "default" {
 #Module      : SNS TOPIC
 #Description : Terraform module which creates SNS Topic resources on AWS
 resource "aws_sns_topic" "default" {
-  count = var.enable_topic ? 1 : 0
+  count = var.enabled && var.enable_topic ? 1 : 0
 
   name                                     = module.labels.id
   display_name                             = var.display_name
@@ -60,7 +62,7 @@ resource "aws_sns_topic" "default" {
 #Module      : SNS TOPIC SUBSCRIPTION
 #Description : Terraform module which creates SNS Topic Subscription resources on AWS
 resource "aws_sns_topic_subscription" "default" {
-  count = var.enable_topic ? 1 : 0
+  count = var.enabled && var.enable_topic ? 1 : 0
 
   topic_arn                       = aws_sns_topic.default[count.index].arn
   protocol                        = var.protocol
@@ -75,7 +77,7 @@ resource "aws_sns_topic_subscription" "default" {
 #Module      : SNS SMS Preferences
 #Description : Terraform module which creates SNS SMS Preferences on AWS
 resource "aws_sns_sms_preferences" "default" {
-  count = var.enable_sms_preference ? 1 : 0
+  count = var.enabled && var.enable_sms_preference ? 1 : 0
 
   monthly_spend_limit                   = var.monthly_spend_limit
   delivery_status_iam_role_arn          = var.delivery_status_iam_role_arn
