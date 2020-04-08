@@ -52,6 +52,7 @@ variable "managedby" {
 # Description : Terraform SNS module variables
 variable "platform" {
   type        = string
+  default     = ""
   description = "The platform that the app is registered with. See Platform for supported platforms like 'APNS' 'GCM'."
 }
 

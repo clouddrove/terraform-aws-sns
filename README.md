@@ -200,7 +200,7 @@ Here are some examples of how you can use this module in your inventory structur
 | monthly\_spend\_limit | The maximum amount in USD that you are willing to spend each month to send SMS messages. | number | `"1"` | no |
 | name | Name  \(e.g. `app` or `cluster`\). | string | `""` | no |
 | name\_prefix | The friendly name for the SNS topic. Conflicts with name. | string | `""` | no |
-| platform | The platform that the app is registered with. See Platform for supported platforms like 'APNS' 'GCM'. | string | n/a | yes |
+| platform | The platform that the app is registered with. See Platform for supported platforms like 'APNS' 'GCM'. | string | `""` | no |
 | platform\_principal | Application Platform principal. See Principal for type of principal required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources. | string | `""` | no |
 | policy | The fully-formed AWS policy as JSON. For more information about building AWS IAM policy documents with Terraform. | string | `""` | no |
 | protocol | The protocol to use. The possible values for this are: sqs, sms, lambda, application. | string | `""` | no |
@@ -221,6 +221,8 @@ Here are some examples of how you can use this module in your inventory structur
 |------|-------------|
 | arn | The ARN of the SNS platform application. |
 | id | The ID of the SNS platform application. |
+| topic-arn | The ARN of the SNS topic. |
+| topic-id | The ID of the SNS topic. |
 
 
 
