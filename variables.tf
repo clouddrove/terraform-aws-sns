@@ -284,7 +284,7 @@ variable "enable_topic" {
 
 variable "enable_sns" {
   type        = bool
-  default     = true
+  default     = false
   description = "Boolean indicating whether or not to create sns."
 }
 

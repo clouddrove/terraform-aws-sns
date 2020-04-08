@@ -174,7 +174,7 @@ Here are some examples of how you can use this module in your inventory structur
 | delivery\_status\_success\_sampling\_rate | The percentage of successful SMS deliveries for which Amazon SNS will write logs in CloudWatch Logs. The value must be between 0 and 100. | string | `"50"` | no |
 | display\_name | The display name for the SNS topic. | string | `""` | no |
 | enable\_sms\_preference | Boolean indicating whether or not to update SNS SMS Preference. | bool | `"false"` | no |
-| enable\_sns | Boolean indicating whether or not to create sns. | bool | `"true"` | no |
+| enable\_sns | Boolean indicating whether or not to create sns. | bool | `"false"` | no |
 | enable\_topic | Boolean indicating whether or not to create topic. | bool | `"false"` | no |
 | enabled | Boolean indicating whether or not to create sns module. | bool | `"true"` | no |
 | endpoint | The endpoint to send data to, the contents will vary with the protocol. | string | `""` | no |
