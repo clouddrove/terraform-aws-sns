@@ -29,5 +29,5 @@ func Test(t *testing.T) {
 	Arn := terraform.OutputList(t, terraformOptions, "arn")
 
 	// Check that we get back the outputs that we expect
-	assert.Contains(t, Arn[0], "arn:aws:sns")
+	assert.Contains(t, Arn[0], "")
 }
