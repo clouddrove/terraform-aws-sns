@@ -38,7 +38,8 @@ usage : |-
   #### Basic
   ```hcl
     module "sns" {
-      source            = "git::https://github.com/clouddrove/terraform-aws-sns.git?ref=tags/0.13.0"
+      source            = "clouddrove/sns/aws"
+      version           = "0.13.0"
       name              = "basic-sns"
       application       = "clouddrove"
       environment       = "test"
@@ -51,7 +52,8 @@ usage : |-
   #### Complete
   ```hcl
     module "sns" {
-      source            = "git::https://github.com/clouddrove/terraform-aws-sns.git?ref=tags/0.13.0"
+      source            = "clouddrove/sns/aws"
+      version           = "0.13.0"
       name              = "sns"
       application       = "clouddrove"
       environment       = "test"
@@ -105,8 +107,9 @@ usage : |-
   ### GCM
   ```hcl
     module "sns" {
-      source      = "git::https://github.com/clouddrove/terraform-aws-sns.git?ref=tags/0.13.0"
-      name        = "sqs"
+      source      = "clouddrove/sns/aws"
+      version     = "0.13.0"
+      name        = "sns"
       application = "clouddrove"
       environment = "test"
       label_order = ["environment", "application", "name"]
