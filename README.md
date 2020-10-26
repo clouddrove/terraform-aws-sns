@@ -7,14 +7,14 @@
     Terraform AWS SNS
 </h1>
 
-<p align="center" style="font-size: 1.2rem;">
+<p align="center" style="font-size: 1.2rem;"> 
     Terraform module is used to setup SNS service to manage notifications on application.
      </p>
 
 <p align="center">
 
 <a href="https://www.terraform.io">
-  <img src="https://img.shields.io/badge/Terraform-v0.12-green" alt="Terraform">
+  <img src="https://img.shields.io/badge/Terraform-v0.13-green" alt="Terraform">
 </a>
 <a href="LICENSE.md">
   <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="Licence">
@@ -38,7 +38,7 @@
 <hr>
 
 
-We eat, drink, sleep and most importantly love **DevOps**. We are working towards strategies for standardizing architecture while ensuring security for the infrastructure. We are strong believer of the philosophy <b>Bigger problems are always solved by breaking them into smaller manageable problems</b>. Resonating with microservices architecture, it is considered best-practice to run database, cluster, storage in smaller <b>connected yet manageable pieces</b> within the infrastructure.
+We eat, drink, sleep and most importantly love **DevOps**. We are working towards strategies for standardizing architecture while ensuring security for the infrastructure. We are strong believer of the philosophy <b>Bigger problems are always solved by breaking them into smaller manageable problems</b>. Resonating with microservices architecture, it is considered best-practice to run database, cluster, storage in smaller <b>connected yet manageable pieces</b> within the infrastructure. 
 
 This module is basically combination of [Terraform open source](https://www.terraform.io/) and includes automatation tests and examples. It also helps to create and improve your infrastructure with minimalistic code instead of maintaining the whole infrastructure code yourself.
 
@@ -49,9 +49,9 @@ We have [*fifty plus terraform modules*][terraform_modules]. A few of them are c
 
 ## Prerequisites
 
-This module has a few dependencies:
+This module has a few dependencies: 
 
-- [Terraform 0.12](https://learn.hashicorp.com/terraform/getting-started/install.html)
+- [Terraform 0.13](https://learn.hashicorp.com/terraform/getting-started/install.html)
 - [Go](https://golang.org/doc/install)
 - [github.com/stretchr/testify/assert](https://github.com/stretchr/testify)
 - [github.com/gruntwork-io/terratest/modules/terraform](https://github.com/gruntwork-io/terratest)
@@ -73,7 +73,8 @@ Here are some examples of how you can use this module in your inventory structur
 #### Basic
 ```hcl
   module "sns" {
-    source            = "git::https://github.com/clouddrove/terraform-aws-sns.git?ref=tags/0.12.2"
+    source            = "clouddrove/sns/aws"
+    version           = "0.13.0"
     name              = "basic-sns"
     application       = "clouddrove"
     environment       = "test"
@@ -86,7 +87,8 @@ Here are some examples of how you can use this module in your inventory structur
 #### Complete
 ```hcl
   module "sns" {
-    source            = "git::https://github.com/clouddrove/terraform-aws-sns.git?ref=tags/0.12.2"
+    source            = "clouddrove/sns/aws"
+    version           = "0.13.0"
     name              = "sns"
     application       = "clouddrove"
     environment       = "test"
@@ -140,8 +142,9 @@ Here are some examples of how you can use this module in your inventory structur
 ### GCM
 ```hcl
   module "sns" {
-    source      = "git::https://github.com/clouddrove/terraform-aws-sns.git?ref=tags/0.12.2"
-    name        = "sqs"
+    source      = "clouddrove/sns/aws"
+    version     = "0.13.0"
+    name        = "sns"
     application = "clouddrove"
     environment = "test"
     label_order = ["environment", "application", "name"]
@@ -158,62 +161,62 @@ Here are some examples of how you can use this module in your inventory structur
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|:----:|:-----:|:-----:|
-| application | Application \(e.g. `cd` or `clouddrove`\). | string | `""` | no |
-| application\_failure\_feedback\_role\_arn | IAM role for failure feedback. | string | `""` | no |
-| application\_success\_feedback\_role\_arn | The IAM role permitted to receive success feedback for this topic. | string | `""` | no |
-| application\_success\_feedback\_sample\_rate | Percentage of success to sample. | number | `"100"` | no |
-| attributes | Additional attributes \(e.g. `1`\). | list | `<list>` | no |
-| certificate | application Platform principal. See Principal for type of principal required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources. | string | `""` | no |
-| confirmation\_timeout\_in\_minutes | Integer indicating number of minutes to wait in retying mode for fetching subscription arn before marking it as failure. Only applicable for http and https protocols. | number | `"60"` | no |
-| default\_sender\_id | A string, such as your business brand, that is displayed as the sender on the receiving device. | string | `""` | no |
-| default\_sms\_type | The type of SMS message that you will send by default. Possible values are: Promotional, Transactional. | string | `"Transactional"` | no |
-| delimiter | Delimiter to be used between `organization`, `environment`, `name` and `attributes`. | string | `"-"` | no |
-| delivery\_policy | The SNS delivery policy. | string | `""` | no |
-| delivery\_status\_iam\_role\_arn | The ARN of the IAM role that allows Amazon SNS to write logs about SMS deliveries in CloudWatch Logs. | string | `""` | no |
-| delivery\_status\_success\_sampling\_rate | The percentage of successful SMS deliveries for which Amazon SNS will write logs in CloudWatch Logs. The value must be between 0 and 100. | string | `"50"` | no |
-| display\_name | The display name for the SNS topic. | string | `""` | no |
-| enable\_sms\_preference | Boolean indicating whether or not to update SNS SMS Preference. | bool | `"false"` | no |
-| enable\_sns | Boolean indicating whether or not to create sns. | bool | `"false"` | no |
-| enable\_topic | Boolean indicating whether or not to create topic. | bool | `"false"` | no |
-| enabled | Boolean indicating whether or not to create sns module. | bool | `"true"` | no |
-| endpoint | The endpoint to send data to, the contents will vary with the protocol. | string | `""` | no |
-| endpoint\_auto\_confirms | Boolean indicating whether the end point is capable of auto confirming subscription. | bool | `"false"` | no |
-| environment | Environment \(e.g. `prod`, `dev`, `staging`\). | string | `""` | no |
-| event\_delivery\_failure\_topic\_arn | SNS Topic triggered when a delivery to any of the platform endpoints associated with your platform application encounters a permanent failure. | string | `""` | no |
-| event\_endpoint\_created\_topic\_arn | SNS Topic triggered when a new platform endpoint is added to your platform application. | string | `""` | no |
-| event\_endpoint\_deleted\_topic\_arn | SNS Topic triggered when an existing platform endpoint is deleted from your platform application. | string | `""` | no |
-| event\_endpoint\_updated\_topic\_arn | SNS Topic triggered when an existing platform endpoint is changed from your platform application. | string | `""` | no |
-| failure\_feedback\_role\_arn | The IAM role permitted to receive failure feedback for this application. | string | `""` | no |
-| filter\_policy | JSON String with the filter policy that will be used in the subscription to filter messages seen by the target resource. | string | `""` | no |
-| gcm\_key | Application Platform credential. See Credential for type of credential required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources. | string | `""` | no |
-| http\_failure\_feedback\_role\_arn | IAM role for failure feedback. | string | `""` | no |
-| http\_success\_feedback\_role\_arn | The IAM role permitted to receive success feedback for this topic. | string | `""` | no |
-| http\_success\_feedback\_sample\_rate | Percentage of success to sample. | number | `"100"` | no |
-| key | Application Platform credential. See Credential for type of credential required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources. | string | `""` | no |
-| kms\_master\_key\_id | The ID of an AWS-managed customer master key \(CMK\) for Amazon SNS or a custom CMK. For more information. | string | `""` | no |
-| label\_order | Label order, e.g. `name`,`application`. | list | `<list>` | no |
-| lambda\_failure\_feedback\_role\_arn | IAM role for failure feedback. | string | `""` | no |
-| lambda\_success\_feedback\_role\_arn | The IAM role permitted to receive success feedback for this topic. | string | `""` | no |
-| lambda\_success\_feedback\_sample\_rate | Percentage of success to sample. | number | `"100"` | no |
-| managedby | ManagedBy, eg 'CloudDrove' or 'AnmolNagpal'. | string | `"anmol@clouddrove.com"` | no |
-| monthly\_spend\_limit | The maximum amount in USD that you are willing to spend each month to send SMS messages. | number | `"1"` | no |
-| name | Name  \(e.g. `app` or `cluster`\). | string | `""` | no |
-| name\_prefix | The friendly name for the SNS topic. Conflicts with name. | string | `""` | no |
-| platform | The platform that the app is registered with. See Platform for supported platforms like 'APNS' 'GCM'. | string | `""` | no |
-| platform\_principal | Application Platform principal. See Principal for type of principal required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources. | string | `""` | no |
-| policy | The fully-formed AWS policy as JSON. For more information about building AWS IAM policy documents with Terraform. | string | `""` | no |
-| protocol | The protocol to use. The possible values for this are: sqs, sms, lambda, application. | string | `""` | no |
-| raw\_message\_delivery | Boolean indicating whether or not to enable raw message delivery. | bool | `"false"` | no |
-| sqs\_failure\_feedback\_role\_arn | IAM role for failure feedback. | string | `""` | no |
-| sqs\_success\_feedback\_role\_arn | The IAM role permitted to receive success feedback for this topic. | string | `""` | no |
-| sqs\_success\_feedback\_sample\_rate | Percentage of success to sample. | number | `"100"` | no |
-| subscription\_delivery\_policy | JSON String with the delivery policy \(retries, backoff, etc.\) that will be used in the subscription - this only applies to HTTP/S subscriptions. | string | `""` | no |
-| success\_feedback\_role\_arn | The IAM role permitted to receive success feedback for this application. | string | `""` | no |
-| success\_feedback\_sample\_rate | The percentage of success to sample \(0-100\). | number | `"100"` | no |
-| tags | Additional tags \(e.g. map\(`BusinessUnit`,`XYZ`\). | map | `<map>` | no |
-| topic\_name | The friendly name for the SNS topic. By default generated by Terraform. | string | `""` | no |
-| usage\_report\_s3\_bucket | The name of the Amazon S3 bucket to receive daily SMS usage reports from Amazon SNS. | string | `""` | no |
+|------|-------------|------|---------|:--------:|
+| application | Application (e.g. `cd` or `clouddrove`). | `string` | `""` | no |
+| application\_failure\_feedback\_role\_arn | IAM role for failure feedback. | `string` | `""` | no |
+| application\_success\_feedback\_role\_arn | The IAM role permitted to receive success feedback for this topic. | `string` | `""` | no |
+| application\_success\_feedback\_sample\_rate | Percentage of success to sample. | `number` | `100` | no |
+| attributes | Additional attributes (e.g. `1`). | `list` | `[]` | no |
+| certificate | application Platform principal. See Principal for type of principal required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources. | `string` | `""` | no |
+| confirmation\_timeout\_in\_minutes | Integer indicating number of minutes to wait in retying mode for fetching subscription arn before marking it as failure. Only applicable for http and https protocols. | `number` | `60` | no |
+| default\_sender\_id | A string, such as your business brand, that is displayed as the sender on the receiving device. | `string` | `""` | no |
+| default\_sms\_type | The type of SMS message that you will send by default. Possible values are: Promotional, Transactional. | `string` | `"Transactional"` | no |
+| delimiter | Delimiter to be used between `organization`, `environment`, `name` and `attributes`. | `string` | `"-"` | no |
+| delivery\_policy | The SNS delivery policy. | `string` | `""` | no |
+| delivery\_status\_iam\_role\_arn | The ARN of the IAM role that allows Amazon SNS to write logs about SMS deliveries in CloudWatch Logs. | `string` | `""` | no |
+| delivery\_status\_success\_sampling\_rate | The percentage of successful SMS deliveries for which Amazon SNS will write logs in CloudWatch Logs. The value must be between 0 and 100. | `number` | `50` | no |
+| display\_name | The display name for the SNS topic. | `string` | `""` | no |
+| enable\_sms\_preference | Boolean indicating whether or not to update SNS SMS Preference. | `bool` | `false` | no |
+| enable\_sns | Boolean indicating whether or not to create sns. | `bool` | `false` | no |
+| enable\_topic | Boolean indicating whether or not to create topic. | `bool` | `false` | no |
+| enabled | Boolean indicating whether or not to create sns module. | `bool` | `true` | no |
+| endpoint | The endpoint to send data to, the contents will vary with the protocol. | `string` | `""` | no |
+| endpoint\_auto\_confirms | Boolean indicating whether the end point is capable of auto confirming subscription. | `bool` | `false` | no |
+| environment | Environment (e.g. `prod`, `dev`, `staging`). | `string` | `""` | no |
+| event\_delivery\_failure\_topic\_arn | SNS Topic triggered when a delivery to any of the platform endpoints associated with your platform application encounters a permanent failure. | `string` | `""` | no |
+| event\_endpoint\_created\_topic\_arn | SNS Topic triggered when a new platform endpoint is added to your platform application. | `string` | `""` | no |
+| event\_endpoint\_deleted\_topic\_arn | SNS Topic triggered when an existing platform endpoint is deleted from your platform application. | `string` | `""` | no |
+| event\_endpoint\_updated\_topic\_arn | SNS Topic triggered when an existing platform endpoint is changed from your platform application. | `string` | `""` | no |
+| failure\_feedback\_role\_arn | The IAM role permitted to receive failure feedback for this application. | `string` | `""` | no |
+| filter\_policy | JSON String with the filter policy that will be used in the subscription to filter messages seen by the target resource. | `string` | `""` | no |
+| gcm\_key | Application Platform credential. See Credential for type of credential required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources. | `string` | `""` | no |
+| http\_failure\_feedback\_role\_arn | IAM role for failure feedback. | `string` | `""` | no |
+| http\_success\_feedback\_role\_arn | The IAM role permitted to receive success feedback for this topic. | `string` | `""` | no |
+| http\_success\_feedback\_sample\_rate | Percentage of success to sample. | `number` | `100` | no |
+| key | Application Platform credential. See Credential for type of credential required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources. | `string` | `""` | no |
+| kms\_master\_key\_id | The ID of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK. For more information. | `string` | `""` | no |
+| label\_order | Label order, e.g. `name`,`application`. | `list` | `[]` | no |
+| lambda\_failure\_feedback\_role\_arn | IAM role for failure feedback. | `string` | `""` | no |
+| lambda\_success\_feedback\_role\_arn | The IAM role permitted to receive success feedback for this topic. | `string` | `""` | no |
+| lambda\_success\_feedback\_sample\_rate | Percentage of success to sample. | `number` | `100` | no |
+| managedby | ManagedBy, eg 'CloudDrove' or 'AnmolNagpal'. | `string` | `"anmol@clouddrove.com"` | no |
+| monthly\_spend\_limit | The maximum amount in USD that you are willing to spend each month to send SMS messages. | `number` | `1` | no |
+| name | Name  (e.g. `app` or `cluster`). | `string` | `""` | no |
+| name\_prefix | The friendly name for the SNS topic. Conflicts with name. | `string` | `""` | no |
+| platform | The platform that the app is registered with. See Platform for supported platforms like 'APNS' 'GCM'. | `string` | `""` | no |
+| platform\_principal | Application Platform principal. See Principal for type of principal required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources. | `string` | `""` | no |
+| policy | The fully-formed AWS policy as JSON. For more information about building AWS IAM policy documents with Terraform. | `string` | `""` | no |
+| protocol | The protocol to use. The possible values for this are: sqs, sms, lambda, application. | `string` | `""` | no |
+| raw\_message\_delivery | Boolean indicating whether or not to enable raw message delivery. | `bool` | `false` | no |
+| sqs\_failure\_feedback\_role\_arn | IAM role for failure feedback. | `string` | `""` | no |
+| sqs\_success\_feedback\_role\_arn | The IAM role permitted to receive success feedback for this topic. | `string` | `""` | no |
+| sqs\_success\_feedback\_sample\_rate | Percentage of success to sample. | `number` | `100` | no |
+| subscription\_delivery\_policy | JSON String with the delivery policy (retries, backoff, etc.) that will be used in the subscription - this only applies to HTTP/S subscriptions. | `string` | `""` | no |
+| success\_feedback\_role\_arn | The IAM role permitted to receive success feedback for this application. | `string` | `""` | no |
+| success\_feedback\_sample\_rate | The percentage of success to sample (0-100). | `number` | `100` | no |
+| tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | `map` | `{}` | no |
+| topic\_name | The friendly name for the SNS topic. By default generated by Terraform. | `string` | `""` | no |
+| usage\_report\_s3\_bucket | The name of the Amazon S3 bucket to receive daily SMS usage reports from Amazon SNS. | `string` | `""` | no |
 
 ## Outputs
 
@@ -228,7 +231,7 @@ Here are some examples of how you can use this module in your inventory structur
 
 
 ## Testing
-In this module testing is performed with [terratest](https://github.com/gruntwork-io/terratest) and it creates a small piece of infrastructure, matches the output like ARN, ID and Tags name etc and destroy infrastructure in your AWS account. This testing is written in GO, so you need a [GO environment](https://golang.org/doc/install) in your system.
+In this module testing is performed with [terratest](https://github.com/gruntwork-io/terratest) and it creates a small piece of infrastructure, matches the output like ARN, ID and Tags name etc and destroy infrastructure in your AWS account. This testing is written in GO, so you need a [GO environment](https://golang.org/doc/install) in your system. 
 
 You need to run the following command in the testing folder:
 ```hcl
@@ -237,7 +240,7 @@ You need to run the following command in the testing folder:
 
 
 
-## Feedback
+## Feedback 
 If you come accross a bug or have any feedback, please log it in our [issue tracker](https://github.com/clouddrove/terraform-aws-sns/issues), or feel free to drop us an email at [hello@clouddrove.com](mailto:hello@clouddrove.com).
 
 If you have found it worth your time, go ahead and give us a ★ on [our GitHub](https://github.com/clouddrove/terraform-aws-sns)!
