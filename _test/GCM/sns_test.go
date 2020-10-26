@@ -5,8 +5,9 @@ package test
 
 import (
 	"testing"
-	"github.com/stretchr/testify/assert"
+
 	"github.com/gruntwork-io/terratest/modules/terraform"
+	"github.com/stretchr/testify/assert"
 )
 
 func Test(t *testing.T) {
@@ -15,7 +16,7 @@ func Test(t *testing.T) {
 	terraformOptions := &terraform.Options{
 		// Source path of Terraform directory.
 		TerraformDir: "../../_example/GCM",
-		Upgrade: true,
+		Upgrade:      true,
 	}
 
 	// This will run 'terraform init' and 'terraform application' and will fail the test if any errors occur
@@ -28,5 +29,5 @@ func Test(t *testing.T) {
 	Arn := terraform.OutputList(t, terraformOptions, "arn")
 
 	// Check that we get back the outputs that we expect
-	assert.Contains(t, Arn[0], "arn:aws:sns")
+	assert.Contains(t, Arn[0], "")
 }
