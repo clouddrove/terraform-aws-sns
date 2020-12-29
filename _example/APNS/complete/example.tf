@@ -6,12 +6,11 @@ data "aws_caller_identity" "current" {}
 
 
 module "sqs" {
-  source      = "clouddrove/sqs/aws"
-  version     = "0.13.0"
+  source      = "git::https://github.com/clouddrove/terraform-aws-sqs.git?ref=0.14"
   name        = "sqs"
-  application = "clouddrove"
+  repository  = "https://registry.terraform.io/modules/clouddrove/sqs/aws/0.14.0"
   environment = "test"
-  label_order = ["environment", "application", "name"]
+  label_order = ["name", "environment"]
 
   delay_seconds             = 90
   max_message_size          = 2048
@@ -40,9 +39,9 @@ module "sns" {
   source = "./../../../"
 
   name        = "sns"
-  application = "clouddrove"
+  repository  = "https://registry.terraform.io/modules/clouddrove/sns/aws/0.14.0"
   environment = "test"
-  label_order = ["environment", "application", "name"]
+  label_order = ["name", "environment"]
 
   platform              = "APNS"
   enable_sms_preference = true

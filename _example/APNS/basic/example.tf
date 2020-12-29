@@ -6,9 +6,9 @@ module "sns" {
   source = "./../../../"
 
   name        = "basic-sns"
-  application = "clouddrove"
+  repository  = "https://registry.terraform.io/modules/clouddrove/sns/aws/0.14.0"
   environment = "test"
-  label_order = ["environment", "application", "name"]
+  label_order = ["name", "environment"]
 
   platform    = "APNS"
   key         = "../../certificates/private_key.pem"
