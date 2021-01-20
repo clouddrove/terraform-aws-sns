@@ -6,12 +6,12 @@ data "aws_caller_identity" "current" {}
 
 
 module "sqs" {
-  source      = "clouddrove/sqs/aws"
-  version     = "0.13.0"
+  source  = "clouddrove/sqs/aws"
+  version = "0.14.0"
+
   name        = "sqs"
-  application = "clouddrove"
   environment = "test"
-  label_order = ["environment", "application", "name"]
+  label_order = ["name", "environment"]
 
   delay_seconds             = 90
   max_message_size          = 2048
@@ -31,7 +31,7 @@ data "aws_iam_policy_document" "document" {
     }
     actions = ["sqs:SendMessage"]
     resources = [
-      format("arn:aws:sqs:eu-west-1:%s:test-clouddrove-sqs", data.aws_caller_identity.current.account_id)
+      format("arn:aws:sqs:eu-west-1:%s:sqs-test", data.aws_caller_identity.current.account_id)
     ]
   }
 }
@@ -40,9 +40,8 @@ module "sns" {
   source = "./../../../"
 
   name        = "sns"
-  application = "clouddrove"
   environment = "test"
-  label_order = ["environment", "application", "name"]
+  label_order = ["name", "environment"]
 
   platform              = "APNS"
   enable_sms_preference = true
@@ -84,7 +83,7 @@ data "aws_iam_policy_document" "sns-topic-policy" {
       identifiers = ["*"]
     }
     resources = [
-      format("arn:aws:sns:eu-west-1:%s:app/APNS/test-clouddrove-sns", data.aws_caller_identity.current.account_id)
+      format("arn:aws:sns:eu-west-1:%s:app/APNS/sns-test", data.aws_caller_identity.current.account_id)
     ]
     sid = "__default_statement_ID"
   }

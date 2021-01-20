@@ -6,10 +6,10 @@ variable "name" {
   description = "Name  (e.g. `app` or `cluster`)."
 }
 
-variable "application" {
+variable "repository" {
   type        = string
-  default     = ""
-  description = "Application (e.g. `cd` or `clouddrove`)."
+  default     = "https://registry.terraform.io/modules/clouddrove/sqs/aws/"
+  description = "Terraform current module repo"
 }
 
 variable "environment" {
@@ -19,13 +19,13 @@ variable "environment" {
 }
 
 variable "label_order" {
-  type        = list
+  type        = list(any)
   default     = []
   description = "Label order, e.g. `name`,`application`."
 }
 
 variable "attributes" {
-  type        = list
+  type        = list(any)
   default     = []
   description = "Additional attributes (e.g. `1`)."
 }
@@ -37,19 +37,25 @@ variable "delimiter" {
 }
 
 variable "tags" {
-  type        = map
+  type        = map(any)
   default     = {}
   description = "Additional tags (e.g. map(`BusinessUnit`,`XYZ`)."
 }
 
 variable "managedby" {
   type        = string
-  default     = "anmol@clouddrove.com"
-  description = "ManagedBy, eg 'CloudDrove' or 'AnmolNagpal'."
+  default     = "hello@clouddrove.com"
+  description = "ManagedBy, eg 'CloudDrove'."
 }
 
 # Module      : SNS Module
 # Description : Terraform SNS module variables
+variable "enabled" {
+  type        = bool
+  default     = true
+  description = "Boolean indicating whether or not to create sns module."
+}
+
 variable "platform" {
   type        = string
   default     = ""
@@ -65,6 +71,7 @@ variable "gcm_key" {
   type        = string
   default     = ""
   description = "Application Platform credential. See Credential for type of credential required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources."
+  sensitive   = true
 }
 
 variable "certificate" {
@@ -113,6 +120,7 @@ variable "success_feedback_role_arn" {
   type        = string
   default     = ""
   description = "The IAM role permitted to receive success feedback for this application."
+  sensitive   = true
 }
 
 variable "success_feedback_sample_rate" {
@@ -173,6 +181,7 @@ variable "http_success_feedback_role_arn" {
   type        = string
   default     = ""
   description = "The IAM role permitted to receive success feedback for this topic."
+  sensitive   = true
 }
 
 variable "http_success_feedback_sample_rate" {
@@ -299,9 +308,11 @@ variable "delivery_status_iam_role_arn" {
   type        = string
   default     = ""
   description = "The ARN of the IAM role that allows Amazon SNS to write logs about SMS deliveries in CloudWatch Logs."
+  sensitive   = true
 }
 
 variable "delivery_status_success_sampling_rate" {
+  type        = number
   default     = 50
   description = "The percentage of successful SMS deliveries for which Amazon SNS will write logs in CloudWatch Logs. The value must be between 0 and 100."
 }
@@ -322,10 +333,4 @@ variable "usage_report_s3_bucket" {
   type        = string
   default     = ""
   description = "The name of the Amazon S3 bucket to receive daily SMS usage reports from Amazon SNS."
-}
-
-variable "enabled" {
-  type        = bool
-  default     = true
-  description = "Boolean indicating whether or not to create sns module."
 }

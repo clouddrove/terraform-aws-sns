@@ -3,15 +3,17 @@
 ## Copyright @ CloudDrove. All Right Reserved.
 
 #Module      : label
-#Description : Terraform module to create consistent naming for multiple names.
+#Description : This terraform module is designed to generate consistent label names and
+#              tags for resources. You can use terraform-labels to implement a strict
+#              naming convention.
 module "labels" {
-  source = "git::https://github.com/clouddrove/terraform-labels.git?ref=tags/0.13.0"
+  source = "git::https://github.com/clouddrove/terraform-labels.git?ref=tags/0.14.0"
 
-  enabled     = var.enabled
   name        = var.name
-  application = var.application
+  repository  = var.repository
   environment = var.environment
   managedby   = var.managedby
+  attributes  = var.attributes
   label_order = var.label_order
 }
 
@@ -86,4 +88,3 @@ resource "aws_sns_sms_preferences" "default" {
   default_sms_type                      = var.default_sms_type
   usage_report_s3_bucket                = var.usage_report_s3_bucket
 }
-
