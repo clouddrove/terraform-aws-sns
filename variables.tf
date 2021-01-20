@@ -19,13 +19,13 @@ variable "environment" {
 }
 
 variable "label_order" {
-  type        = list
+  type        = list(any)
   default     = []
   description = "Label order, e.g. `name`,`application`."
 }
 
 variable "attributes" {
-  type        = list
+  type        = list(any)
   default     = []
   description = "Additional attributes (e.g. `1`)."
 }
@@ -37,7 +37,7 @@ variable "delimiter" {
 }
 
 variable "tags" {
-  type        = map
+  type        = map(any)
   default     = {}
   description = "Additional tags (e.g. map(`BusinessUnit`,`XYZ`)."
 }
@@ -194,7 +194,6 @@ variable "http_failure_feedback_role_arn" {
   type        = string
   default     = ""
   description = "IAM role for failure feedback."
-  sensitive   = true
 }
 
 variable "kms_master_key_id" {
@@ -313,7 +312,7 @@ variable "delivery_status_iam_role_arn" {
 }
 
 variable "delivery_status_success_sampling_rate" {
-  type        =number
+  type        = number
   default     = 50
   description = "The percentage of successful SMS deliveries for which Amazon SNS will write logs in CloudWatch Logs. The value must be between 0 and 100."
 }

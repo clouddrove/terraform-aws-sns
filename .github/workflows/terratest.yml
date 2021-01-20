@@ -6,31 +6,6 @@ on:
     types: [labeled]
 
 jobs:
-  APN_basic:
-    name: 'APN basic'
-    runs-on: ubuntu-latest
-    steps:
-
-      - name: 'Checkout'
-        uses: actions/checkout@v2.3.4
-
-      - name: 'Configure AWS Credentials'
-        uses: clouddrove/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.TEST_AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.TEST_AWS_ACCESS_SECRET_KEY }}
-          aws-region: us-east-2
-
-
-      - name: 'Terratest for APN basic example'
-        if: ${{ github.event.label.name == 'terratest' }}
-        uses: 'clouddrove/github-actions@v4.0'
-        with:
-          actions_subcommand: 'terratest'
-          tf_actions_working_dir: '_test/APNS/basic'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   APN_Complete:
     name: 'APN Complete'
     runs-on: ubuntu-latest
@@ -54,29 +29,7 @@ jobs:
           tf_actions_working_dir: '_test/APNS/complete'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  GCM:
-    name: 'GCM'
-    runs-on: ubuntu-latest
-    steps:
 
-      - name: 'Checkout'
-        uses: actions/checkout@v2.3.4
-
-      - name: 'Configure AWS Credentials'
-        uses: clouddrove/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.TEST_AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.TEST_AWS_ACCESS_SECRET_KEY }}
-          aws-region: us-east-2
-
-      - name: 'Terratest for GCM'
-        if: ${{ github.event.label.name == 'terratest' }}
-        uses: 'clouddrove/github-actions@v4.0'
-        with:
-          actions_subcommand: 'terratest'
-          tf_actions_working_dir: '_test/GCM'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 'Checkout'
         uses: actions/checkout@v2.3.4

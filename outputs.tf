@@ -1,5 +1,5 @@
 # Module      : SNS Module
-# Description : Terraform SNS module outputs
+# Description : Terraform SNS module outputs.
 output "id" {
   value       = join("", aws_sns_platform_application.default.*.id)
   description = "The ID of the SNS platform application."

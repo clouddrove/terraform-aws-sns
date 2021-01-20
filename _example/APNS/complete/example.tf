@@ -6,7 +6,7 @@ data "aws_caller_identity" "current" {}
 
 
 module "sqs" {
-  source      = "git::https://github.com/clouddrove/terraform-aws-sqs.git?ref=tags/0.14.0"
+  source = "git::https://github.com/clouddrove/terraform-aws-sqs.git?ref=tags/0.14.0"
 
   name        = "sqs"
   environment = "test"

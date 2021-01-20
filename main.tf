@@ -88,4 +88,3 @@ resource "aws_sns_sms_preferences" "default" {
   default_sms_type                      = var.default_sms_type
   usage_report_s3_bucket                = var.usage_report_s3_bucket
 }
-
