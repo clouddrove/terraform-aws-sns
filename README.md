@@ -7,14 +7,14 @@
     Terraform AWS SNS
 </h1>
 
-<p align="center" style="font-size: 1.2rem;">
+<p align="center" style="font-size: 1.2rem;"> 
     Terraform module is used to setup SNS service to manage notifications on application.
      </p>
 
 <p align="center">
 
 <a href="https://www.terraform.io">
-  <img src="https://img.shields.io/badge/Terraform-v0.13-green" alt="Terraform">
+  <img src="https://img.shields.io/badge/Terraform-v0.14-green" alt="Terraform">
 </a>
 <a href="LICENSE.md">
   <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="Licence">
@@ -38,7 +38,7 @@
 <hr>
 
 
-We eat, drink, sleep and most importantly love **DevOps**. We are working towards strategies for standardizing architecture while ensuring security for the infrastructure. We are strong believer of the philosophy <b>Bigger problems are always solved by breaking them into smaller manageable problems</b>. Resonating with microservices architecture, it is considered best-practice to run database, cluster, storage in smaller <b>connected yet manageable pieces</b> within the infrastructure.
+We eat, drink, sleep and most importantly love **DevOps**. We are working towards strategies for standardizing architecture while ensuring security for the infrastructure. We are strong believer of the philosophy <b>Bigger problems are always solved by breaking them into smaller manageable problems</b>. Resonating with microservices architecture, it is considered best-practice to run database, cluster, storage in smaller <b>connected yet manageable pieces</b> within the infrastructure. 
 
 This module is basically combination of [Terraform open source](https://www.terraform.io/) and includes automatation tests and examples. It also helps to create and improve your infrastructure with minimalistic code instead of maintaining the whole infrastructure code yourself.
 
@@ -49,7 +49,7 @@ We have [*fifty plus terraform modules*][terraform_modules]. A few of them are c
 
 ## Prerequisites
 
-This module has a few dependencies:
+This module has a few dependencies: 
 
 - [Terraform 0.13](https://learn.hashicorp.com/terraform/getting-started/install.html)
 - [Go](https://golang.org/doc/install)
@@ -74,11 +74,10 @@ Here are some examples of how you can use this module in your inventory structur
 ```hcl
   module "sns" {
     source            = "clouddrove/sns/aws"
-    version           = "0.13.0"
+    version           = "0.14.0"
     name              = "basic-sns"
-    application       = "clouddrove"
     environment       = "test"
-    label_order       = ["environment", "application", "name"]
+    label_order       = ["name","environment"]
     platform          = "APNS"
     key               = "../../certificates/private_key.pem"
     certificate       = "../../certificates/cert.pem"
@@ -88,11 +87,10 @@ Here are some examples of how you can use this module in your inventory structur
 ```hcl
   module "sns" {
     source            = "clouddrove/sns/aws"
-    version           = "0.13.0"
+    version           = "0.14.0"
     name              = "sns"
-    application       = "clouddrove"
     environment       = "test"
-    label_order       = ["environment", "application", "name"]
+    label_order       = ["name","environment"]
     platform          = "APNS"
     key               = file("../../certificates/private_key.pem")
     certificate       = file("../../certificates/cert.pem")
@@ -143,11 +141,10 @@ Here are some examples of how you can use this module in your inventory structur
 ```hcl
   module "sns" {
     source      = "clouddrove/sns/aws"
-    version     = "0.13.0"
+    version     = "0.14.0"
     name        = "sns"
-    application = "clouddrove"
     environment = "test"
-    label_order = ["environment", "application", "name"]
+    label_order = ["name","environment"]
     platform    = "GCM"
     key         = "AAAAKHQaqe1w:APA91bEgwftAYq6N2YV8TeU2k4bRj0k1q2I7Q47ZvFPLQm-ESbD2Fhjj3U9wNNuZ2aC-QZVdgDrN5C6E3Ec08AWhMgbs4b72gNvqcXh1JBoR6yLwretghyjutTR4yRmT0vWdhz4_PW1AwDC0aVoH"
   }
@@ -162,11 +159,10 @@ Here are some examples of how you can use this module in your inventory structur
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| application | Application (e.g. `cd` or `clouddrove`). | `string` | `""` | no |
 | application\_failure\_feedback\_role\_arn | IAM role for failure feedback. | `string` | `""` | no |
 | application\_success\_feedback\_role\_arn | The IAM role permitted to receive success feedback for this topic. | `string` | `""` | no |
 | application\_success\_feedback\_sample\_rate | Percentage of success to sample. | `number` | `100` | no |
-| attributes | Additional attributes (e.g. `1`). | `list` | `[]` | no |
+| attributes | Additional attributes (e.g. `1`). | `list(any)` | `[]` | no |
 | certificate | application Platform principal. See Principal for type of principal required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources. | `string` | `""` | no |
 | confirmation\_timeout\_in\_minutes | Integer indicating number of minutes to wait in retying mode for fetching subscription arn before marking it as failure. Only applicable for http and https protocols. | `number` | `60` | no |
 | default\_sender\_id | A string, such as your business brand, that is displayed as the sender on the receiving device. | `string` | `""` | no |
@@ -195,11 +191,11 @@ Here are some examples of how you can use this module in your inventory structur
 | http\_success\_feedback\_sample\_rate | Percentage of success to sample. | `number` | `100` | no |
 | key | Application Platform credential. See Credential for type of credential required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources. | `string` | `""` | no |
 | kms\_master\_key\_id | The ID of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK. For more information. | `string` | `""` | no |
-| label\_order | Label order, e.g. `name`,`application`. | `list` | `[]` | no |
+| label\_order | Label order, e.g. `name`,`application`. | `list(any)` | `[]` | no |
 | lambda\_failure\_feedback\_role\_arn | IAM role for failure feedback. | `string` | `""` | no |
 | lambda\_success\_feedback\_role\_arn | The IAM role permitted to receive success feedback for this topic. | `string` | `""` | no |
 | lambda\_success\_feedback\_sample\_rate | Percentage of success to sample. | `number` | `100` | no |
-| managedby | ManagedBy, eg 'CloudDrove' or 'AnmolNagpal'. | `string` | `"anmol@clouddrove.com"` | no |
+| managedby | ManagedBy, eg 'CloudDrove'. | `string` | `"hello@clouddrove.com"` | no |
 | monthly\_spend\_limit | The maximum amount in USD that you are willing to spend each month to send SMS messages. | `number` | `1` | no |
 | name | Name  (e.g. `app` or `cluster`). | `string` | `""` | no |
 | name\_prefix | The friendly name for the SNS topic. Conflicts with name. | `string` | `""` | no |
@@ -208,13 +204,14 @@ Here are some examples of how you can use this module in your inventory structur
 | policy | The fully-formed AWS policy as JSON. For more information about building AWS IAM policy documents with Terraform. | `string` | `""` | no |
 | protocol | The protocol to use. The possible values for this are: sqs, sms, lambda, application. | `string` | `""` | no |
 | raw\_message\_delivery | Boolean indicating whether or not to enable raw message delivery. | `bool` | `false` | no |
+| repository | Terraform current module repo | `string` | `"https://registry.terraform.io/modules/clouddrove/sqs/aws/"` | no |
 | sqs\_failure\_feedback\_role\_arn | IAM role for failure feedback. | `string` | `""` | no |
 | sqs\_success\_feedback\_role\_arn | The IAM role permitted to receive success feedback for this topic. | `string` | `""` | no |
 | sqs\_success\_feedback\_sample\_rate | Percentage of success to sample. | `number` | `100` | no |
 | subscription\_delivery\_policy | JSON String with the delivery policy (retries, backoff, etc.) that will be used in the subscription - this only applies to HTTP/S subscriptions. | `string` | `""` | no |
 | success\_feedback\_role\_arn | The IAM role permitted to receive success feedback for this application. | `string` | `""` | no |
 | success\_feedback\_sample\_rate | The percentage of success to sample (0-100). | `number` | `100` | no |
-| tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | `map` | `{}` | no |
+| tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | `map(any)` | `{}` | no |
 | topic\_name | The friendly name for the SNS topic. By default generated by Terraform. | `string` | `""` | no |
 | usage\_report\_s3\_bucket | The name of the Amazon S3 bucket to receive daily SMS usage reports from Amazon SNS. | `string` | `""` | no |
 
@@ -231,7 +228,7 @@ Here are some examples of how you can use this module in your inventory structur
 
 
 ## Testing
-In this module testing is performed with [terratest](https://github.com/gruntwork-io/terratest) and it creates a small piece of infrastructure, matches the output like ARN, ID and Tags name etc and destroy infrastructure in your AWS account. This testing is written in GO, so you need a [GO environment](https://golang.org/doc/install) in your system.
+In this module testing is performed with [terratest](https://github.com/gruntwork-io/terratest) and it creates a small piece of infrastructure, matches the output like ARN, ID and Tags name etc and destroy infrastructure in your AWS account. This testing is written in GO, so you need a [GO environment](https://golang.org/doc/install) in your system. 
 
 You need to run the following command in the testing folder:
 ```hcl
@@ -240,7 +237,7 @@ You need to run the following command in the testing folder:
 
 
 
-## Feedback
+## Feedback 
 If you come accross a bug or have any feedback, please log it in our [issue tracker](https://github.com/clouddrove/terraform-aws-sns/issues), or feel free to drop us an email at [hello@clouddrove.com](mailto:hello@clouddrove.com).
 
 If you have found it worth your time, go ahead and give us a ★ on [our GitHub](https://github.com/clouddrove/terraform-aws-sns)!
