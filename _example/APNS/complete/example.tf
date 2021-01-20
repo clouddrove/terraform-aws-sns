@@ -6,7 +6,8 @@ data "aws_caller_identity" "current" {}
 
 
 module "sqs" {
-  source = "git::https://github.com/clouddrove/terraform-aws-sqs.git?ref=tags/0.14.0"
+  source  = "clouddrove/sqs/aws"
+  version = "0.14.0"
 
   name        = "sqs"
   environment = "test"
@@ -82,7 +83,7 @@ data "aws_iam_policy_document" "sns-topic-policy" {
       identifiers = ["*"]
     }
     resources = [
-      format("arn:aws:sns:eu-west-1:%s:app/APNS/test-clouddrove-sns", data.aws_caller_identity.current.account_id)
+      format("arn:aws:sns:eu-west-1:%s:app/APNS/sns-test", data.aws_caller_identity.current.account_id)
     ]
     sid = "__default_statement_ID"
   }
