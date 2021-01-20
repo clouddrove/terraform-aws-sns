@@ -8,14 +8,8 @@ variable "name" {
 
 variable "repository" {
   type        = string
-  default     = ""
+  default     = "https://registry.terraform.io/modules/clouddrove/sqs/aws/"
   description = "Terraform current module repo"
-
-  validation {
-    # regex(...) fails if it cannot find a match
-    condition     = can(regex("^https://", var.repository))
-    error_message = "The module-repo value must be a valid Git repo link."
-  }
 }
 
 variable "environment" {
@@ -56,6 +50,12 @@ variable "managedby" {
 
 # Module      : SNS Module
 # Description : Terraform SNS module variables
+variable "enabled" {
+  type        = bool
+  default     = true
+  description = "Boolean indicating whether or not to create sns module."
+}
+
 variable "platform" {
   type        = string
   default     = ""
@@ -66,7 +66,6 @@ variable "key" {
   type        = string
   default     = ""
   description = "Application Platform credential. See Credential for type of credential required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources."
-  sensitive   = true
 }
 variable "gcm_key" {
   type        = string
@@ -79,21 +78,18 @@ variable "certificate" {
   type        = string
   default     = ""
   description = "application Platform principal. See Principal for type of principal required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources."
-  sensitive   = true
 }
 
 variable "event_delivery_failure_topic_arn" {
   type        = string
   default     = ""
   description = "SNS Topic triggered when a delivery to any of the platform endpoints associated with your platform application encounters a permanent failure."
-  sensitive   = true
 }
 
 variable "event_endpoint_created_topic_arn" {
   type        = string
   default     = ""
   description = "SNS Topic triggered when a new platform endpoint is added to your platform application."
-  sensitive   = true
 }
 
 variable "event_endpoint_deleted_topic_arn" {
@@ -106,14 +102,12 @@ variable "event_endpoint_updated_topic_arn" {
   type        = string
   default     = ""
   description = "SNS Topic triggered when an existing platform endpoint is changed from your platform application."
-  sensitive   = true
 }
 
 variable "failure_feedback_role_arn" {
   type        = string
   default     = ""
   description = "The IAM role permitted to receive failure feedback for this application."
-  sensitive   = true
 }
 
 variable "platform_principal" {
@@ -157,35 +151,30 @@ variable "policy" {
   type        = string
   default     = ""
   description = "The fully-formed AWS policy as JSON. For more information about building AWS IAM policy documents with Terraform."
-  sensitive   = true
 }
 
 variable "delivery_policy" {
   type        = string
   default     = ""
   description = "The SNS delivery policy."
-  sensitive   = true
 }
 
 variable "application_success_feedback_role_arn" {
   type        = string
   default     = ""
   description = "The IAM role permitted to receive success feedback for this topic."
-  sensitive   = true
 }
 
 variable "application_success_feedback_sample_rate" {
   type        = number
   default     = 100
   description = "Percentage of success to sample."
-  sensitive   = true
 }
 
 variable "application_failure_feedback_role_arn" {
   type        = string
   default     = ""
   description = "IAM role for failure feedback."
-  sensitive   = true
 }
 
 variable "http_success_feedback_role_arn" {
@@ -212,14 +201,12 @@ variable "kms_master_key_id" {
   type        = string
   default     = ""
   description = "The ID of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK. For more information."
-  sensitive   = true
 }
 
 variable "lambda_success_feedback_role_arn" {
   type        = string
   default     = ""
   description = "The IAM role permitted to receive success feedback for this topic."
-  sensitive   = true
 }
 
 variable "lambda_success_feedback_sample_rate" {
@@ -232,14 +219,12 @@ variable "lambda_failure_feedback_role_arn" {
   type        = string
   default     = ""
   description = "IAM role for failure feedback."
-  sensitive   = true
 }
 
 variable "sqs_success_feedback_role_arn" {
   type        = string
   default     = ""
   description = "The IAM role permitted to receive success feedback for this topic."
-  sensitive   = true
 }
 
 variable "sqs_success_feedback_sample_rate" {
@@ -264,7 +249,6 @@ variable "endpoint" {
   type        = string
   default     = ""
   description = "The endpoint to send data to, the contents will vary with the protocol."
-  sensitive   = true
 }
 
 variable "endpoint_auto_confirms" {
@@ -289,7 +273,6 @@ variable "filter_policy" {
   type        = string
   default     = ""
   description = "JSON String with the filter policy that will be used in the subscription to filter messages seen by the target resource."
-  sensitive   = true
 }
 
 variable "subscription_delivery_policy" {
@@ -330,6 +313,7 @@ variable "delivery_status_iam_role_arn" {
 }
 
 variable "delivery_status_success_sampling_rate" {
+  type        =number
   default     = 50
   description = "The percentage of successful SMS deliveries for which Amazon SNS will write logs in CloudWatch Logs. The value must be between 0 and 100."
 }
@@ -350,10 +334,4 @@ variable "usage_report_s3_bucket" {
   type        = string
   default     = ""
   description = "The name of the Amazon S3 bucket to receive daily SMS usage reports from Amazon SNS."
-}
-
-variable "enabled" {
-  type        = bool
-  default     = true
-  description = "Boolean indicating whether or not to create sns module."
 }

@@ -6,9 +6,9 @@ data "aws_caller_identity" "current" {}
 
 
 module "sqs" {
-  source      = "git::https://github.com/clouddrove/terraform-aws-sqs.git?ref=0.14"
+  source      = "git::https://github.com/clouddrove/terraform-aws-sqs.git?ref=tags/0.14.0"
+
   name        = "sqs"
-  repository  = "https://registry.terraform.io/modules/clouddrove/sqs/aws/0.14.0"
   environment = "test"
   label_order = ["name", "environment"]
 
@@ -30,7 +30,7 @@ data "aws_iam_policy_document" "document" {
     }
     actions = ["sqs:SendMessage"]
     resources = [
-      format("arn:aws:sqs:eu-west-1:%s:test-clouddrove-sqs", data.aws_caller_identity.current.account_id)
+      format("arn:aws:sqs:eu-west-1:%s:sqs-test", data.aws_caller_identity.current.account_id)
     ]
   }
 }
@@ -39,7 +39,6 @@ module "sns" {
   source = "./../../../"
 
   name        = "sns"
-  repository  = "https://registry.terraform.io/modules/clouddrove/sns/aws/0.14.0"
   environment = "test"
   label_order = ["name", "environment"]
 

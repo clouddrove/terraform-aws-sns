@@ -5,88 +5,117 @@ on:
       - master
 
 jobs:
-  terraform:
-    name: 'Terraform'
+  fmt:
+    name: 'terraform fmt'
     runs-on: ubuntu-latest
     steps:
       - name: 'Checkout'
-        uses: actions/checkout@master
+        uses: actions/checkout@v2.3.4
 
-      - name: Configure AWS Credentials
+      - name: 'Terraform Format'
+        uses: 'clouddrove/github-actions@v6.0'
+        with:
+          actions_subcommand: 'fmt'
+
+  APN_Basic:
+    name: 'APN Basic'
+    needs: fmt
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: 'Checkout'
+        uses: actions/checkout@v2.3.4
+
+      - name: 'Configure AWS Credentials'
         uses: clouddrove/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.TEST_AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.TEST_AWS_ACCESS_SECRET_KEY }}
           aws-region: us-east-2
 
-
-      - name: 'Terraform Format'
-        uses: 'clouddrove/github-actions@v4.0'
-        with:
-          actions_subcommand: 'fmt'
-
       - name: 'Terraform init for APN basic'
-        uses: 'clouddrove/github-actions@v4.0'
+        uses: 'clouddrove/github-actions@v6.0'
         with:
           actions_subcommand: 'init'
           tf_actions_working_dir: ./_example/APNS/basic
 
       - name: 'Terraform validate for APN basic'
-        uses: 'clouddrove/github-actions@v4.0'
+        uses: 'clouddrove/github-actions@v6.0'
         with:
           actions_subcommand: 'validate'
           tf_actions_working_dir: ./_example/APNS/basic
 
       - name: 'Terraform plan for APN basic'
-        uses: 'clouddrove/github-actions@v4.0'
+        uses: 'clouddrove/github-actions@v6.0'
         with:
           actions_subcommand: 'plan'
           tf_actions_working_dir: ./_example/APNS/basic
 
+  APN_Complete:
+    name: 'APN_Complete'
+    needs: fmt
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: 'Checkout'
+        uses: actions/checkout@v2.3.4
+
+      - name: 'Configure AWS Credentials'
+        uses: clouddrove/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.TEST_AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.TEST_AWS_ACCESS_SECRET_KEY }}
+          aws-region: us-east-2
 
       - name: 'Terraform init for APN complete'
-        uses: 'clouddrove/github-actions@v4.0'
+        uses: 'clouddrove/github-actions@v6.0'
         with:
           actions_subcommand: 'init'
           tf_actions_working_dir: ./_example/APNS/complete
 
       - name: 'Terraform validate for APN complete'
-        uses: 'clouddrove/github-actions@v4.0'
+        uses: 'clouddrove/github-actions@v6.0'
         with:
           actions_subcommand: 'validate'
           tf_actions_working_dir: ./_example/APNS/complete
 
       - name: 'Terraform plan for APN complete'
-        uses: 'clouddrove/github-actions@v4.0'
+        uses: 'clouddrove/github-actions@v6.0'
         with:
           actions_subcommand: 'plan'
           tf_actions_working_dir: ./_example/APNS/complete
+  GCM:
+    name: 'GCM'
+    needs: fmt
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: 'Checkout'
+        uses: actions/checkout@v2.3.4
+
+      - name: 'Configure AWS Credentials'
+        uses: clouddrove/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.TEST_AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.TEST_AWS_ACCESS_SECRET_KEY }}
+          aws-region: us-east-2
 
       - name: 'Terraform init for GCM'
-        uses: 'clouddrove/github-actions@v4.0'
+        uses: 'clouddrove/github-actions@v6.0'
         with:
           actions_subcommand: 'init'
           tf_actions_working_dir: ./_example/GCM
 
       - name: 'Terraform validate for GCM'
-        uses: 'clouddrove/github-actions@v4.0'
+        uses: 'clouddrove/github-actions@v6.0'
         with:
           actions_subcommand: 'validate'
           tf_actions_working_dir: ./_example/GCM
 
       - name: 'Terraform plan for GCM'
-        uses: 'clouddrove/github-actions@v4.0'
+        uses: 'clouddrove/github-actions@v6.0'
         with:
           actions_subcommand: 'plan'
           tf_actions_working_dir: ./_example/GCM
 
-      - name: 'Slack Notification'
-        uses: clouddrove/action-slack@v2
-        with:
-          status: ${{ job.status }}
-          fields: repo,author
-          author_name: 'CloudDrove'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # required
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_TERRAFORM }} # required
-        if: always()
+ 

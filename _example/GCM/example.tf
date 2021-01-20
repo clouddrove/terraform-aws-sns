@@ -6,7 +6,6 @@ module "sns" {
   source = "./../../"
 
   name        = "sqs"
-  repository  = "https://registry.terraform.io/modules/clouddrove/sns/aws/0.14.0"
   environment = "test"
   label_order = ["name", "environment"]
 
