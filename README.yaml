@@ -39,7 +39,7 @@ usage : |-
   ```hcl
     module "sns" {
       source            = "clouddrove/sns/aws"
-      version           = "0.14.0"
+      version           = "0.15.0"
       name              = "basic-sns"
       environment       = "test"
       label_order       = ["name","environment"]
@@ -52,7 +52,7 @@ usage : |-
   ```hcl
     module "sns" {
       source            = "clouddrove/sns/aws"
-      version           = "0.14.0"
+      version           = "0.15.0"
       name              = "sns"
       environment       = "test"
       label_order       = ["name","environment"]
@@ -106,7 +106,7 @@ usage : |-
   ```hcl
     module "sns" {
       source      = "clouddrove/sns/aws"
-      version     = "0.14.0"
+      version     = "0.15.0"
       name        = "sns"
       environment = "test"
       label_order = ["name","environment"]
