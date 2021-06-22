@@ -5,7 +5,7 @@ provider "aws" {
 module "sns" {
   source = "./../../../"
 
-  name = "text"
+  name        = "text"
   environment = "test"
   label_order = ["name", "environment"]
 
