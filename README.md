@@ -7,7 +7,7 @@
     Terraform AWS SNS
 </h1>
 
-<p align="center" style="font-size: 1.2rem;">
+<p align="center" style="font-size: 1.2rem;"> 
     Terraform module is used to setup SNS service to manage notifications on application.
      </p>
 
@@ -38,7 +38,7 @@
 <hr>
 
 
-We eat, drink, sleep and most importantly love **DevOps**. We are working towards strategies for standardizing architecture while ensuring security for the infrastructure. We are strong believer of the philosophy <b>Bigger problems are always solved by breaking them into smaller manageable problems</b>. Resonating with microservices architecture, it is considered best-practice to run database, cluster, storage in smaller <b>connected yet manageable pieces</b> within the infrastructure.
+We eat, drink, sleep and most importantly love **DevOps**. We are working towards strategies for standardizing architecture while ensuring security for the infrastructure. We are strong believer of the philosophy <b>Bigger problems are always solved by breaking them into smaller manageable problems</b>. Resonating with microservices architecture, it is considered best-practice to run database, cluster, storage in smaller <b>connected yet manageable pieces</b> within the infrastructure. 
 
 This module is basically combination of [Terraform open source](https://www.terraform.io/) and includes automatation tests and examples. It also helps to create and improve your infrastructure with minimalistic code instead of maintaining the whole infrastructure code yourself.
 
@@ -49,7 +49,7 @@ We have [*fifty plus terraform modules*][terraform_modules]. A few of them are c
 
 ## Prerequisites
 
-This module has a few dependencies:
+This module has a few dependencies: 
 
 - [Terraform 0.13](https://learn.hashicorp.com/terraform/getting-started/install.html)
 - [Go](https://golang.org/doc/install)
@@ -74,7 +74,7 @@ Here are some examples of how you can use this module in your inventory structur
 ```hcl
   module "sns" {
     source            = "clouddrove/sns/aws"
-    version           = "0.14.0"
+    version           = "0.15.0"
     name              = "basic-sns"
     environment       = "test"
     label_order       = ["name","environment"]
@@ -87,7 +87,7 @@ Here are some examples of how you can use this module in your inventory structur
 ```hcl
   module "sns" {
     source            = "clouddrove/sns/aws"
-    version           = "0.14.0"
+    version           = "0.15.0"
     name              = "sns"
     environment       = "test"
     label_order       = ["name","environment"]
@@ -141,7 +141,7 @@ Here are some examples of how you can use this module in your inventory structur
 ```hcl
   module "sns" {
     source      = "clouddrove/sns/aws"
-    version     = "0.14.0"
+    version     = "0.15.0"
     name        = "sns"
     environment = "test"
     label_order = ["name","environment"]
@@ -172,7 +172,7 @@ Here are some examples of how you can use this module in your inventory structur
 | delivery\_status\_iam\_role\_arn | The ARN of the IAM role that allows Amazon SNS to write logs about SMS deliveries in CloudWatch Logs. | `string` | `""` | no |
 | delivery\_status\_success\_sampling\_rate | The percentage of successful SMS deliveries for which Amazon SNS will write logs in CloudWatch Logs. The value must be between 0 and 100. | `number` | `50` | no |
 | display\_name | The display name for the SNS topic. | `string` | `""` | no |
-| enable\_sms\_preference | Boolean indicating whether or not to update SNS SMS Preference. | `bool` | `false` | no |
+| enable\_sms\_preference | Boolean indicating whether or not to update SNS SMS Preference. | `bool` | `true` | no |
 | enable\_sns | Boolean indicating whether or not to create sns. | `bool` | `false` | no |
 | enable\_topic | Boolean indicating whether or not to create topic. | `bool` | `false` | no |
 | enabled | Boolean indicating whether or not to create sns module. | `bool` | `true` | no |
@@ -204,7 +204,7 @@ Here are some examples of how you can use this module in your inventory structur
 | policy | The fully-formed AWS policy as JSON. For more information about building AWS IAM policy documents with Terraform. | `string` | `""` | no |
 | protocol | The protocol to use. The possible values for this are: sqs, sms, lambda, application. | `string` | `""` | no |
 | raw\_message\_delivery | Boolean indicating whether or not to enable raw message delivery. | `bool` | `false` | no |
-| repository | Terraform current module repo | `string` | `"https://registry.terraform.io/modules/clouddrove/sqs/aws/"` | no |
+| repository | Terraform current module repo | `string` | `"https://github.com/clouddrove/terraform-aws-sns"` | no |
 | sqs\_failure\_feedback\_role\_arn | IAM role for failure feedback. | `string` | `""` | no |
 | sqs\_success\_feedback\_role\_arn | The IAM role permitted to receive success feedback for this topic. | `string` | `""` | no |
 | sqs\_success\_feedback\_sample\_rate | Percentage of success to sample. | `number` | `100` | no |
@@ -228,7 +228,7 @@ Here are some examples of how you can use this module in your inventory structur
 
 
 ## Testing
-In this module testing is performed with [terratest](https://github.com/gruntwork-io/terratest) and it creates a small piece of infrastructure, matches the output like ARN, ID and Tags name etc and destroy infrastructure in your AWS account. This testing is written in GO, so you need a [GO environment](https://golang.org/doc/install) in your system.
+In this module testing is performed with [terratest](https://github.com/gruntwork-io/terratest) and it creates a small piece of infrastructure, matches the output like ARN, ID and Tags name etc and destroy infrastructure in your AWS account. This testing is written in GO, so you need a [GO environment](https://golang.org/doc/install) in your system. 
 
 You need to run the following command in the testing folder:
 ```hcl
@@ -237,7 +237,7 @@ You need to run the following command in the testing folder:
 
 
 
-## Feedback
+## Feedback 
 If you come accross a bug or have any feedback, please log it in our [issue tracker](https://github.com/clouddrove/terraform-aws-sns/issues), or feel free to drop us an email at [hello@clouddrove.com](mailto:hello@clouddrove.com).
 
 If you have found it worth your time, go ahead and give us a ★ on [our GitHub](https://github.com/clouddrove/terraform-aws-sns)!
