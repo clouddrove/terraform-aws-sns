@@ -8,7 +8,7 @@ variable "name" {
 
 variable "repository" {
   type        = string
-  default     = "https://registry.terraform.io/modules/clouddrove/sqs/aws/"
+  default     = "https://github.com/clouddrove/terraform-aws-sns"
   description = "Terraform current module repo"
 }
 
@@ -282,7 +282,7 @@ variable "subscription_delivery_policy" {
 
 variable "enable_sms_preference" {
   type        = bool
-  default     = false
+  default     = true
   description = "Boolean indicating whether or not to update SNS SMS Preference."
 }
 
