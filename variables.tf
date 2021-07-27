@@ -155,7 +155,7 @@ variable "policy" {
 
 variable "delivery_policy" {
   type        = string
-  default     = ""
+  default     = null
   description = "The SNS delivery policy."
 }
 
