@@ -292,6 +292,12 @@ variable "enable_topic" {
   description = "Boolean indicating whether or not to create topic."
 }
 
+variable "enable_subscription" {
+  type        = bool
+  default     = false
+  description = "Boolean indicating whether or not to create subscription."
+}
+
 variable "enable_sns" {
   type        = bool
   default     = false

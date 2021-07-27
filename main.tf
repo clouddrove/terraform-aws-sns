@@ -65,7 +65,7 @@ resource "aws_sns_topic" "default" {
 #Module      : SNS TOPIC SUBSCRIPTION
 #Description : Terraform module which creates SNS Topic Subscription resources on AWS
 resource "aws_sns_topic_subscription" "default" {
-  count = var.enabled && var.enable_topic ? 1 : 0
+  count = var.enabled && var.enable_subscription ? 1 : 0
 
   topic_arn                       = aws_sns_topic.default[count.index].arn
   protocol                        = var.protocol
