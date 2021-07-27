@@ -282,7 +282,7 @@ variable "subscription_delivery_policy" {
 
 variable "enable_sms_preference" {
   type        = bool
-  default     = true
+  default     = false
   description = "Boolean indicating whether or not to update SNS SMS Preference."
 }
 
@@ -290,6 +290,12 @@ variable "enable_topic" {
   type        = bool
   default     = false
   description = "Boolean indicating whether or not to create topic."
+}
+
+variable "enable_subscription" {
+  type        = bool
+  default     = false
+  description = "Boolean indicating whether or not to create subscription."
 }
 
 variable "enable_sns" {
