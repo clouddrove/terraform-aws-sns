@@ -282,7 +282,7 @@ variable "subscription_delivery_policy" {
 
 variable "enable_sms_preference" {
   type        = bool
-  default     = true
+  default     = false
   description = "Boolean indicating whether or not to update SNS SMS Preference."
 }
 
