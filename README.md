@@ -172,8 +172,9 @@ Here are some examples of how you can use this module in your inventory structur
 | delivery\_status\_iam\_role\_arn | The ARN of the IAM role that allows Amazon SNS to write logs about SMS deliveries in CloudWatch Logs. | `string` | `""` | no |
 | delivery\_status\_success\_sampling\_rate | The percentage of successful SMS deliveries for which Amazon SNS will write logs in CloudWatch Logs. The value must be between 0 and 100. | `number` | `50` | no |
 | display\_name | The display name for the SNS topic. | `string` | `""` | no |
-| enable\_sms\_preference | Boolean indicating whether or not to update SNS SMS Preference. | `bool` | `true` | no |
+| enable\_sms\_preference | Boolean indicating whether or not to update SNS SMS Preference. | `bool` | `false` | no |
 | enable\_sns | Boolean indicating whether or not to create sns. | `bool` | `false` | no |
+| enable\_subscription | Boolean indicating whether or not to create subscription. | `bool` | `false` | no |
 | enable\_topic | Boolean indicating whether or not to create topic. | `bool` | `false` | no |
 | enabled | Boolean indicating whether or not to create sns module. | `bool` | `true` | no |
 | endpoint | The endpoint to send data to, the contents will vary with the protocol. | `string` | `""` | no |
