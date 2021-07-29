@@ -51,7 +51,7 @@ module "sns" {
 
   key             = "../../certificates/private_key.pem"
   certificate     = "../../certificates/cert.pem"
-  delivery_policy = "../../_json/delivery_policy.json"
+  delivery_policy = file("../../_json/delivery_policy.json")
   policy          = data.aws_iam_policy_document.sns-topic-policy.json
 }
 
