@@ -65,17 +65,15 @@ resource "aws_sns_topic" "default" {
 #Module      : SNS TOPIC SUBSCRIPTION
 #Description : Terraform module which creates SNS Topic Subscription resources on AWS
 resource "aws_sns_topic_subscription" "this" {
-  for_each               = var.subscribers
-  topic_arn              = join("", aws_sns_topic.default.*.arn)
-  protocol               = var.subscribers[each.key].protocol
-  endpoint               = var.subscribers[each.key].endpoint
-  endpoint_auto_confirms = var.subscribers[each.key].endpoint_auto_confirms
-  raw_message_delivery   = var.subscribers[each.key].raw_message_delivery
-  //  filter_policy                   = var.filter_policy
-  //  delivery_policy                 = var.subscription_delivery_policy
-  //  confirmation_timeout_in_minutes = var.confirmation_timeout_in_minutes
-  # TODO enable when PR gets merged https://github.com/terraform-providers/terraform-provider-aws/issues/10931
-  # redrive_policy        = length(aws_sqs_queue.dead_letter_queue.*) > 0 ? "{\"deadLetterTargetArn\": \"${join("", aws_sqs_queue.dead_letter_queue.*.arn)}\"}" : null
+  for_each                        = var.subscribers
+  topic_arn                       = join("", aws_sns_topic.default.*.arn)
+  protocol                        = var.subscribers[each.key].protocol
+  endpoint                        = var.subscribers[each.key].endpoint
+  endpoint_auto_confirms          = var.subscribers[each.key].endpoint_auto_confirms
+  raw_message_delivery            = var.subscribers[each.key].raw_message_delivery
+  filter_policy                   = var.subscribers[each.key].filter_policy
+  delivery_policy                 = var.subscribers[each.key].delivery_policy
+  confirmation_timeout_in_minutes = var.subscribers[each.key].confirmation_timeout_in_minutes
 
 }
 
