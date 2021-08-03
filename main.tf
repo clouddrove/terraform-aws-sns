@@ -45,7 +45,7 @@ resource "aws_sns_topic" "default" {
   name                                     = module.labels.id
   display_name                             = var.display_name
   policy                                   = var.policy
-  delivery_policy                          = file(var.delivery_policy)
+  delivery_policy                          = var.delivery_policy
   application_success_feedback_role_arn    = var.application_success_feedback_role_arn
   application_success_feedback_sample_rate = var.application_success_feedback_sample_rate
   application_failure_feedback_role_arn    = var.application_failure_feedback_role_arn
@@ -64,18 +64,19 @@ resource "aws_sns_topic" "default" {
 
 #Module      : SNS TOPIC SUBSCRIPTION
 #Description : Terraform module which creates SNS Topic Subscription resources on AWS
-resource "aws_sns_topic_subscription" "default" {
-  count = var.enabled && var.enable_subscription ? 1 : 0
+resource "aws_sns_topic_subscription" "this" {
+  for_each                        = var.subscribers
+  topic_arn                       = join("", aws_sns_topic.default.*.arn)
+  protocol                        = var.subscribers[each.key].protocol
+  endpoint                        = var.subscribers[each.key].endpoint
+  endpoint_auto_confirms          = var.subscribers[each.key].endpoint_auto_confirms
+  raw_message_delivery            = var.subscribers[each.key].raw_message_delivery
+  filter_policy                   = var.subscribers[each.key].filter_policy
+  delivery_policy                 = var.subscribers[each.key].delivery_policy
+  confirmation_timeout_in_minutes = var.subscribers[each.key].confirmation_timeout_in_minutes
 
-  topic_arn                       = aws_sns_topic.default[count.index].arn
-  protocol                        = var.protocol
-  endpoint                        = var.endpoint
-  endpoint_auto_confirms          = var.endpoint_auto_confirms
-  confirmation_timeout_in_minutes = var.confirmation_timeout_in_minutes
-  raw_message_delivery            = var.raw_message_delivery
-  filter_policy                   = var.filter_policy
-  delivery_policy                 = var.subscription_delivery_policy
 }
+
 
 #Module      : SNS SMS Preferences
 #Description : Terraform module which creates SNS SMS Preferences on AWS

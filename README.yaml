@@ -114,3 +114,38 @@ usage : |-
       key         = "AAAAKHQaqe1w:APA91bEgwftAYq6N2YV8TeU2k4bRj0k1q2I7Q47ZvFPLQm-ESbD2Fhjj3U9wNNuZ2aC-QZVdgDrN5C6E3Ec08AWhMgbs4b72gNvqcXh1JBoR6yLwretghyjutTR4yRmT0vWdhz4_PW1AwDC0aVoH"
     }
   ```
+  ### sns_topic
+  ```hcl
+    module "sns" {
+
+      source       = "clouddrove/sns/aws"
+      name         = "sqs"
+      environment  = "test"
+      label_order  = ["name", "environment"]
+      enable_topic = true
+
+      subscribers = {
+      newrelic = {
+      protocol                        = "https"
+      endpoint                        = "https://example.com"
+      endpoint_auto_confirms          = false
+      raw_message_delivery            = true
+      filter_policy                   = ""
+      delivery_policy                 = ""
+      confirmation_timeout_in_minutes = "60"
+
+      },
+      sms = {
+      protocol                        = "sms"
+      endpoint                        = "917742xxxxxx"
+      endpoint_auto_confirms          = false
+      raw_message_delivery            = false
+      filter_policy                   = ""
+      delivery_policy                 = ""
+      confirmation_timeout_in_minutes = "60"
+      },
+
+     }
+      }
+
+  ```
