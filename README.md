@@ -149,6 +149,41 @@ Here are some examples of how you can use this module in your inventory structur
     key         = "AAAAKHQaqe1w:APA91bEgwftAYq6N2YV8TeU2k4bRj0k1q2I7Q47ZvFPLQm-ESbD2Fhjj3U9wNNuZ2aC-QZVdgDrN5C6E3Ec08AWhMgbs4b72gNvqcXh1JBoR6yLwretghyjutTR4yRmT0vWdhz4_PW1AwDC0aVoH"
   }
 ```
+### sns_topic
+```hcl
+  module "sns" {
+
+    source       = "clouddrove/sns/aws"
+    name         = "sqs"
+    environment  = "test"
+    label_order  = ["name", "environment"]
+    enable_topic = true
+
+    subscribers = {
+    newrelic = {
+    protocol                        = "https"
+    endpoint                        = "https://example.com"
+    endpoint_auto_confirms          = false
+    raw_message_delivery            = true
+    filter_policy                   = ""
+    delivery_policy                 = ""
+    confirmation_timeout_in_minutes = "60"
+
+    },
+    sms = {
+    protocol                        = "sms"
+    endpoint                        = "917742xxxxxx"
+    endpoint_auto_confirms          = false
+    raw_message_delivery            = false
+    filter_policy                   = ""
+    delivery_policy                 = ""
+    confirmation_timeout_in_minutes = "60"
+    },
+
+   }
+    }
+
+```
 
 
 
@@ -168,7 +203,7 @@ Here are some examples of how you can use this module in your inventory structur
 | default\_sender\_id | A string, such as your business brand, that is displayed as the sender on the receiving device. | `string` | `""` | no |
 | default\_sms\_type | The type of SMS message that you will send by default. Possible values are: Promotional, Transactional. | `string` | `"Transactional"` | no |
 | delimiter | Delimiter to be used between `organization`, `environment`, `name` and `attributes`. | `string` | `"-"` | no |
-| delivery\_policy | The SNS delivery policy. | `string` | `""` | no |
+| delivery\_policy | The SNS delivery policy. | `string` | `null` | no |
 | delivery\_status\_iam\_role\_arn | The ARN of the IAM role that allows Amazon SNS to write logs about SMS deliveries in CloudWatch Logs. | `string` | `""` | no |
 | delivery\_status\_success\_sampling\_rate | The percentage of successful SMS deliveries for which Amazon SNS will write logs in CloudWatch Logs. The value must be between 0 and 100. | `number` | `50` | no |
 | display\_name | The display name for the SNS topic. | `string` | `""` | no |
@@ -204,11 +239,12 @@ Here are some examples of how you can use this module in your inventory structur
 | platform\_principal | Application Platform principal. See Principal for type of principal required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources. | `string` | `""` | no |
 | policy | The fully-formed AWS policy as JSON. For more information about building AWS IAM policy documents with Terraform. | `string` | `""` | no |
 | protocol | The protocol to use. The possible values for this are: sqs, sms, lambda, application. | `string` | `""` | no |
-| raw\_message\_delivery | Boolean indicating whether or not to enable raw message delivery. | `bool` | `false` | no |
+| raw\_message\_delivery | Boolean indicating whether or not to enable raw message delivery. | `bool` | `true` | no |
 | repository | Terraform current module repo | `string` | `"https://github.com/clouddrove/terraform-aws-sns"` | no |
 | sqs\_failure\_feedback\_role\_arn | IAM role for failure feedback. | `string` | `""` | no |
 | sqs\_success\_feedback\_role\_arn | The IAM role permitted to receive success feedback for this topic. | `string` | `""` | no |
 | sqs\_success\_feedback\_sample\_rate | Percentage of success to sample. | `number` | `100` | no |
+| subscribers | Required configuration for subscibres to SNS topic. | <pre>map(object({<br>    protocol = string<br>    # The protocol to use. The possible values for this are: sqs, sms, lambda, application. (http or https are partially supported, see below) (email is an option but is unsupported, see below).<br>    endpoint = string<br>    # The endpoint to send data to, the contents will vary with the protocol. (see below for more information)<br>    endpoint_auto_confirms = bool<br>    # Boolean indicating whether the end point is capable of auto confirming subscription e.g., PagerDuty (default is false)<br>    raw_message_delivery = bool<br>    # Boolean indicating whether or not to enable raw message delivery (the original message is directly passed, not wrapped in JSON with the original message in the message property) (default is false)<br>    filter_policy = string<br>    # JSON String with the filter policy that will be used in the subscription to filter messages seen by the target resource.<br>    delivery_policy = string<br>    # The SNS delivery policy<br>    confirmation_timeout_in_minutes = string<br>    # Integer indicating number of minutes to wait in retying mode for fetching subscription arn before marking it as failure. Only applicable for http and https protocols.<br>  }))</pre> | `{}` | no |
 | subscription\_delivery\_policy | JSON String with the delivery policy (retries, backoff, etc.) that will be used in the subscription - this only applies to HTTP/S subscriptions. | `string` | `""` | no |
 | success\_feedback\_role\_arn | The IAM role permitted to receive success feedback for this application. | `string` | `""` | no |
 | success\_feedback\_sample\_rate | The percentage of success to sample (0-100). | `number` | `100` | no |
