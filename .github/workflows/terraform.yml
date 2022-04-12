@@ -31,7 +31,11 @@ jobs:
           - ${{ needs.versionExtract.outputs.minVersion }}
           - ${{ needs.versionExtract.outputs.maxVersion }}
         directory:
-          - _example/
+          - _example/APNS/basic
+          - _example/APNS/complete
+          - _example/APNS/text
+          - _example/GCM
+          - _example/sns_topic
 
     steps:
       - name: Checkout
