@@ -39,6 +39,7 @@ resource "aws_sns_platform_application" "default" {
 
 #Module      : SNS TOPIC
 #Description : Terraform module which creates SNS Topic resources on AWS
+#tfsec:ignore:aws-sns-enable-topic-encryption
 resource "aws_sns_topic" "default" {
   count = var.enabled && var.enable_topic ? 1 : 0
 
