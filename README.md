@@ -14,10 +14,16 @@
 <p align="center">
 
 <a href="https://www.terraform.io">
-  <img src="https://img.shields.io/badge/Terraform-v0.14-green" alt="Terraform">
+  <img src="https://img.shields.io/badge/Terraform-v1.1.7-green" alt="Terraform">
 </a>
 <a href="LICENSE.md">
-  <img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="Licence">
+  <img src="https://img.shields.io/badge/License-APACHE-blue.svg" alt="Licence">
+</a>
+<a href="https://github.com/clouddrove/terraform-aws-sns/actions/workflows/tfsec.yml">
+  <img src="https://github.com/clouddrove/terraform-aws-sns/actions/workflows/tfsec.yml/badge.svg" alt="tfsec">
+</a>
+<a href="https://github.com/clouddrove/terraform-aws-sns/actions/workflows/terraform.yml">
+  <img src="https://github.com/clouddrove/terraform-aws-sns/actions/workflows/terraform.yml/badge.svg" alt="static-checks">
 </a>
 
 
@@ -51,7 +57,7 @@ We have [*fifty plus terraform modules*][terraform_modules]. A few of them are c
 
 This module has a few dependencies: 
 
-- [Terraform 0.13](https://learn.hashicorp.com/terraform/getting-started/install.html)
+- [Terraform 1.x.x](https://learn.hashicorp.com/terraform/getting-started/install.html)
 - [Go](https://golang.org/doc/install)
 - [github.com/stretchr/testify/assert](https://github.com/stretchr/testify)
 - [github.com/gruntwork-io/terratest/modules/terraform](https://github.com/gruntwork-io/terratest)
@@ -74,7 +80,7 @@ Here are some examples of how you can use this module in your inventory structur
 ```hcl
   module "sns" {
     source            = "clouddrove/sns/aws"
-    version           = "0.15.0"
+    version           = "1.0.1"
     name              = "basic-sns"
     environment       = "test"
     label_order       = ["name","environment"]
@@ -87,7 +93,7 @@ Here are some examples of how you can use this module in your inventory structur
 ```hcl
   module "sns" {
     source            = "clouddrove/sns/aws"
-    version           = "0.15.0"
+    version           = "1.0.1"
     name              = "sns"
     environment       = "test"
     label_order       = ["name","environment"]
@@ -141,7 +147,7 @@ Here are some examples of how you can use this module in your inventory structur
 ```hcl
   module "sns" {
     source      = "clouddrove/sns/aws"
-    version     = "0.15.0"
+    version     = "1.0.1"
     name        = "sns"
     environment = "test"
     label_order = ["name","environment"]
