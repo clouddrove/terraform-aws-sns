@@ -30,13 +30,9 @@ jobs:
         version:
           - ${{ needs.versionExtract.outputs.minVersion }}
           - ${{ needs.versionExtract.outputs.maxVersion }}
-         directory:
-          - _example/APNS/basic
-          - _example/APNS/complete
-          - _example/APNS/text
-          - _example/GCM
-          - _example/sns_topic
-          
+        directory:
+          - _example/
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -58,7 +54,7 @@ jobs:
           cd ${{ matrix.directory }}
           terraform init
           terraform validate
-          terraform plan -input=false -no-color
+          
       - name: tflint
         uses: reviewdog/action-tflint@master
         with:
