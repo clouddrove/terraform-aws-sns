@@ -59,7 +59,7 @@ jobs:
           terraform init
           terraform validate
 
-      - name: tflint
+     - name: tflint
         uses: reviewdog/action-tflint@master
         with:
           github_token: ${{ secrets.GITHUB }}
@@ -67,6 +67,7 @@ jobs:
           fail_on_error: 'true'
           filter_mode: 'nofilter'
           flags: '--module'
+
 
   format:
     name: Check code format
