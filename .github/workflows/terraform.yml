@@ -31,11 +31,7 @@ jobs:
           - ${{ needs.versionExtract.outputs.minVersion }}
           - ${{ needs.versionExtract.outputs.maxVersion }}
         directory:
-          - _example/APNS/basic
-          - _example/APNS/complete
-          - _example/APNS/text
-          - _example/GCM
-          - _example/sns_topic
+          - _example/
 
     steps:
       - name: Checkout
@@ -58,8 +54,8 @@ jobs:
           cd ${{ matrix.directory }}
           terraform init
           terraform validate
-
-     - name: tflint
+          
+      - name: tflint
         uses: reviewdog/action-tflint@master
         with:
           github_token: ${{ secrets.GITHUB }}
@@ -67,7 +63,6 @@ jobs:
           fail_on_error: 'true'
           filter_mode: 'nofilter'
           flags: '--module'
-
 
   format:
     name: Check code format
