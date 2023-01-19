@@ -22,7 +22,7 @@ module "sns" {
     },
     sms = {
       protocol                        = "sms"
-      endpoint                        = "917742xxxxxxx"
+      endpoint                        = "917414xxxxxx"
       endpoint_auto_confirms          = false
       raw_message_delivery            = false
       filter_policy                   = ""
