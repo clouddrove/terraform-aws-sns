@@ -7,7 +7,7 @@ on:
 
 jobs:
   Terratest:
-    name: 'terratest'
+    name: 'APN Complete'
     runs-on: ubuntu-latest
     steps:
 
@@ -21,12 +21,14 @@ jobs:
           aws-secret-access-key: ${{ secrets.TEST_AWS_ACCESS_SECRET_KEY }}
           aws-region: us-east-2
 
-      - name: 'terratest'
+      - name: 'Terratest for APN Complete example'
+        if: ${{ github.event.label.name == 'terratest' }}
         uses: 'clouddrove/github-actions@v9.0.2'
         with:
           actions_subcommand: 'terratest'
-          if: ${{ github.event.label.name == 'terratest' }}
-          tf_actions_working_dir: '_test'
+          tf_actions_working_dir: '_test/APNS/complete'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 'Slack Notification'
         uses: clouddrove/action-slack@v2
