@@ -54,7 +54,7 @@ jobs:
           cd ${{ matrix.directory }}
           terraform init
           terraform validate
-          
+
       - name: tflint
         uses: reviewdog/action-tflint@master
         with:
