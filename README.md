@@ -80,7 +80,7 @@ Here are some examples of how you can use this module in your inventory structur
 ```hcl
   module "sns" {
     source            = "clouddrove/sns/aws"
-    version           = "1.0.1"
+    version           = "1.3.0"
     name              = "basic-sns"
     environment       = "test"
     label_order       = ["name","environment"]
@@ -93,7 +93,7 @@ Here are some examples of how you can use this module in your inventory structur
 ```hcl
   module "sns" {
     source            = "clouddrove/sns/aws"
-    version           = "1.0.1"
+    version           = "1.3.0"
     name              = "sns"
     environment       = "test"
     label_order       = ["name","environment"]
@@ -147,7 +147,7 @@ Here are some examples of how you can use this module in your inventory structur
 ```hcl
   module "sns" {
     source      = "clouddrove/sns/aws"
-    version     = "1.0.1"
+    version     = "1.3.0"
     name        = "sns"
     environment = "test"
     label_order = ["name","environment"]
