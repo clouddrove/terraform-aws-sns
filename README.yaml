@@ -4,8 +4,9 @@
 # Run `make readme` to rebuild the `README.md`
 #
 
+
 # Name of this project
-name : Terraform AWS SNS
+name: Terraform AWS SNS
 
 # License of this project
 license: "APACHE"
@@ -27,6 +28,7 @@ badges:
   - name: "static-checks"
     image: "https://github.com/clouddrove/terraform-aws-sns/actions/workflows/terraform.yml/badge.svg"
     url: "https://github.com/clouddrove/terraform-aws-sns/actions/workflows/terraform.yml"
+
 
 #  description of this project
 description: |-
