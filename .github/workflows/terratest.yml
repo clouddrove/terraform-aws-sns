@@ -19,7 +19,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.TEST_AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.TEST_AWS_ACCESS_SECRET_KEY }}
-          aws-region: us-east-2
+          aws-region: eu-west-1
 
       - name: 'terratest'
         uses: 'clouddrove/github-actions@v9.0.2'
