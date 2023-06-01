@@ -31,7 +31,9 @@ jobs:
           - ${{ needs.versionExtract.outputs.minVersion }}
           - ${{ needs.versionExtract.outputs.maxVersion }}
         directory:
+          - _example/_json/
           - _example/GCM/
+          - _example/certificates/
           - _example/sns_topic/
           - _example/APNS/basic/
           - _example/APNS/complete/
