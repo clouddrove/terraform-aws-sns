@@ -2,12 +2,19 @@ provider "aws" {
   region = "eu-west-1"
 }
 
+locals {
+  name        = "sqs"
+  environment = "test"
+}
+
+##-----------------------------------------------------------------------------
+## SNS module call.
+##-----------------------------------------------------------------------------
 module "sns" {
   source = "./../../"
 
-  name         = "sqs"
-  environment  = "test"
-  label_order  = ["name", "environment"]
+  name         = local.name
+  environment  = local.environment
   enable_topic = true
 
   subscribers = {
@@ -22,7 +29,7 @@ module "sns" {
     },
     sms = {
       protocol                        = "sms"
-      endpoint                        = "917414xxxxxx"
+      endpoint                        = "+9198xxxxxx"
       endpoint_auto_confirms          = false
       raw_message_delivery            = false
       filter_policy                   = ""
@@ -31,5 +38,27 @@ module "sns" {
     },
 
   }
-}
 
+  data_protection_policy = jsonencode(
+    {
+      Description = "Deny Inbound Address"
+      Name        = "DenyInboundEmailAdressPolicy"
+      Statement = [
+        {
+          "DataDirection" = "Inbound"
+          "DataIdentifier" = [
+            "arn:aws:dataprotection::aws:data-identifier/EmailAddress",
+          ]
+          "Operation" = {
+            "Deny" = {}
+          }
+          "Principal" = [
+            "*",
+          ]
+          "Sid" = "DenyInboundEmailAddress"
+        },
+      ]
+      Version = "2021-06-01"
+    }
+  )
+}
