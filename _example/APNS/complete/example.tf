@@ -2,17 +2,22 @@ provider "aws" {
   region = "eu-west-1"
 }
 
+locals {
+  name        = "sns"
+  environment = "test"
+}
+
 data "aws_caller_identity" "current" {}
 
-
+##-----------------------------------------------------------------------------
+## sqs module call.
+##-----------------------------------------------------------------------------
 module "sqs" {
   source  = "clouddrove/sqs/aws"
   version = "1.3.0"
 
-  name        = "sqs"
-  environment = "test"
-  label_order = ["name", "environment"]
-
+  name                      = local.name
+  environment               = local.environment
   delay_seconds             = 90
   max_message_size          = 2048
   message_retention_seconds = 86400
@@ -36,13 +41,14 @@ data "aws_iam_policy_document" "document" {
   }
 }
 
+##-----------------------------------------------------------------------------
+## SNS module call.
+##-----------------------------------------------------------------------------
 module "sns" {
   source = "./../../../"
 
-  name        = "sns"
-  environment = "test"
-  label_order = ["name", "environment"]
-
+  name                  = local.name
+  environment           = local.environment
   platform              = "APNS"
   enable_sms_preference = true
   enable_topic          = true

@@ -15,19 +15,19 @@ github_repo: clouddrove/terraform-aws-sns
 
 # Badges to display
 badges:
-  - name: "Terraform"
-    image: "https://img.shields.io/badge/Terraform-v1.1.7-green"
-    url: "https://www.terraform.io"
-  - name: "Licence"
-    image: "https://img.shields.io/badge/License-APACHE-blue.svg"
-    url: "LICENSE.md"
+  - name: "Latest Release"
+    image: "https://img.shields.io/github/release/clouddrove/terraform-aws-sns.svg"
+    url: "https://github.com/clouddrove/terraform-aws-sns/releases/latest"
   - name: "tfsec"
     image: "https://github.com/clouddrove/terraform-aws-sns/actions/workflows/tfsec.yml/badge.svg"
     url: "https://github.com/clouddrove/terraform-aws-sns/actions/workflows/tfsec.yml"
-  - name: "static-checks"
-    image: "https://github.com/clouddrove/terraform-aws-sns/actions/workflows/terraform.yml/badge.svg"
-    url: "https://github.com/clouddrove/terraform-aws-sns/actions/workflows/terraform.yml"
+  - name: "Licence"
+    image: "https://img.shields.io/badge/License-APACHE-blue.svg"
+    url: "LICENSE.md"
 
+prerequesties:
+  - name: Terraform 1.5.6
+    url: https://learn.hashicorp.com/terraform/getting-started/install.html
 
 #  description of this project
 description: |-
@@ -45,67 +45,78 @@ usage : |-
   #### Basic
   ```hcl
     module "sns" {
-      source            = "clouddrove/sns/aws"
-      version           = "1.3.0"
-      name              = "basic-sns"
-      environment       = "test"
-      label_order       = ["name","environment"]
-      platform          = "APNS"
-      key               = "../../certificates/private_key.pem"
-      certificate       = "../../certificates/cert.pem"
+      source      = "clouddrove/sns/aws"
+      name        = local.name
+      environment = local.environment
+      enable_sns  = true
+      platform    = "APNS"
+      key         = "../../certificates/private_key.pem"
+      certificate = "../../certificates/cert.pem"
     }
   ```
+  #### Text
+  ```hcl
+    module "sns" {
+      source                = "clouddrove/sns/aws"
+      name                  = local.name
+      environment           = local.environment
+      enable_sms_preference = true
+      monthly_spend_limit   = "1"
+
+      delivery_status_success_sampling_rate = "50"
+      default_sender_id                     = "test"
+      default_sms_type                      = "Transactional"
+    }
+  ```
+
   #### Complete
   ```hcl
     module "sns" {
-      source            = "clouddrove/sns/aws"
-      version           = "1.3.0"
-      name              = "sns"
-      environment       = "test"
-      label_order       = ["name","environment"]
-      platform          = "APNS"
-      key               = file("../../certificates/private_key.pem")
-      certificate       = file("../../certificates/cert.pem")
-      topic_name        = "sns_topic"
-      delivery_policy   = file("./../_json/delivery_policy.json")
-      policy            = data.aws_iam_policy_document.sns-topic-policy.json
-      endpoint          = "arn:aws:sqs:eu-west-1:xxxxxxxxxxx:dev-sqs-clouddrove"
-      update_preference = true
-      create_topic      = true
-      protocol          = "sqs"
+      source                = "clouddrove/sns/aws"
+      name                  = local.name
+      environment           = local.environment
+      platform              = "APNS"
+      enable_sms_preference = true
+      enable_topic          = true
+      endpoint              = module.sqs.arn
+      protocol              = "sqs"
+      key                   = "../../certificates/private_key.pem"
+      certificate           = "../../certificates/cert.pem"
+      delivery_policy       = file("../../_json/delivery_policy.json")
+      policy                = data.aws_iam_policy_document.sns-topic-policy.json
     }
 
-    data "aws_iam_policy_document" "sns-topic-policy" {
+      data "aws_iam_policy_document" "sns-topic-policy" {
       policy_id = "__default_policy_ID"
       statement {
-        actions = [
-          "SNS:Subscribe",
-          "SNS:SetTopicAttributes",
-          "SNS:RemovePermission",
-          "SNS:Receive",
-          "SNS:Publish",
-          "SNS:ListSubscriptionsByTopic",
-          "SNS:GetTopicAttributes",
-          "SNS:DeleteTopic",
-          "SNS:AddPermission",
-        ]
-        condition {
-          test     = "StringEquals"
-          variable = "AWS:SourceOwner"
+      actions = [
+      "SNS:Subscribe",
+      "SNS:SetTopicAttributes",
+      "SNS:RemovePermission",
+      "SNS:Receive",
+      "SNS:Publish",
+      "SNS:ListSubscriptionsByTopic",
+      "SNS:GetTopicAttributes",
+      "SNS:DeleteTopic",
+      "SNS:AddPermission",
+      ]
+      condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceOwner"
 
-          values = [
-            xxxxxxxxxxx,
-          ]
-        }
-        effect = "Allow"
-        principals {
-          type        = "AWS"
-          identifiers = ["*"]
-        }
-        resources = [
-          "arn:aws:sns:eu-west-1:xxxxxxxxxxx:sns_topic",
-        ]
-        sid = "__default_statement_ID"
+      values = [
+      data.aws_caller_identity.current.account_id,
+      ]
+      }
+      effect = "Allow"
+      principals {
+      type        = "AWS"
+      identifiers = ["*"]
+      }
+      resources = [
+      format("arn:aws:sns:eu-west-1:%s:app/APNS/sns-test", data.aws_caller_identity.current.account_id)
+      ]
+      sid = "__default_statement_ID"
       }
     }
   ```
@@ -113,46 +124,40 @@ usage : |-
   ```hcl
     module "sns" {
       source      = "clouddrove/sns/aws"
-      version     = "1.3.0"
-      name        = "sns"
-      environment = "test"
-      label_order = ["name","environment"]
+      name        = local.name
+      environment = local.environment
+      enable_sns  = true
       platform    = "GCM"
-      key         = "AAAAKHQaqe1w:APA91bEgwftAYq6N2YV8TeU2k4bRj0k1q2I7Q47ZvFPLQm-ESbD2Fhjj3U9wNNuZ2aC-QZVdgDrN5C6E3Ec08AWhMgbs4b72gNvqcXh1JBoR6yLwretghyjutTR4yRmT0vWdhz4_PW1AwDC0aVoH"
+      gcm_key     = "AAAA8TYQCtc:APesgdrthyujioyhtgfds4icP_6Kyz3OT2Ms1cbJZDOq3AkCAt5tNpNE0g3oUQBdind1g7891cdrVAxbOmzL3XRd0ktgkFne2OwI7pC5an877XcBNQiHPMHT7dN7TykI2o6O2K"
     }
   ```
   ### sns_topic
   ```hcl
     module "sns" {
-
       source       = "clouddrove/sns/aws"
-      name         = "sqs"
-      environment  = "test"
-      label_order  = ["name", "environment"]
+      name         = local.name
+      environment  = local.environment
       enable_topic = true
 
       subscribers = {
-      newrelic = {
-      protocol                        = "https"
-      endpoint                        = "https://example.com"
-      endpoint_auto_confirms          = false
-      raw_message_delivery            = true
-      filter_policy                   = ""
-      delivery_policy                 = ""
-      confirmation_timeout_in_minutes = "60"
-
-      },
-      sms = {
-      protocol                        = "sms"
-      endpoint                        = "917742xxxxxx"
-      endpoint_auto_confirms          = false
-      raw_message_delivery            = false
-      filter_policy                   = ""
-      delivery_policy                 = ""
-      confirmation_timeout_in_minutes = "60"
-      },
-
-     }
+        newrelic = {
+          protocol                        = "https"
+          endpoint                        = "https://example.com"
+          endpoint_auto_confirms          = false
+          raw_message_delivery            = true
+          filter_policy                   = ""
+          delivery_policy                 = ""
+          confirmation_timeout_in_minutes = "60"
+        },
+        sms = {
+          protocol                        = "sms"
+          endpoint                        = "9198*****"
+          endpoint_auto_confirms          = false
+          raw_message_delivery            = false
+          filter_policy                   = ""
+          delivery_policy                 = ""
+          confirmation_timeout_in_minutes = "60"
+        },
       }
-
+    }
   ```
