@@ -8,20 +8,20 @@ jobs:
   APNS-basic-example:
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.4
     with:
-      working_directory: './_example/APNS/basic/'
+      working_directory: './examples/APNS/basic/'
   APNS-complete-example:
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.4
     with:
-      working_directory: './_example/APNS/complete/'
+      working_directory: './examples/APNS/complete/'
   APNS-text-example:
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.4
     with:
-      working_directory: './_example/APNS/text/'
+      working_directory: './examples/APNS/text/'
   GCM-example:
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.4
     with:
-      working_directory: './_example/GCM/'
+      working_directory: './examples/GCM/'
   sns_topic-example:
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.4
     with:
-      working_directory: './_example/sns_topic/'
+      working_directory: './examples/sns_topic/'
