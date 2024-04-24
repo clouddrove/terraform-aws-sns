@@ -30,7 +30,7 @@ updates:
     open-pull-requests-limit: 3
 
   - package-ecosystem: "terraform" # See documentation for possible values
-    directory: "_example/GCM" # Location of package manifests
+    directory: "examples/GCM" # Location of package manifests
     schedule:
       interval: "weekly"
     # Add assignees
@@ -43,7 +43,7 @@ updates:
     open-pull-requests-limit: 3
 
   - package-ecosystem: "terraform" # See documentation for possible values
-    directory: "_example/sns_topic" # Location of package manifests
+    directory: "examples/sns_topic" # Location of package manifests
     schedule:
       interval: "weekly"
     # Add assignees
@@ -56,7 +56,7 @@ updates:
     open-pull-requests-limit: 3
 
   - package-ecosystem: "terraform" # See documentation for possible values
-    directory: "_example/APNS/basic/" # Location of package manifests
+    directory: "examples/APNS/basic/" # Location of package manifests
     schedule:
       interval: "weekly"
     # Add assignees
@@ -69,7 +69,7 @@ updates:
     open-pull-requests-limit: 3
 
   - package-ecosystem: "terraform" # See documentation for possible values
-    directory: "_example/APNS/complete/" # Location of package manifests
+    directory: "examples/APNS/complete/" # Location of package manifests
     schedule:
       interval: "weekly"
     # Add assignees
@@ -82,7 +82,7 @@ updates:
     open-pull-requests-limit: 3
 
   - package-ecosystem: "terraform" # See documentation for possible values
-    directory: "_example/APNS/text/" # Location of package manifests
+    directory: "examples/APNS/text/" # Location of package manifests
     schedule:
       interval: "weekly"
     # Add assignees
