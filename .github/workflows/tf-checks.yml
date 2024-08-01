@@ -6,22 +6,22 @@ on:
   workflow_dispatch:
 jobs:
   APNS-basic-example:
-    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.7
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
     with:
       working_directory: './examples/APNS/basic/'
   APNS-complete-example:
-    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.7
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
     with:
       working_directory: './examples/APNS/complete/'
   APNS-text-example:
-    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.7
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
     with:
       working_directory: './examples/APNS/text/'
   GCM-example:
-    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.7
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
     with:
       working_directory: './examples/GCM/'
   sns_topic-example:
-    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.7
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
     with:
       working_directory: './examples/sns_topic/'
