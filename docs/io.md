@@ -64,4 +64,3 @@
 | id | The ID of the SNS platform application. |
 | topic-arn | The ARN of the SNS topic. |
 | topic-id | The ID of the SNS topic. |
-
