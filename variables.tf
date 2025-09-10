@@ -273,6 +273,12 @@ variable "subscribers" {
     # The SNS delivery policy
     confirmation_timeout_in_minutes = string
     # Integer indicating number of minutes to wait in retying mode for fetching subscription arn before marking it as failure. Only applicable for http and https protocols.
+    redrive_policy = string
+    # When specified, sends undeliverable messages to the specified SQS dead-letter queue
+    replay_policy = string
+    # A map of replay policy statements
+    subscription_role_arn = string
+    # The ARN of the IAM role that has the following trust relationship policy: { "Version": "2012-10-17", "Statement": [ { "Effect": "Allow", "Principal": { "Service": "sns.amazonaws.com" }, "Action": "sts:AssumeRole" } ] }
   }))
   description = "Required configuration for subscibres to SNS topic."
   default     = {}

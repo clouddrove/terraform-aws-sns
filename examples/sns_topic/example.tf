@@ -26,15 +26,21 @@ module "sns" {
       filter_policy                   = ""
       delivery_policy                 = ""
       confirmation_timeout_in_minutes = "60"
+      redrive_policy                  = ""
+      replay_policy                   = ""
+      subscription_role_arn           = ""
     },
     sms = {
       protocol                        = "sms"
-      endpoint                        = "+9198xxxxxx"
+      endpoint                        = "+919876543210"
       endpoint_auto_confirms          = false
       raw_message_delivery            = false
       filter_policy                   = ""
       delivery_policy                 = ""
       confirmation_timeout_in_minutes = "60"
+      redrive_policy                  = ""
+      replay_policy                   = ""
+      subscription_role_arn           = ""
     },
 
   }
