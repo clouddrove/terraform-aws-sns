@@ -74,7 +74,7 @@ resource "aws_sns_topic_subscription" "this" {
   filter_policy                   = var.subscribers[each.key].filter_policy
   delivery_policy                 = var.subscribers[each.key].delivery_policy
   confirmation_timeout_in_minutes = var.subscribers[each.key].confirmation_timeout_in_minutes
-  redrive_policy                  = var.subscribers[each.key].redrive_policy 
+  redrive_policy                  = var.subscribers[each.key].redrive_policy
   replay_policy                   = var.subscribers[each.key].replay_policy
   subscription_role_arn           = var.subscribers[each.key].subscription_role_arn
 }
