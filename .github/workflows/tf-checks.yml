@@ -5,35 +5,35 @@ on:
   pull_request:
 jobs:
   APNS-basic-example:
-    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@v2
     with:
       working_directory: './examples/APNS/basic/'
       provider: aws
     secrets:
       BUILD_ROLE: ${{ secrets.BUILD_ROLE }}
   APNS-complete-example:
-    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@v2
     with:
       working_directory: './examples/APNS/complete/'
       provider: aws
     secrets:
       BUILD_ROLE: ${{ secrets.BUILD_ROLE }}
   APNS-text-example:
-    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@v2
     with:
       working_directory: './examples/APNS/text/'
       provider: aws
     secrets:
       BUILD_ROLE: ${{ secrets.BUILD_ROLE }}
   GCM-example:
-    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@v2
     with:
       working_directory: './examples/GCM/'
       provider: aws
     secrets:
       BUILD_ROLE: ${{ secrets.BUILD_ROLE }}
   sns_topic-example:
-    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@v2
     with:
       working_directory: './examples/sns_topic/'
       provider: aws
