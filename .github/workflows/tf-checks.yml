@@ -10,6 +10,7 @@ jobs:
     with:
       working_directory: './examples/APNS/basic/'
       provider: aws
+      enable_plan: true
     secrets:
       BUILD_ROLE: ${{ secrets.BUILD_ROLE }}
   APNS-complete-example:
@@ -18,6 +19,7 @@ jobs:
     with:
       working_directory: './examples/APNS/complete/'
       provider: aws
+      enable_plan: true
     secrets:
       BUILD_ROLE: ${{ secrets.BUILD_ROLE }}
   APNS-text-example:
@@ -26,6 +28,7 @@ jobs:
     with:
       working_directory: './examples/APNS/text/'
       provider: aws
+      enable_plan: true
     secrets:
       BUILD_ROLE: ${{ secrets.BUILD_ROLE }}
   GCM-example:
@@ -34,6 +37,7 @@ jobs:
     with:
       working_directory: './examples/GCM/'
       provider: aws
+      enable_plan: true
     secrets:
       BUILD_ROLE: ${{ secrets.BUILD_ROLE }}
   sns_topic-example:
@@ -42,5 +46,6 @@ jobs:
     with:
       working_directory: './examples/sns_topic/'
       provider: aws
+      enable_plan: true
     secrets:
       BUILD_ROLE: ${{ secrets.BUILD_ROLE }}
