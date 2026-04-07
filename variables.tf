@@ -216,7 +216,7 @@ variable "enable_sms_preference" {
 
 variable "enable_topic" {
   type        = bool
-  default     = true 
+  default     = true
   description = "Boolean indicating whether or not to create topic."
 }
 
