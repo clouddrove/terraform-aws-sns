@@ -6,6 +6,12 @@ variable "name" {
   description = "Name  (e.g. `app` or `cluster`)."
 }
 
+variable "tags" {
+  description = "A map of tags to add to all resources"
+  type        = map(string)
+  default     = {}
+}
+
 variable "repository" {
   type        = string
   default     = "https://github.com/clouddrove/terraform-aws-sns"
@@ -210,7 +216,7 @@ variable "enable_sms_preference" {
 
 variable "enable_topic" {
   type        = bool
-  default     = false
+  default     = true
   description = "Boolean indicating whether or not to create topic."
 }
 
