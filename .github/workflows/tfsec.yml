@@ -7,6 +7,7 @@ on:
       - '*.tf'
 jobs:
   tfsec:
+    if: github.actor != 'dependabot[bot]'
     uses: clouddrove/github-shared-workflows/.github/workflows/security-tfsec.yml@master
     secrets: inherit
     with:

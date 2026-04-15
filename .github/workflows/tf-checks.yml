@@ -6,6 +6,7 @@ on:
       - '*.tf'
 jobs:
   APNS-basic-example:
+    if: github.actor != 'dependabot[bot]'
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
     with:
       working_directory: './examples/APNS/basic/'
@@ -15,6 +16,7 @@ jobs:
     secrets:
       BUILD_ROLE: ${{ secrets.BUILD_ROLE }}
   APNS-complete-example:
+    if: github.actor != 'dependabot[bot]'
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
     with:
       working_directory: './examples/APNS/complete/'
@@ -24,6 +26,7 @@ jobs:
     secrets:
       BUILD_ROLE: ${{ secrets.BUILD_ROLE }}
   APNS-text-example:
+    if: github.actor != 'dependabot[bot]'
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
     with:
       working_directory: './examples/APNS/text/'
@@ -33,6 +36,7 @@ jobs:
     secrets:
       BUILD_ROLE: ${{ secrets.BUILD_ROLE }}
   GCM-example:
+    if: github.actor != 'dependabot[bot]'
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
     with:
       working_directory: './examples/GCM/'
@@ -42,6 +46,7 @@ jobs:
     secrets:
       BUILD_ROLE: ${{ secrets.BUILD_ROLE }}
   sns_topic-example:
+    if: github.actor != 'dependabot[bot]'
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@master
     with:
       working_directory: './examples/sns_topic/'
