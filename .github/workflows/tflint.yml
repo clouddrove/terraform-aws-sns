@@ -6,6 +6,7 @@ on:
       - '*.tf'
 jobs:
   tf-lint:
+    if: github.actor != 'dependabot[bot]'
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-lint.yml@master
     secrets:
       GITHUB: ${{ secrets.GITHUB_TOKEN }}
