@@ -14,7 +14,7 @@ data "aws_caller_identity" "current" {}
 ##-----------------------------------------------------------------------------
 module "sqs" {
   source  = "clouddrove/sqs/aws"
-  version = "1.3.0"
+  version = "1.3.1"
 
   name                      = local.name
   environment               = local.environment
