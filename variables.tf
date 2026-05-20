@@ -30,6 +30,12 @@ variable "managedby" {
   description = "ManagedBy, eg 'CloudDrove'."
 }
 
+variable "extra_tags" {
+  type        = map(string)
+  default     = {}
+  description = "Additional tags (e.g. map(`CostCenter`,`platform`))."
+}
+
 # Module      : SNS Module
 # Description : Terraform SNS module variables
 variable "enabled" {
