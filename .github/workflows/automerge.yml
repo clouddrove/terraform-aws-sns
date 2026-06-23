@@ -14,5 +14,5 @@ jobs:
     secrets:
       GITHUB: ${{ secrets.GITHUB_TOKEN }}
     with:
-      tfcheck: 'auto-merge / Check Static Analysis (sns_topic-example / Check code format)'
+      tfcheck: 'sns_topic-example / Check code format'
 ...
