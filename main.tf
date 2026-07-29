@@ -97,13 +97,15 @@ resource "aws_sns_sms_preferences" "default" {
 ## Provides an SNS topic policy resource..
 ##-----------------------------------------------------------------------------
 resource "aws_sns_topic_policy" "this" {
-  count  = var.enabled && var.create_topic_policy ? 1 : 0
+  # count  = var.enabled && var.create_topic_policy ? 1 : 0
+  count  = var.enabled && var.enable_topic && var.create_topic_policy ? 1 : 0
   arn    = aws_sns_topic.default[0].arn
   policy = data.aws_iam_policy_document.this[0].json
 }
 
 data "aws_iam_policy_document" "this" {
-  count = var.enabled && var.create_topic_policy ? 1 : 0
+  # count = var.enabled && var.create_topic_policy ? 1 : 0
+  count = var.enabled && var.enable_topic && var.create_topic_policy ? 1 : 0
 
   source_policy_documents   = var.source_topic_policy_documents
   override_policy_documents = var.override_topic_policy_documents
