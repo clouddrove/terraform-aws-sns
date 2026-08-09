@@ -25,6 +25,7 @@
 | event\_endpoint\_created\_topic\_arn | SNS Topic triggered when a new platform endpoint is added to your platform application. | `string` | `""` | no |
 | event\_endpoint\_deleted\_topic\_arn | SNS Topic triggered when an existing platform endpoint is deleted from your platform application. | `string` | `""` | no |
 | event\_endpoint\_updated\_topic\_arn | SNS Topic triggered when an existing platform endpoint is changed from your platform application. | `string` | `""` | no |
+| extra\_tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | `map(string)` | `{}` | no |
 | failure\_feedback\_role\_arn | The IAM role permitted to receive failure feedback for this application. | `string` | `""` | no |
 | fifo\_topic | Boolean indicating whether or not to create a FIFO (first-in-first-out) topic | `bool` | `false` | no |
 | gcm\_key | Application Platform credential. See Credential for type of credential required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources. | `string` | `""` | no |
