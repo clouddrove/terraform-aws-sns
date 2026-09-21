@@ -2,13 +2,16 @@
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| apple\_platform\_bundle\_id | Apple application bundle ID used for APNS token-based authentication. | `string` | `null` | no |
+| apple\_platform\_team\_id | Ten-character Apple developer team ID used for APNS token-based authentication. | `string` | `null` | no |
 | application\_failure\_feedback\_role\_arn | IAM role for failure feedback. | `string` | `""` | no |
 | application\_success\_feedback\_role\_arn | The IAM role permitted to receive success feedback for this topic. | `string` | `""` | no |
 | application\_success\_feedback\_sample\_rate | Percentage of success to sample. | `number` | `100` | no |
+| archive\_policy | JSON archive policy for FIFO topics. MessageRetentionPeriod must be between 1 and 365 days. Disable archiving before destroying a topic. | `string` | `null` | no |
 | certificate | application Platform principal. See Principal for type of principal required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources. | `string` | `""` | no |
 | content\_based\_deduplication | Boolean indicating whether or not to enable content-based deduplication for FIFO topics. | `bool` | `false` | no |
 | create\_topic\_policy | Determines whether an SNS topic policy is created | `bool` | `true` | no |
-| data\_protection\_policy | A map of data protection policy statements | `string` | `null` | no |
+| data\_protection\_policy | JSON data protection policy for a standard topic. AWS no longer makes SNS message data protection available to new customers as of April 30, 2026. | `string` | `null` | no |
 | default\_sender\_id | A string, such as your business brand, that is displayed as the sender on the receiving device. | `string` | `""` | no |
 | default\_sms\_type | The type of SMS message that you will send by default. Possible values are: Promotional, Transactional. | `string` | `"Transactional"` | no |
 | delivery\_policy | The SNS delivery policy. | `string` | `null` | no |
@@ -27,7 +30,11 @@
 | event\_endpoint\_updated\_topic\_arn | SNS Topic triggered when an existing platform endpoint is changed from your platform application. | `string` | `""` | no |
 | extra\_tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | `map(string)` | `{}` | no |
 | failure\_feedback\_role\_arn | The IAM role permitted to receive failure feedback for this application. | `string` | `""` | no |
+| fifo\_throughput\_scope | FIFO throughput and deduplication scope. Valid values are Topic and MessageGroup; MessageGroup enables high throughput and cannot later be changed back to Topic. | `string` | `null` | no |
 | fifo\_topic | Boolean indicating whether or not to create a FIFO (first-in-first-out) topic | `bool` | `false` | no |
+| firehose\_failure\_feedback\_role\_arn | IAM role that permits SNS to write failed Amazon Data Firehose delivery logs to CloudWatch Logs. | `string` | `null` | no |
+| firehose\_success\_feedback\_role\_arn | IAM role that permits SNS to write successful Amazon Data Firehose delivery logs to CloudWatch Logs. | `string` | `null` | no |
+| firehose\_success\_feedback\_sample\_rate | Percentage of successful Amazon Data Firehose deliveries to log, from 0 to 100. | `number` | `null` | no |
 | gcm\_key | Application Platform credential. See Credential for type of credential required for platform. The value of this attribute when stored into the Terraform state is only a hash of the real value, so therefore it is not practical to use this as an attribute for other resources. | `string` | `""` | no |
 | http\_failure\_feedback\_role\_arn | IAM role for failure feedback. | `string` | `""` | no |
 | http\_success\_feedback\_role\_arn | The IAM role permitted to receive success feedback for this topic. | `string` | `""` | no |
@@ -43,17 +50,20 @@
 | name | Name  (e.g. `app` or `cluster`). | `string` | `""` | no |
 | override\_topic\_policy\_documents | List of IAM policy documents that are merged together into the exported document. In merging, statements with non-blank `sid`s will override statements with the same `sid` | `list(string)` | `[]` | no |
 | platform | The platform that the app is registered with. See Platform for supported platforms like 'APNS' 'GCM'. | `string` | `""` | no |
-| policy | The fully-formed AWS policy as JSON. For more information about building AWS IAM policy documents with Terraform. | `string` | `""` | no |
+| platform\_credential | Platform credential value supplied directly. Takes precedence over gcm_key and the file referenced by key. | `string` | `null` | no |
+| platform\_principal | Platform principal value supplied directly. Takes precedence over the file referenced by certificate. For APNS token authentication, use the signing key ID. | `string` | `null` | no |
+| policy | Fully formed topic policy JSON used when create_topic_policy is false. | `string` | `""` | no |
 | repository | Terraform current module repo | `string` | `"https://github.com/clouddrove/terraform-aws-sns"` | no |
 | signature\_version | If SignatureVersion should be 1 (SHA1) or 2 (SHA256). The signature version corresponds to the hashing algorithm used while creating the signature of the notifications, subscription confirmations, or unsubscribe confirmation messages sent by Amazon SNS. | `number` | `null` | no |
 | source\_topic\_policy\_documents | List of IAM policy documents that are merged together into the exported document. Statements must have unique `sid`s | `list(string)` | `[]` | no |
 | sqs\_failure\_feedback\_role\_arn | IAM role for failure feedback. | `string` | `""` | no |
 | sqs\_success\_feedback\_role\_arn | The IAM role permitted to receive success feedback for this topic. | `string` | `""` | no |
 | sqs\_success\_feedback\_sample\_rate | Percentage of success to sample. | `number` | `100` | no |
-| subscribers | Required configuration for subscibres to SNS topic. | <pre>map(object({<br>    protocol = string<br>    # The protocol to use. The possible values for this are: sqs, sms, lambda, application. (http or https are partially supported, see below) (email is an option but is unsupported, see below).<br>    endpoint = string<br>    # The endpoint to send data to, the contents will vary with the protocol. (see below for more information)<br>    endpoint_auto_confirms = bool<br>    # Boolean indicating whether the end point is capable of auto confirming subscription e.g., PagerDuty (default is false)<br>    raw_message_delivery = bool<br>    # Boolean indicating whether or not to enable raw message delivery (the original message is directly passed, not wrapped in JSON with the original message in the message property) (default is false)<br>    filter_policy = string<br>    # JSON String with the filter policy that will be used in the subscription to filter messages seen by the target resource.<br>    delivery_policy = string<br>    # The SNS delivery policy<br>    confirmation_timeout_in_minutes = string<br>    # Integer indicating number of minutes to wait in retying mode for fetching subscription arn before marking it as failure. Only applicable for http and https protocols.<br>    redrive_policy = string<br>    # When specified, sends undeliverable messages to the specified SQS dead-letter queue<br>    replay_policy = string<br>    # A map of replay policy statements<br>    subscription_role_arn = string<br>    # The ARN of the IAM role that has the following trust relationship policy: { "Version": "2012-10-17", "Statement": [ { "Effect": "Allow", "Principal": { "Service": "sns.amazonaws.com" }, "Action": "sts:AssumeRole" } ] }<br>  }))</pre> | `{}` | no |
+| subscribers | SNS topic subscriptions. Only protocol and endpoint are required; optional settings include delivery, filter, dead-letter, replay, and Firehose role policies. | <pre>map(object({<br>    protocol                        = string<br>    endpoint                        = string<br>    endpoint_auto_confirms          = optional(bool, false)<br>    raw_message_delivery            = optional(bool, false)<br>    filter_policy                   = optional(string)<br>    filter_policy_scope             = optional(string)<br>    delivery_policy                 = optional(string)<br>    confirmation_timeout_in_minutes = optional(number, 1)<br>    redrive_policy                  = optional(string)<br>    replay_policy                   = optional(string)<br>    subscription_role_arn           = optional(string)<br>  }))</pre> | `{}` | no |
 | success\_feedback\_role\_arn | The IAM role permitted to receive success feedback for this application. | `string` | `""` | no |
 | success\_feedback\_sample\_rate | The percentage of success to sample (0-100). | `number` | `100` | no |
 | topic\_policy\_statements | A map of IAM policy [statements](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document#statement) for custom permission usage | `any` | `{}` | no |
+| topic\_arn | ARN of an existing SNS topic to which subscribers are attached when enable_topic is false. | `string` | `null` | no |
 | tracing\_config | Tracing mode of an Amazon SNS topic. Valid values: PassThrough, Active. | `string` | `null` | no |
 | usage\_report\_s3\_bucket | The name of the Amazon S3 bucket to receive daily SMS usage reports from Amazon SNS. | `string` | `""` | no |
 
@@ -62,7 +72,11 @@
 | Name | Description |
 |------|-------------|
 | arn | The ARN of the SNS platform application. |
+| beginning-archive-time | The oldest timestamp from which archived FIFO messages can be replayed. |
 | id | The ID of the SNS platform application. |
-| topic-arn | The ARN of the SNS topic. |
+| topic-arn | The ARN of the created topic or the existing topic supplied with topic_arn. |
 | topic-id | The ID of the SNS topic. |
-
+| topic-name | The name of the created SNS topic. |
+| topic-owner | The AWS account ID that owns the created SNS topic. |
+| subscription-arns | Map of subscriber keys to SNS subscription ARNs. |
+| subscription-pending-confirmation | Map indicating whether each subscription is pending confirmation. |

@@ -31,12 +31,12 @@ badges:
 prerequesties:
   - name: Terraform
     url: https://learn.hashicorp.com/terraform/getting-started/install.html
-    version: ">= 1.6.6"
+    version: ">= 1.10.0"
 
 providers:
   - name: aws
     url: https://aws.amazon.com/
-    version: ">= 5.31.0"
+    version: ">= 5.98.0"
 
 module_dependencies:
   - name: Labels Module
@@ -45,7 +45,10 @@ module_dependencies:
 
 #  description of this project
 description: |-
-  Terraform module is used to setup SNS service to manage notifications on application.
+  Terraform module for SNS topics, subscriptions, mobile push applications, and SMS preferences.
+  It supports standard and FIFO topics, high-throughput FIFO, FIFO message archiving and replay,
+  payload- or attribute-based subscription filtering, dead-letter queues, Firehose delivery logging,
+  server-side encryption, X-Ray tracing, APNS token authentication, and topic data protection policies.
 
 
 # How to use this project
@@ -93,6 +96,7 @@ usage : |-
       key                   = "../../certificates/private_key.pem"
       certificate           = "../../certificates/cert.pem"
       delivery_policy       = file("../../_json/delivery_policy.json")
+      create_topic_policy   = false
       policy                = data.aws_iam_policy_document.sns-topic-policy.json
     }
 
@@ -151,23 +155,43 @@ usage : |-
 
       subscribers = {
         newrelic = {
-          protocol                        = "https"
-          endpoint                        = "https://example.com"
-          endpoint_auto_confirms          = false
-          raw_message_delivery            = true
-          filter_policy                   = ""
-          delivery_policy                 = ""
-          confirmation_timeout_in_minutes = "60"
+          protocol             = "https"
+          endpoint             = "https://example.com"
+          raw_message_delivery = true
+          filter_policy        = jsonencode({ event_type = ["created"] })
+          filter_policy_scope  = "MessageBody"
         },
         sms = {
-          protocol                        = "sms"
-          endpoint                        = "9198*****"
-          endpoint_auto_confirms          = false
-          raw_message_delivery            = false
-          filter_policy                   = ""
-          delivery_policy                 = ""
-          confirmation_timeout_in_minutes = "60"
+          protocol = "sms"
+          endpoint = "9198*****"
         },
+      }
+    }
+  ```
+
+  ### High-throughput FIFO with archiving and replay
+  ```hcl
+    module "sns" {
+      source                      = "clouddrove/sns/aws"
+      name                        = "orders"
+      environment                 = "prod"
+      enable_topic                = true
+      fifo_topic                  = true
+      # AWS does not allow changing MessageGroup back to Topic.
+      fifo_throughput_scope       = "MessageGroup"
+      content_based_deduplication = true
+      # Disable archive_policy before destroying the topic.
+      archive_policy = jsonencode({ MessageRetentionPeriod = 30 })
+
+      subscribers = {
+        orders = {
+          protocol = "sqs"
+          endpoint = aws_sqs_queue.orders.arn
+          replay_policy = jsonencode({
+            PointType     = "Timestamp"
+            StartingPoint = "2026-01-01T00:00:00Z"
+          })
+        }
       }
     }
   ```
