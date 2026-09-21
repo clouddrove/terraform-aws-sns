@@ -214,7 +214,7 @@ variable "firehose_success_feedback_sample_rate" {
   description = "Percentage of successful Amazon Data Firehose deliveries to log, from 0 to 100."
 
   validation {
-    condition     = var.firehose_success_feedback_sample_rate == null || (var.firehose_success_feedback_sample_rate >= 0 && var.firehose_success_feedback_sample_rate <= 100)
+    condition     = var.firehose_success_feedback_sample_rate == null ? true : (var.firehose_success_feedback_sample_rate >= 0 && var.firehose_success_feedback_sample_rate <= 100)
     error_message = "firehose_success_feedback_sample_rate must be between 0 and 100."
   }
 }
@@ -373,7 +373,7 @@ variable "subscribers" {
 
   validation {
     condition = alltrue([
-      for subscriber in values(var.subscribers) : subscriber.filter_policy_scope == null || contains(["MessageAttributes", "MessageBody"], subscriber.filter_policy_scope)
+      for subscriber in values(var.subscribers) : subscriber.filter_policy_scope == null ? true : contains(["MessageAttributes", "MessageBody"], subscriber.filter_policy_scope)
     ])
     error_message = "Each filter_policy_scope must be MessageAttributes or MessageBody."
   }
@@ -398,7 +398,7 @@ variable "fifo_throughput_scope" {
   description = "FIFO throughput and deduplication scope. Valid values are Topic and MessageGroup; MessageGroup enables high throughput and cannot later be changed back to Topic."
 
   validation {
-    condition     = var.fifo_throughput_scope == null || contains(["Topic", "MessageGroup"], var.fifo_throughput_scope)
+    condition     = var.fifo_throughput_scope == null ? true : contains(["Topic", "MessageGroup"], var.fifo_throughput_scope)
     error_message = "fifo_throughput_scope must be Topic or MessageGroup."
   }
 }
