@@ -11,8 +11,7 @@ run "fifo_archive_and_payload_filtering" {
   command = plan
 
   variables {
-    name                                  = "events.fifo"
-    environment                           = "test"
+    name                                  = "events-test.fifo"
     enable_topic                          = true
     create_topic_policy                   = false
     fifo_topic                            = true
@@ -41,7 +40,7 @@ run "fifo_archive_and_payload_filtering" {
 
   assert {
     condition     = aws_sns_topic.default[0].name == "events-test.fifo"
-    error_message = "FIFO topic names must receive exactly one .fifo suffix."
+    error_message = "The caller-supplied FIFO topic name must be preserved."
   }
 
   assert {

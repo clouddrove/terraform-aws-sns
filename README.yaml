@@ -173,8 +173,7 @@ usage : |-
   ```hcl
     module "sns" {
       source                      = "clouddrove/sns/aws"
-      name                        = "orders"
-      environment                 = "prod"
+      name                        = "orders-prod.fifo"
       enable_topic                = true
       fifo_topic                  = true
       # AWS does not allow changing MessageGroup back to Topic.

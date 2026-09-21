@@ -17,7 +17,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- FIFO topic names now receive the required `.fifo` suffix automatically.
 - Subscription fields other than `protocol` and `endpoint` are optional.
 - The minimum AWS provider version is now 5.98.0.
 

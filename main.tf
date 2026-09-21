@@ -3,8 +3,7 @@ data "aws_caller_identity" "current" {
 }
 
 locals {
-  topic_name = var.fifo_topic ? "${trimsuffix(module.labels.id, ".fifo")}.fifo" : module.labels.id
-  topic_arn  = var.enable_topic ? try(aws_sns_topic.default[0].arn, null) : var.topic_arn
+  topic_arn = var.enable_topic ? try(aws_sns_topic.default[0].arn, null) : var.topic_arn
 
   platform_credential = try(coalesce(
     var.platform_credential,
@@ -23,7 +22,7 @@ locals {
 module "labels" {
   source      = "clouddrove/labels/aws"
   version     = "1.3.1"
-  name        = var.fifo_topic ? trimsuffix(var.name, ".fifo") : var.name
+  name        = var.name
   repository  = var.repository
   environment = var.environment
   managedby   = var.managedby
@@ -76,7 +75,7 @@ resource "aws_sns_platform_application" "default" {
 #tfsec:ignore:aws-sns-enable-topic-encryption
 resource "aws_sns_topic" "default" {
   count                                    = var.enabled && var.enable_topic ? 1 : 0
-  name                                     = local.topic_name
+  name                                     = module.labels.id
   display_name                             = var.display_name
   policy                                   = var.create_topic_policy || var.policy == "" ? null : var.policy
   delivery_policy                          = var.delivery_policy
