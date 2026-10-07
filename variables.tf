@@ -62,6 +62,42 @@ variable "gcm_key" {
   sensitive   = true
 }
 
+variable "platform_credential" {
+  type        = string
+  default     = null
+  description = "Platform credential value supplied directly. Takes precedence over gcm_key and the file referenced by key."
+  sensitive   = true
+}
+
+variable "platform_principal" {
+  type        = string
+  default     = null
+  description = "Platform principal value supplied directly. Takes precedence over the file referenced by certificate. For APNS token authentication, use the signing key ID."
+  sensitive   = true
+}
+
+variable "apple_platform_team_id" {
+  type        = string
+  default     = null
+  description = "Ten-character Apple developer team ID used for APNS token-based authentication."
+
+  validation {
+    condition     = var.apple_platform_team_id == null || can(regex("^[[:alnum:]]{10}$", var.apple_platform_team_id))
+    error_message = "apple_platform_team_id must contain exactly 10 alphanumeric characters."
+  }
+}
+
+variable "apple_platform_bundle_id" {
+  type        = string
+  default     = null
+  description = "Apple application bundle ID used for APNS token-based authentication."
+
+  validation {
+    condition     = var.apple_platform_bundle_id == null || can(regex("^[[:alnum:].-]+$", var.apple_platform_bundle_id))
+    error_message = "apple_platform_bundle_id may contain only alphanumeric characters, hyphens, and periods."
+  }
+}
+
 variable "certificate" {
   type        = string
   default     = ""
@@ -120,7 +156,7 @@ variable "display_name" {
 variable "policy" {
   type        = string
   default     = ""
-  description = "The fully-formed AWS policy as JSON. For more information about building AWS IAM policy documents with Terraform."
+  description = "Fully formed topic policy JSON used when create_topic_policy is false."
 }
 
 variable "delivery_policy" {
@@ -164,6 +200,29 @@ variable "http_failure_feedback_role_arn" {
   type        = string
   default     = ""
   description = "IAM role for failure feedback."
+}
+
+variable "firehose_success_feedback_role_arn" {
+  type        = string
+  default     = null
+  description = "IAM role that permits SNS to write successful Amazon Data Firehose delivery logs to CloudWatch Logs."
+}
+
+variable "firehose_success_feedback_sample_rate" {
+  type        = number
+  default     = null
+  description = "Percentage of successful Amazon Data Firehose deliveries to log, from 0 to 100."
+
+  validation {
+    condition     = var.firehose_success_feedback_sample_rate == null ? true : (var.firehose_success_feedback_sample_rate >= 0 && var.firehose_success_feedback_sample_rate <= 100)
+    error_message = "firehose_success_feedback_sample_rate must be between 0 and 100."
+  }
+}
+
+variable "firehose_failure_feedback_role_arn" {
+  type        = string
+  default     = null
+  description = "IAM role that permits SNS to write failed Amazon Data Firehose delivery logs to CloudWatch Logs."
 }
 
 variable "kms_master_key_id" {
@@ -220,6 +279,17 @@ variable "enable_topic" {
   description = "Boolean indicating whether or not to create topic."
 }
 
+variable "topic_arn" {
+  type        = string
+  default     = null
+  description = "ARN of an existing SNS topic to which subscribers are attached when enable_topic is false."
+
+  validation {
+    condition     = var.topic_arn == null || can(regex("^arn:[^:]+:sns:[^:]+:[0-9]{12}:.+$", var.topic_arn))
+    error_message = "topic_arn must be a valid SNS topic ARN."
+  }
+}
+
 variable "enable_sns" {
   type        = bool
   default     = false
@@ -269,31 +339,83 @@ variable "subscribers" {
     # The protocol to use. The possible values for this are: sqs, sms, lambda, application. (http or https are partially supported, see below) (email is an option but is unsupported, see below).
     endpoint = string
     # The endpoint to send data to, the contents will vary with the protocol. (see below for more information)
-    endpoint_auto_confirms = bool
+    endpoint_auto_confirms = optional(bool, false)
     # Boolean indicating whether the end point is capable of auto confirming subscription e.g., PagerDuty (default is false)
-    raw_message_delivery = bool
+    raw_message_delivery = optional(bool, false)
     # Boolean indicating whether or not to enable raw message delivery (the original message is directly passed, not wrapped in JSON with the original message in the message property) (default is false)
-    filter_policy = string
+    filter_policy = optional(string)
     # JSON String with the filter policy that will be used in the subscription to filter messages seen by the target resource.
-    delivery_policy = string
+    filter_policy_scope = optional(string)
+    # Whether the filter policy applies to MessageAttributes or MessageBody.
+    delivery_policy = optional(string)
     # The SNS delivery policy
-    confirmation_timeout_in_minutes = string
+    confirmation_timeout_in_minutes = optional(number, 1)
     # Integer indicating number of minutes to wait in retying mode for fetching subscription arn before marking it as failure. Only applicable for http and https protocols.
-    redrive_policy = string
+    redrive_policy = optional(string)
     # When specified, sends undeliverable messages to the specified SQS dead-letter queue
-    replay_policy = string
+    replay_policy = optional(string)
     # A map of replay policy statements
-    subscription_role_arn = string
+    subscription_role_arn = optional(string)
     # The ARN of the IAM role that has the following trust relationship policy: { "Version": "2012-10-17", "Statement": [ { "Effect": "Allow", "Principal": { "Service": "sns.amazonaws.com" }, "Action": "sts:AssumeRole" } ] }
   }))
-  description = "Required configuration for subscibres to SNS topic."
+  description = "SNS topic subscriptions. Only protocol and endpoint are required; optional settings configure delivery, filtering, dead-letter queues, replay, and Firehose access."
   default     = {}
+
+  validation {
+    condition = alltrue([
+      for subscriber in values(var.subscribers) : contains(
+        ["application", "email", "email-json", "firehose", "http", "https", "lambda", "sms", "sqs"],
+        subscriber.protocol,
+      )
+    ])
+    error_message = "Each subscriber protocol must be one supported by Amazon SNS."
+  }
+
+  validation {
+    condition = alltrue([
+      for subscriber in values(var.subscribers) : subscriber.filter_policy_scope == null ? true : contains(["MessageAttributes", "MessageBody"], subscriber.filter_policy_scope)
+    ])
+    error_message = "Each filter_policy_scope must be MessageAttributes or MessageBody."
+  }
+
+  validation {
+    condition = alltrue([
+      for subscriber in values(var.subscribers) : subscriber.protocol != "firehose" || subscriber.subscription_role_arn != null
+    ])
+    error_message = "A subscription_role_arn is required for every firehose subscriber."
+  }
 }
 
 variable "content_based_deduplication" {
   type        = bool
   default     = false
   description = "Boolean indicating whether or not to enable content-based deduplication for FIFO topics."
+}
+
+variable "fifo_throughput_scope" {
+  type        = string
+  default     = null
+  description = "FIFO throughput and deduplication scope. Valid values are Topic and MessageGroup; MessageGroup enables high throughput and cannot later be changed back to Topic."
+
+  validation {
+    condition     = var.fifo_throughput_scope == null ? true : contains(["Topic", "MessageGroup"], var.fifo_throughput_scope)
+    error_message = "fifo_throughput_scope must be Topic or MessageGroup."
+  }
+}
+
+variable "archive_policy" {
+  type        = string
+  default     = null
+  description = "JSON archive policy for FIFO topics. MessageRetentionPeriod must be between 1 and 365 days. Disable archiving before destroying a topic."
+
+  validation {
+    condition = var.archive_policy == null || (
+      can(jsondecode(var.archive_policy).MessageRetentionPeriod) &&
+      try(jsondecode(var.archive_policy).MessageRetentionPeriod >= 1, false) &&
+      try(jsondecode(var.archive_policy).MessageRetentionPeriod <= 365, false)
+    )
+    error_message = "archive_policy must be valid JSON containing MessageRetentionPeriod between 1 and 365."
+  }
 }
 
 variable "signature_version" {
@@ -347,5 +469,5 @@ variable "fifo_topic" {
 variable "data_protection_policy" {
   type        = string
   default     = null
-  description = "A map of data protection policy statements"
+  description = "JSON data protection policy for a standard topic. AWS no longer makes SNS message data protection available to new customers as of April 30, 2026."
 }

@@ -19,52 +19,17 @@ module "sns" {
 
   subscribers = {
     newrelic = {
-      protocol                        = "https"
-      endpoint                        = "https://example.com"
-      endpoint_auto_confirms          = false
-      raw_message_delivery            = true
-      filter_policy                   = ""
-      delivery_policy                 = ""
-      confirmation_timeout_in_minutes = "60"
-      redrive_policy                  = ""
-      replay_policy                   = ""
-      subscription_role_arn           = ""
+      protocol             = "https"
+      endpoint             = "https://example.com"
+      raw_message_delivery = true
+      filter_policy        = jsonencode({ event_type = ["created"] })
+      filter_policy_scope  = "MessageBody"
     },
     sms = {
-      protocol                        = "sms"
-      endpoint                        = "+919876543210"
-      endpoint_auto_confirms          = false
-      raw_message_delivery            = false
-      filter_policy                   = ""
-      delivery_policy                 = ""
-      confirmation_timeout_in_minutes = "60"
-      redrive_policy                  = ""
-      replay_policy                   = ""
-      subscription_role_arn           = ""
+      protocol = "sms"
+      endpoint = "+919876543210"
     },
 
   }
 
-  data_protection_policy = jsonencode(
-    {
-      Description = "Deny Inbound Address"
-      Name        = "DenyInboundEmailAdressPolicy"
-      Statement = [
-        {
-          "DataDirection" = "Inbound"
-          "DataIdentifier" = [
-            "arn:aws:dataprotection::aws:data-identifier/EmailAddress",
-          ]
-          "Operation" = {
-            "Deny" = {}
-          }
-          "Principal" = [
-            "*",
-          ]
-          "Sid" = "DenyInboundEmailAddress"
-        },
-      ]
-      Version = "2021-06-01"
-    }
-  )
 }

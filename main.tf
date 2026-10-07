@@ -1,4 +1,20 @@
-data "aws_caller_identity" "current" {}
+data "aws_caller_identity" "current" {
+  count = var.enabled && var.enable_topic && var.create_topic_policy && var.enable_default_topic_policy ? 1 : 0
+}
+
+locals {
+  topic_arn = var.enable_topic ? try(aws_sns_topic.default[0].arn, null) : var.topic_arn
+
+  platform_credential = try(coalesce(
+    var.platform_credential,
+    var.gcm_key != "" ? var.gcm_key : null,
+    var.key != "" ? file(var.key) : null,
+  ), null)
+  platform_principal = try(coalesce(
+    var.platform_principal,
+    var.certificate != "" ? file(var.certificate) : null,
+  ), null)
+}
 
 ##-----------------------------------------------------------------------------
 ## Labels module callled that will be used for naming and tags.
@@ -21,8 +37,10 @@ resource "aws_sns_platform_application" "default" {
   count                            = var.enabled && var.enable_sns ? 1 : 0
   name                             = module.labels.id
   platform                         = var.platform
-  platform_credential              = length(var.gcm_key) > 0 ? var.gcm_key : file(var.key)
-  platform_principal               = length(var.gcm_key) > 0 ? var.gcm_key : file(var.certificate)
+  platform_credential              = local.platform_credential
+  platform_principal               = local.platform_principal
+  apple_platform_team_id           = var.apple_platform_team_id
+  apple_platform_bundle_id         = var.apple_platform_bundle_id
   event_delivery_failure_topic_arn = var.event_delivery_failure_topic_arn
   event_endpoint_created_topic_arn = var.event_endpoint_created_topic_arn
   event_endpoint_deleted_topic_arn = var.event_endpoint_deleted_topic_arn
@@ -30,6 +48,25 @@ resource "aws_sns_platform_application" "default" {
   failure_feedback_role_arn        = var.failure_feedback_role_arn
   success_feedback_role_arn        = var.success_feedback_role_arn
   success_feedback_sample_rate     = var.success_feedback_sample_rate
+
+  lifecycle {
+    precondition {
+      condition     = local.platform_credential != null
+      error_message = "A platform credential must be supplied with platform_credential, gcm_key, or key when enable_sns is true."
+    }
+
+    precondition {
+      condition     = (var.apple_platform_team_id == null) == (var.apple_platform_bundle_id == null)
+      error_message = "apple_platform_team_id and apple_platform_bundle_id must be supplied together for APNS token authentication."
+    }
+
+    precondition {
+      condition = var.apple_platform_team_id == null || (
+        contains(["APNS", "APNS_SANDBOX"], var.platform) && local.platform_principal != null
+      )
+      error_message = "APNS token authentication requires an APNS platform and platform_principal containing the Apple signing key ID."
+    }
+  }
 }
 
 ##-----------------------------------------------------------------------------
@@ -40,7 +77,7 @@ resource "aws_sns_topic" "default" {
   count                                    = var.enabled && var.enable_topic ? 1 : 0
   name                                     = module.labels.id
   display_name                             = var.display_name
-  policy                                   = var.policy
+  policy                                   = var.create_topic_policy || var.policy == "" ? null : var.policy
   delivery_policy                          = var.delivery_policy
   application_success_feedback_role_arn    = var.application_success_feedback_role_arn
   application_success_feedback_sample_rate = var.application_success_feedback_sample_rate
@@ -48,6 +85,9 @@ resource "aws_sns_topic" "default" {
   http_success_feedback_role_arn           = var.http_success_feedback_role_arn
   http_success_feedback_sample_rate        = var.http_success_feedback_sample_rate
   http_failure_feedback_role_arn           = var.http_failure_feedback_role_arn
+  firehose_success_feedback_role_arn       = var.firehose_success_feedback_role_arn
+  firehose_success_feedback_sample_rate    = var.firehose_success_feedback_sample_rate
+  firehose_failure_feedback_role_arn       = var.firehose_failure_feedback_role_arn
   kms_master_key_id                        = var.kms_master_key_id
   lambda_success_feedback_role_arn         = var.lambda_success_feedback_role_arn
   lambda_success_feedback_sample_rate      = var.lambda_success_feedback_sample_rate
@@ -56,28 +96,39 @@ resource "aws_sns_topic" "default" {
   sqs_success_feedback_sample_rate         = var.sqs_success_feedback_sample_rate
   sqs_failure_feedback_role_arn            = var.sqs_failure_feedback_role_arn
   content_based_deduplication              = var.content_based_deduplication
+  fifo_throughput_scope                    = var.fifo_throughput_scope
   fifo_topic                               = var.fifo_topic
+  archive_policy                           = var.archive_policy
   signature_version                        = var.fifo_topic ? null : var.signature_version
   tracing_config                           = var.tracing_config
   tags                                     = module.labels.tags
+
+  lifecycle {
+    precondition {
+      condition     = var.fifo_topic || (var.fifo_throughput_scope == null && var.archive_policy == null)
+      error_message = "fifo_throughput_scope and archive_policy can only be configured for a FIFO topic."
+    }
+  }
 }
 
 ##-----------------------------------------------------------------------------
-## rovides a resource for subscribing to SNS topics. Requires that an SNS topic exist for the subscription to attach to.
+## Provides a resource for subscribing to SNS topics. Requires that an SNS topic exist for the subscription to attach to.
 ##-----------------------------------------------------------------------------
 resource "aws_sns_topic_subscription" "this" {
-  for_each                        = var.subscribers
-  topic_arn                       = join("", aws_sns_topic.default[*].arn)
-  protocol                        = var.subscribers[each.key].protocol
-  endpoint                        = var.subscribers[each.key].endpoint
-  endpoint_auto_confirms          = var.subscribers[each.key].endpoint_auto_confirms
-  raw_message_delivery            = var.subscribers[each.key].raw_message_delivery
-  filter_policy                   = var.subscribers[each.key].filter_policy
-  delivery_policy                 = var.subscribers[each.key].delivery_policy
-  confirmation_timeout_in_minutes = var.subscribers[each.key].confirmation_timeout_in_minutes
-  redrive_policy                  = var.subscribers[each.key].redrive_policy
-  replay_policy                   = var.subscribers[each.key].replay_policy
-  subscription_role_arn           = var.subscribers[each.key].subscription_role_arn
+  for_each = var.enabled && (var.enable_topic || var.topic_arn != null) ? var.subscribers : {}
+
+  topic_arn                       = local.topic_arn
+  protocol                        = each.value.protocol
+  endpoint                        = each.value.endpoint
+  endpoint_auto_confirms          = each.value.endpoint_auto_confirms
+  raw_message_delivery            = each.value.raw_message_delivery
+  filter_policy                   = each.value.filter_policy
+  filter_policy_scope             = each.value.filter_policy_scope
+  delivery_policy                 = each.value.delivery_policy
+  confirmation_timeout_in_minutes = each.value.confirmation_timeout_in_minutes
+  redrive_policy                  = each.value.redrive_policy
+  replay_policy                   = each.value.replay_policy
+  subscription_role_arn           = each.value.subscription_role_arn
 }
 
 ##-----------------------------------------------------------------------------
@@ -135,7 +186,7 @@ data "aws_iam_policy_document" "this" {
 
       condition {
         test     = "StringEquals"
-        values   = [data.aws_caller_identity.current.account_id]
+        values   = [data.aws_caller_identity.current[0].account_id]
         variable = "AWS:SourceOwner"
       }
     }
@@ -185,7 +236,7 @@ data "aws_iam_policy_document" "this" {
 }
 
 resource "aws_sns_topic_data_protection_policy" "this" {
-  count  = var.enabled && var.data_protection_policy != null && !var.fifo_topic ? 1 : 0
+  count  = var.enabled && var.enable_topic && var.data_protection_policy != null && !var.fifo_topic ? 1 : 0
   arn    = aws_sns_topic.default[0].arn
   policy = var.data_protection_policy
 }

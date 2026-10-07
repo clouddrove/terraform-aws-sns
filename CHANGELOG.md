@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- High-throughput FIFO topics through `fifo_throughput_scope`.
+- FIFO message archiving and subscription replay policies.
+- Payload-based subscription filtering with `filter_policy_scope`.
+- Amazon Data Firehose delivery-status logging attributes.
+- APNS token-based authentication fields and direct credential inputs.
+- Subscriptions to existing SNS topics and subscription status outputs.
+
+### Changed
+
+- Subscription fields other than `protocol` and `endpoint` are optional.
+- The minimum AWS provider version is now 5.98.0.
+
+### Fixed
+
+- Disabled topics no longer create dangling subscriptions or data protection policies.
+- Inline topic policies no longer conflict with a separately managed topic policy.
+
 ## [1.3.0] - 2022-01-26
 ### :bug: Bug Fixes
 - [`7cc6167`](https://github.com/clouddrove/terraform-aws-sns/commit/7cc61671be6219d860fcc83e78c8434f1af12e78) - update github-action.
