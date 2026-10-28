@@ -101,12 +101,21 @@ resource "aws_sns_topic" "default" {
   archive_policy                           = var.archive_policy
   signature_version                        = var.fifo_topic ? null : var.signature_version
   tracing_config                           = var.tracing_config
+  maximum_message_size                     = var.maximum_message_size
   tags                                     = module.labels.tags
 
   lifecycle {
     precondition {
       condition     = var.fifo_topic || (var.fifo_throughput_scope == null && var.archive_policy == null)
       error_message = "fifo_throughput_scope and archive_policy can only be configured for a FIFO topic."
+    }
+
+    precondition {
+      condition = var.maximum_message_size == null || var.maximum_message_size <= 262144 || (
+        length(var.subscribers) <= 100 &&
+        alltrue([for subscriber in values(var.subscribers) : contains(["firehose", "lambda", "sqs"], subscriber.protocol)])
+      )
+      error_message = "SNS topics configured above 262144 bytes support at most 100 subscriptions, and all managed subscriptions must use firehose, lambda, or sqs."
     }
   }
 }

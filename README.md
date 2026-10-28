@@ -60,7 +60,7 @@ This table contains both Prerequisites and Providers:
 | Description   | Name                                       | Version   |
 |:-------------:|:-------------------------------------------:|:---------:|
 | **Prerequisite** | [Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html) | >= 1.10.0 |
-| **Provider** | [aws](https://aws.amazon.com/) | >= 5.98.0 |
+| **Provider** | [aws](https://aws.amazon.com/) | >= 6.67.0 |
 
 
 
@@ -71,6 +71,26 @@ This table contains both Prerequisites and Providers:
 **IMPORTANT:** Since the master branch used in source varies based on new modifications, we recommend using the [release versions](https://github.com/clouddrove/terraform-aws-sns/releases).
 
 📌 For additional usage examples, check the complete list under [`examples/`](./examples) directory.
+
+To allow SNS messages up to 1 MiB, set `maximum_message_size` (valid range: 1,024–1,048,576 bytes):
+
+```hcl
+module "sns" {
+  source               = "clouddrove/sns/aws"
+  name                 = "large-events"
+  enable_topic         = true
+  maximum_message_size = 1048576
+
+  subscribers = {
+    worker = {
+      protocol = "sqs"
+      endpoint = aws_sqs_queue.worker.arn
+    }
+  }
+}
+```
+
+Topics configured above 256 KiB support at most 100 subscriptions, all using Firehose, Lambda, or SQS. The module checks subscriptions declared in `subscribers`.
 
 
 

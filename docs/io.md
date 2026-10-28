@@ -46,6 +46,7 @@
 | lambda\_success\_feedback\_role\_arn | The IAM role permitted to receive success feedback for this topic. | `string` | `""` | no |
 | lambda\_success\_feedback\_sample\_rate | Percentage of success to sample. | `number` | `100` | no |
 | managedby | ManagedBy, eg 'CloudDrove'. | `string` | `"hello@clouddrove.com"` | no |
+| maximum\_message\_size | Maximum published SNS message size in bytes. Valid values are 1024 to 1048576; AWS defaults to 262144 (256 KiB). Values above 262144 require no more than 100 subscriptions, all using Firehose, Lambda, or SQS. | `number` | `null` | no |
 | monthly\_spend\_limit | The maximum amount in USD that you are willing to spend each month to send SMS messages. | `number` | `1` | no |
 | name | Name  (e.g. `app` or `cluster`). | `string` | `""` | no |
 | override\_topic\_policy\_documents | List of IAM policy documents that are merged together into the exported document. In merging, statements with non-blank `sid`s will override statements with the same `sid` | `list(string)` | `[]` | no |

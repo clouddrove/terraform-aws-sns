@@ -36,7 +36,7 @@ prerequesties:
 providers:
   - name: aws
     url: https://aws.amazon.com/
-    version: ">= 5.98.0"
+    version: ">= 6.67.0"
 
 module_dependencies:
   - name: Labels Module
@@ -47,7 +47,7 @@ module_dependencies:
 description: |-
   Terraform module for SNS topics, subscriptions, mobile push applications, and SMS preferences.
   It supports standard and FIFO topics, high-throughput FIFO, FIFO message archiving and replay,
-  payload- or attribute-based subscription filtering, dead-letter queues, Firehose delivery logging,
+  payload- or attribute-based subscription filtering, messages up to 1 MiB, dead-letter queues, Firehose delivery logging,
   server-side encryption, X-Ray tracing, APNS token authentication, and topic data protection policies.
 
 
@@ -194,3 +194,22 @@ usage : |-
       }
     }
   ```
+
+  ### Large messages
+  ```hcl
+    module "sns" {
+      source               = "clouddrove/sns/aws"
+      name                 = "large-events"
+      enable_topic         = true
+      maximum_message_size = 1048576 # Up to 1 MiB
+
+      subscribers = {
+        worker = {
+          protocol = "sqs"
+          endpoint = aws_sqs_queue.worker.arn
+        }
+      }
+    }
+  ```
+  Topics configured above 256 KiB are limited to 100 subscriptions, all of which must use
+  Firehose, Lambda, or SQS. The module checks the subscriptions declared in `subscribers`.

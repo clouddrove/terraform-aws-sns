@@ -231,6 +231,21 @@ variable "kms_master_key_id" {
   description = "The ID of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK. For more information."
 }
 
+variable "maximum_message_size" {
+  type        = number
+  default     = null
+  description = "Maximum published SNS message size in bytes. Valid values are 1024 to 1048576; AWS defaults to 262144 (256 KiB). Values above 262144 require no more than 100 subscriptions, all using Firehose, Lambda, or SQS."
+
+  validation {
+    condition = var.maximum_message_size == null || (
+      var.maximum_message_size >= 1024 &&
+      var.maximum_message_size <= 1048576 &&
+      var.maximum_message_size == floor(var.maximum_message_size)
+    )
+    error_message = "maximum_message_size must be a whole number of bytes between 1024 and 1048576."
+  }
+}
+
 variable "lambda_success_feedback_role_arn" {
   type        = string
   default     = ""
