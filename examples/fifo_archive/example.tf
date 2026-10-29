@@ -2,6 +2,7 @@ resource "aws_sqs_queue" "orders" {
   name                        = "orders-prod.fifo"
   fifo_queue                  = true
   content_based_deduplication = true
+  sqs_managed_sse_enabled     = true
 }
 
 module "sns" {
