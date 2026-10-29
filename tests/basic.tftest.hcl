@@ -12,6 +12,7 @@ run "fifo_archive_and_payload_filtering" {
 
   variables {
     name                                  = "events-test.fifo"
+    environment                           = "prod"
     enable_topic                          = true
     create_topic_policy                   = false
     fifo_topic                            = true
@@ -32,15 +33,15 @@ run "fifo_archive_and_payload_filtering" {
         filter_policy_scope = "MessageBody"
         replay_policy = jsonencode({
           PointType     = "Timestamp"
-          StartingPoint = "2026-01-01T00:00:00Z"
+          StartingPoint = "2026-10-29T00:00:00Z"
         })
       }
     }
   }
 
   assert {
-    condition     = aws_sns_topic.default[0].name == "events-test.fifo"
-    error_message = "The caller-supplied FIFO topic name must be preserved."
+    condition     = aws_sns_topic.default[0].name == "events-test-prod.fifo"
+    error_message = "FIFO topic names must end with .fifo after the environment suffix."
   }
 
   assert {
@@ -95,4 +96,96 @@ run "apns_token_authentication" {
     condition     = aws_sns_platform_application.default[0].apple_platform_bundle_id == "com.example.mobile"
     error_message = "APNS token authentication fields were not passed to the platform application."
   }
+}
+
+run "reject_non_fifo_attributes" {
+  command = plan
+
+  variables {
+    enable_topic          = true
+    create_topic_policy   = false
+    fifo_throughput_scope = "MessageGroup"
+  }
+
+  expect_failures = [aws_sns_topic.default]
+}
+
+run "reject_policy_with_managed_policy" {
+  command = plan
+
+  variables {
+    enable_topic        = true
+    policy              = "{}"
+    create_topic_policy = true
+  }
+
+  expect_failures = [aws_sns_topic.default]
+}
+
+run "reject_topic_arn_with_created_topic" {
+  command = plan
+
+  variables {
+    enable_topic = true
+    topic_arn    = "arn:aws:sns:eu-west-1:123456789012:existing-topic"
+  }
+
+  expect_failures = [var.topic_arn]
+}
+
+run "reject_firehose_without_role" {
+  command = plan
+
+  variables {
+    subscribers = {
+      delivery = {
+        protocol              = "firehose"
+        endpoint              = "arn:aws:firehose:eu-west-1:123456789012:deliverystream/events"
+        subscription_role_arn = ""
+      }
+    }
+  }
+
+  expect_failures = [var.subscribers]
+}
+
+run "reject_unsupported_subscriber_protocol" {
+  command = plan
+
+  variables {
+    subscribers = {
+      consumer = {
+        protocol = "ftp"
+        endpoint = "example"
+      }
+    }
+  }
+
+  expect_failures = [var.subscribers]
+}
+
+run "reject_invalid_archive_retention" {
+  command = plan
+
+  variables {
+    enable_topic        = true
+    fifo_topic          = true
+    create_topic_policy = false
+    archive_policy      = jsonencode({ MessageRetentionPeriod = 366 })
+  }
+
+  expect_failures = [var.archive_policy]
+}
+
+run "reject_unpaired_apns_token_fields" {
+  command = plan
+
+  variables {
+    enable_sns             = true
+    platform               = "APNS"
+    platform_credential    = "test-signing-key"
+    apple_platform_team_id = "TEAMID1234"
+  }
+
+  expect_failures = [aws_sns_platform_application.default]
 }

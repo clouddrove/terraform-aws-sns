@@ -63,8 +63,8 @@
 | subscribers | SNS topic subscriptions. Only protocol and endpoint are required; optional settings include delivery, filter, dead-letter, replay, and Firehose role policies. | <pre>map(object({<br>    protocol                        = string<br>    endpoint                        = string<br>    endpoint_auto_confirms          = optional(bool, false)<br>    raw_message_delivery            = optional(bool, false)<br>    filter_policy                   = optional(string)<br>    filter_policy_scope             = optional(string)<br>    delivery_policy                 = optional(string)<br>    confirmation_timeout_in_minutes = optional(number, 1)<br>    redrive_policy                  = optional(string)<br>    replay_policy                   = optional(string)<br>    subscription_role_arn           = optional(string)<br>  }))</pre> | `{}` | no |
 | success\_feedback\_role\_arn | The IAM role permitted to receive success feedback for this application. | `string` | `""` | no |
 | success\_feedback\_sample\_rate | The percentage of success to sample (0-100). | `number` | `100` | no |
-| topic\_policy\_statements | A map of IAM policy [statements](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document#statement) for custom permission usage | `any` | `{}` | no |
 | topic\_arn | ARN of an existing SNS topic to which subscribers are attached when enable_topic is false. | `string` | `null` | no |
+| topic\_policy\_statements | A map of IAM policy [statements](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document#statement) for custom permission usage | `any` | `{}` | no |
 | tracing\_config | Tracing mode of an Amazon SNS topic. Valid values: PassThrough, Active. | `string` | `null` | no |
 | usage\_report\_s3\_bucket | The name of the Amazon S3 bucket to receive daily SMS usage reports from Amazon SNS. | `string` | `""` | no |
 
@@ -75,9 +75,9 @@
 | arn | The ARN of the SNS platform application. |
 | beginning-archive-time | The oldest timestamp from which archived FIFO messages can be replayed. |
 | id | The ID of the SNS platform application. |
+| subscription-arns | Map of subscriber keys to SNS subscription ARNs. |
+| subscription-pending-confirmation | Map indicating whether each subscription is pending confirmation. |
 | topic-arn | The ARN of the created topic or the existing topic supplied with topic_arn. |
 | topic-id | The ID of the SNS topic. |
 | topic-name | The name of the created SNS topic. |
 | topic-owner | The AWS account ID that owns the created SNS topic. |
-| subscription-arns | Map of subscriber keys to SNS subscription ARNs. |
-| subscription-pending-confirmation | Map indicating whether each subscription is pending confirmation. |

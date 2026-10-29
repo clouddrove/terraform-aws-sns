@@ -72,6 +72,33 @@ This table contains both Prerequisites and Providers:
 
 📌 For additional usage examples, check the complete list under [`examples/`](./examples) directory.
 
+For FIFO topics with environment suffixes, the module places `.fifo` after the generated name:
+
+```hcl
+resource "aws_sqs_queue" "orders" {
+  name                        = "orders-prod.fifo"
+  fifo_queue                  = true
+  content_based_deduplication = true
+}
+
+module "sns" {
+  source        = "clouddrove/sns/aws"
+  name          = "orders.fifo"
+  environment   = "prod"
+  enable_topic  = true
+  fifo_topic    = true
+
+  subscribers = {
+    orders = {
+      protocol = "sqs"
+      endpoint = aws_sqs_queue.orders.arn
+    }
+  }
+}
+```
+
+When supplying `policy`, set `create_topic_policy = false`. If a topic is disabled, `topic-id` and `topic-arn` return `null` when no existing ARN is supplied.
+
 To allow SNS messages up to 1 MiB, set `maximum_message_size` (valid range: 1,024–1,048,576 bytes):
 
 ```hcl

@@ -18,7 +18,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Subscription fields other than `protocol` and `endpoint` are optional.
-- The minimum AWS provider version is now 5.98.0.
+- The minimum AWS provider version is now 6.67.0.
+- Disabled topic outputs now return `null` when no topic is created; consumers that checked for an empty string should check for `null`.
+
+### Breaking
+
+- A supplied `policy` is rejected when `create_topic_policy` is `true`. Set `create_topic_policy = false` to manage the topic policy with `policy`.
+- FIFO topic names now always end in `.fifo`, including when an environment suffix is configured.
 
 ### Fixed
 

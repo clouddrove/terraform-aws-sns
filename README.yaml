@@ -171,9 +171,16 @@ usage : |-
 
   ### High-throughput FIFO with archiving and replay
   ```hcl
+    resource "aws_sqs_queue" "orders" {
+      name                        = "orders.fifo"
+      fifo_queue                  = true
+      content_based_deduplication = true
+    }
+
     module "sns" {
       source                      = "clouddrove/sns/aws"
-      name                        = "orders-prod.fifo"
+      name                        = "orders.fifo"
+      environment                 = "prod"
       enable_topic                = true
       fifo_topic                  = true
       # AWS does not allow changing MessageGroup back to Topic.
@@ -188,7 +195,7 @@ usage : |-
           endpoint = aws_sqs_queue.orders.arn
           replay_policy = jsonencode({
             PointType     = "Timestamp"
-            StartingPoint = "2026-01-01T00:00:00Z"
+            StartingPoint = timeadd(timestamp(), "-1h")
           })
         }
       }

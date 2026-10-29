@@ -300,8 +300,8 @@ variable "topic_arn" {
   description = "ARN of an existing SNS topic to which subscribers are attached when enable_topic is false."
 
   validation {
-    condition     = var.topic_arn == null || can(regex("^arn:[^:]+:sns:[^:]+:[0-9]{12}:.+$", var.topic_arn))
-    error_message = "topic_arn must be a valid SNS topic ARN."
+    condition     = var.topic_arn == null || (!var.enable_topic && can(regex("^arn:[^:]+:sns:[^:]+:[0-9]{12}:.+$", var.topic_arn)))
+    error_message = "topic_arn must be a valid SNS topic ARN and cannot be set when enable_topic is true."
   }
 }
 
@@ -373,7 +373,7 @@ variable "subscribers" {
     subscription_role_arn = optional(string)
     # The ARN of the IAM role that has the following trust relationship policy: { "Version": "2012-10-17", "Statement": [ { "Effect": "Allow", "Principal": { "Service": "sns.amazonaws.com" }, "Action": "sts:AssumeRole" } ] }
   }))
-  description = "SNS topic subscriptions. Only protocol and endpoint are required; optional settings configure delivery, filtering, dead-letter queues, replay, and Firehose access."
+  description = "SNS topic subscriptions. Only protocol and endpoint are required; optional settings configure delivery, filtering, dead-letter queues, replay, and Firehose role policies."
   default     = {}
 
   validation {
@@ -395,7 +395,7 @@ variable "subscribers" {
 
   validation {
     condition = alltrue([
-      for subscriber in values(var.subscribers) : subscriber.protocol != "firehose" || subscriber.subscription_role_arn != null
+      for subscriber in values(var.subscribers) : subscriber.protocol != "firehose" || try(length(trimspace(subscriber.subscription_role_arn)) > 0, false)
     ])
     error_message = "A subscription_role_arn is required for every firehose subscriber."
   }

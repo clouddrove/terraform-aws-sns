@@ -3,17 +3,16 @@ data "aws_caller_identity" "current" {
 }
 
 locals {
-  topic_arn = var.enable_topic ? try(aws_sns_topic.default[0].arn, null) : var.topic_arn
+  topic_arn  = var.enable_topic ? try(aws_sns_topic.default[0].arn, null) : var.topic_arn
+  topic_name = var.fifo_topic && !endswith(module.labels.id, ".fifo") ? "${module.labels.id}.fifo" : module.labels.id
 
-  platform_credential = try(coalesce(
-    var.platform_credential,
-    var.gcm_key != "" ? var.gcm_key : null,
-    var.key != "" ? file(var.key) : null,
-  ), null)
-  platform_principal = try(coalesce(
-    var.platform_principal,
-    var.certificate != "" ? file(var.certificate) : null,
-  ), null)
+  platform_credential = var.platform_credential != null ? var.platform_credential : (
+    var.gcm_key != "" ? var.gcm_key : (var.key != "" ? file(var.key) : null)
+  )
+  # Preserve the legacy GCM principal value while allowing explicit principals and APNS certificates.
+  platform_principal = var.platform_principal != null ? var.platform_principal : (
+    var.gcm_key != "" ? var.gcm_key : (var.certificate != "" ? file(var.certificate) : null)
+  )
 }
 
 ##-----------------------------------------------------------------------------
@@ -22,7 +21,7 @@ locals {
 module "labels" {
   source      = "clouddrove/labels/aws"
   version     = "1.3.1"
-  name        = var.name
+  name        = var.fifo_topic ? trimsuffix(var.name, ".fifo") : var.name
   repository  = var.repository
   environment = var.environment
   managedby   = var.managedby
@@ -75,7 +74,7 @@ resource "aws_sns_platform_application" "default" {
 #tfsec:ignore:aws-sns-enable-topic-encryption
 resource "aws_sns_topic" "default" {
   count                                    = var.enabled && var.enable_topic ? 1 : 0
-  name                                     = module.labels.id
+  name                                     = local.topic_name
   display_name                             = var.display_name
   policy                                   = var.create_topic_policy || var.policy == "" ? null : var.policy
   delivery_policy                          = var.delivery_policy
@@ -105,6 +104,11 @@ resource "aws_sns_topic" "default" {
   tags                                     = module.labels.tags
 
   lifecycle {
+    precondition {
+      condition     = !var.create_topic_policy || var.policy == ""
+      error_message = "policy cannot be set when create_topic_policy is true; set create_topic_policy = false to use the supplied policy."
+    }
+
     precondition {
       condition     = var.fifo_topic || (var.fifo_throughput_scope == null && var.archive_policy == null)
       error_message = "fifo_throughput_scope and archive_policy can only be configured for a FIFO topic."
