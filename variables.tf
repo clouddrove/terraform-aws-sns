@@ -237,7 +237,7 @@ variable "maximum_message_size" {
   description = "Maximum published SNS message size in bytes. Valid values are 1024 to 1048576; AWS defaults to 262144 (256 KiB). Values above 262144 require no more than 100 subscriptions, all using Firehose, Lambda, or SQS."
 
   validation {
-    condition = var.maximum_message_size == null || (
+    condition = var.maximum_message_size == null ? true : (
       var.maximum_message_size >= 1024 &&
       var.maximum_message_size <= 1048576 &&
       var.maximum_message_size == floor(var.maximum_message_size)
