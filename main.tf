@@ -115,9 +115,11 @@ resource "aws_sns_topic" "default" {
     }
 
     precondition {
-      condition = var.maximum_message_size == null || var.maximum_message_size <= 262144 || (
-        length(var.subscribers) <= 100 &&
-        alltrue([for subscriber in values(var.subscribers) : contains(["firehose", "lambda", "sqs"], subscriber.protocol)])
+      condition = var.maximum_message_size == null ? true : (
+        var.maximum_message_size <= 262144 || (
+          length(var.subscribers) <= 100 &&
+          alltrue([for subscriber in values(var.subscribers) : contains(["firehose", "lambda", "sqs"], subscriber.protocol)])
+        )
       )
       error_message = "SNS topics configured above 262144 bytes support at most 100 subscriptions, and all managed subscriptions must use firehose, lambda, or sqs."
     }
