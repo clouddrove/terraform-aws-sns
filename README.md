@@ -59,8 +59,8 @@ This table contains both Prerequisites and Providers:
 
 | Description   | Name                                       | Version   |
 |:-------------:|:-------------------------------------------:|:---------:|
-| **Prerequisite** | [Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html) | >= 1.6.6 |
-| **Provider** | [aws](https://aws.amazon.com/) | >= 5.31.0 |
+| **Prerequisite** | [Terraform](https://learn.hashicorp.com/terraform/getting-started/install.html) | >= 1.10.0 |
+| **Provider** | [aws](https://aws.amazon.com/) | >= 6.67.0 |
 
 
 
@@ -71,6 +71,53 @@ This table contains both Prerequisites and Providers:
 **IMPORTANT:** Since the master branch used in source varies based on new modifications, we recommend using the [release versions](https://github.com/clouddrove/terraform-aws-sns/releases).
 
 📌 For additional usage examples, check the complete list under [`examples/`](./examples) directory.
+
+For FIFO topics with environment suffixes, the module places `.fifo` after the generated name:
+
+```hcl
+resource "aws_sqs_queue" "orders" {
+  name                        = "orders-prod.fifo"
+  fifo_queue                  = true
+  content_based_deduplication = true
+}
+
+module "sns" {
+  source        = "clouddrove/sns/aws"
+  name          = "orders.fifo"
+  environment   = "prod"
+  enable_topic  = true
+  fifo_topic    = true
+
+  subscribers = {
+    orders = {
+      protocol = "sqs"
+      endpoint = aws_sqs_queue.orders.arn
+    }
+  }
+}
+```
+
+When supplying `policy`, set `create_topic_policy = false`. If a topic is disabled, `topic-id` and `topic-arn` return `null` when no existing ARN is supplied.
+
+To allow SNS messages up to 1 MiB, set `maximum_message_size` (valid range: 1,024–1,048,576 bytes):
+
+```hcl
+module "sns" {
+  source               = "clouddrove/sns/aws"
+  name                 = "large-events"
+  enable_topic         = true
+  maximum_message_size = 1048576
+
+  subscribers = {
+    worker = {
+      protocol = "sqs"
+      endpoint = aws_sqs_queue.worker.arn
+    }
+  }
+}
+```
+
+Topics configured above 256 KiB support at most 100 subscriptions, all using Firehose, Lambda, or SQS. The module checks subscriptions declared in `subscribers`.
 
 
 
