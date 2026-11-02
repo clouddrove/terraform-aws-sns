@@ -169,12 +169,38 @@ usage : |-
     }
   ```
 
-  ### High-throughput FIFO with archiving and replay
+  ### High-throughput FIFO with archiving
+  The SQS queue policy allows the SNS topic to deliver messages to the queue. Replay is a one-time operation; set a fixed timestamp within the archive retention window when you request a replay.
   ```hcl
     resource "aws_sqs_queue" "orders" {
       name                        = "orders.fifo"
       fifo_queue                  = true
       content_based_deduplication = true
+    }
+
+    data "aws_iam_policy_document" "allow_sns" {
+      statement {
+        effect = "Allow"
+
+        principals {
+          type        = "Service"
+          identifiers = ["sns.amazonaws.com"]
+        }
+
+        actions   = ["sqs:SendMessage"]
+        resources = [aws_sqs_queue.orders.arn]
+
+        condition {
+          test     = "ArnEquals"
+          variable = "aws:SourceArn"
+          values   = [module.sns.topic-arn]
+        }
+      }
+    }
+
+    resource "aws_sqs_queue_policy" "allow_sns" {
+      queue_url = aws_sqs_queue.orders.id
+      policy    = data.aws_iam_policy_document.allow_sns.json
     }
 
     module "sns" {
@@ -193,10 +219,6 @@ usage : |-
         orders = {
           protocol = "sqs"
           endpoint = aws_sqs_queue.orders.arn
-          replay_policy = jsonencode({
-            PointType     = "Timestamp"
-            StartingPoint = timeadd(timestamp(), "-1h")
-          })
         }
       }
     }

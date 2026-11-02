@@ -5,6 +5,31 @@ resource "aws_sqs_queue" "orders" {
   sqs_managed_sse_enabled     = true
 }
 
+data "aws_iam_policy_document" "allow_sns" {
+  statement {
+    effect = "Allow"
+
+    principals {
+      type        = "Service"
+      identifiers = ["sns.amazonaws.com"]
+    }
+
+    actions   = ["sqs:SendMessage"]
+    resources = [aws_sqs_queue.orders.arn]
+
+    condition {
+      test     = "ArnEquals"
+      variable = "aws:SourceArn"
+      values   = [module.sns.topic-arn]
+    }
+  }
+}
+
+resource "aws_sqs_queue_policy" "allow_sns" {
+  queue_url = aws_sqs_queue.orders.id
+  policy    = data.aws_iam_policy_document.allow_sns.json
+}
+
 module "sns" {
   source = "./../../"
 
@@ -20,10 +45,6 @@ module "sns" {
     orders = {
       protocol = "sqs"
       endpoint = aws_sqs_queue.orders.arn
-      replay_policy = jsonencode({
-        PointType     = "Timestamp"
-        StartingPoint = timeadd(timestamp(), "-1h")
-      })
     }
   }
 }
