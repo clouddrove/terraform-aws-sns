@@ -133,6 +133,24 @@ run "reject_topic_arn_with_created_topic" {
   expect_failures = [var.topic_arn]
 }
 
+run "reject_large_message_with_more_than_100_subscriptions" {
+  command = plan
+
+  variables {
+    enable_topic         = true
+    create_topic_policy  = false
+    maximum_message_size = 300000
+    subscribers = {
+      for index in range(101) : "queue-${index}" => {
+        protocol = "sqs"
+        endpoint = "arn:aws:sqs:eu-west-1:123456789012:queue-${index}"
+      }
+    }
+  }
+
+  expect_failures = [aws_sns_topic.default]
+}
+
 run "reject_firehose_without_role" {
   command = plan
 
