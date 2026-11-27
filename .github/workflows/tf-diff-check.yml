@@ -1,0 +1,66 @@
+---
+name: Terraform Difference Checks
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+  issues: write
+
+on:
+  pull_request:
+    paths:
+      - '**/*.tf'
+      - '*.tf'
+jobs:
+  tf-checks-APNS-basic-example:
+    if: github.actor != 'dependabot[bot]'
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@v2
+    with:
+      working_directory: './examples/APNS/basic/'
+      provider: 'aws'
+      target_branch: 'master'
+      aws_region: 'ca-central-1'
+    secrets:
+      BUILD_ROLE: ${{ secrets.BUILD_ROLE }}
+  tf-checks-APNS-complete-example:
+    if: github.actor != 'dependabot[bot]'
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@v2
+    with:
+      working_directory: './examples/APNS/complete/'
+      provider: 'aws'
+      target_branch: 'master'
+      aws_region: 'ca-central-1'
+    secrets:
+      BUILD_ROLE: ${{ secrets.BUILD_ROLE }}
+  tf-checks-APNS-text-example:
+    if: github.actor != 'dependabot[bot]'
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@v2
+    with:
+      working_directory: './examples/APNS/text/'
+      provider: 'aws'
+      target_branch: 'master'
+      aws_region: 'ca-central-1'
+    secrets:
+      BUILD_ROLE: ${{ secrets.BUILD_ROLE }}
+
+  tf-checks-GCM-example:
+    if: github.actor != 'dependabot[bot]'
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@v2
+    with:
+      working_directory: './examples/GCM/'
+      provider: 'aws'
+      target_branch: 'master'
+      aws_region: 'ca-central-1'
+    secrets:
+      BUILD_ROLE: ${{ secrets.BUILD_ROLE }}
+  tf-checks-sns_topic-example:
+    if: github.actor != 'dependabot[bot]'
+    uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@v2
+    with:
+      working_directory: './examples/sns_topic/'
+      provider: 'aws'
+      target_branch: 'master'
+      aws_region: 'ca-central-1'
+    secrets:
+      BUILD_ROLE: ${{ secrets.BUILD_ROLE }}        
